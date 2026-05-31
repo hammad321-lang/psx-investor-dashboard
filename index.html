@@ -18,16 +18,24 @@
         .brand-text span { color: var(--accent); }
         .user-stamp { font-weight: 600; color: var(--accent); letter-spacing: 0.5px; }
         
-        .adsense-space { background: #131722; border: 1px dashed #3a3f58; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem; border-radius: 8px; }
+        /* Shariah Top Navigation Hub Styles */
+        .shariah-hub { background: linear-gradient(135deg, #12141c 0%, #15221b 100%); border: 1px solid #1e3a27; border-radius: 12px; padding: 1.5rem; }
+        .shariah-hub h3 { margin-bottom: 0.75rem; color: #2ecc71; display: flex; align-items: center; gap: 0.5rem; }
+        .hub-flex { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+        .quick-chip { background: rgba(46,204,113,0.15); border: 1px solid #2ecc71; color: #2ecc71; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .quick-chip:hover { background: #2ecc71; color: #000; }
+        .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.2rem; border-radius: 6px; outline:none; font-weight:600; cursor: pointer; }
+        
+        /* AdSense Layout Engine Matrix Rules */
+        .adsense-space { background: #131722; border: 1px dashed #3a3f58; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem; border-radius: 8px; text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
         .top-banner { height: 90px; width: 100%; }
-        .sidebar-ad { height: 350px; width: 100%; }
+        .left-skyscraper { width: 300px; height: 600px; position: sticky; top: 1.5rem; }
         
-        .workspace { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
-        @media (max-width: 1024px) { .workspace { grid-template-columns: 1fr; } }
+        /* Dual Column Core Container */
+        .workspace { display: flex; gap: 1.5rem; }
+        @media (max-width: 1100px) { .workspace { flex-direction: column; } .left-skyscraper { width: 100%; height: 150px; position: static; } }
         
-        .sidebar-panel { display: flex; flex-direction: column; gap: 1.5rem; }
-        .main-panel { display: flex; flex-direction: column; gap: 1.5rem; }
-        
+        .main-panel { flex: 1; display: flex; flex-direction: column; gap: 1.5rem; }
         .panel-box { background: var(--surface-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
         
         .search-container { display: flex; gap: 0.5rem; }
@@ -69,7 +77,7 @@
 
     <div class="wrapper">
         
-        <div class="adsense-space top-banner"></div>
+        <div class="adsense-space top-banner">Google AdSense Landscape Leaderboard Space Banner Slot</div>
 
         <header>
             <div class="brand-text">
@@ -78,64 +86,109 @@
             <div class="user-stamp" id="headerUser">Hammad Hanif</div>
         </header>
 
+        <!-- Top Discovery Hub: Shariah Screener -->
+        <div class="shariah-hub">
+            <h3>🕌 Shariah Compliance Screening Quick-Access Center</h3>
+            <div class="hub-flex">
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('FFC')">FFC (Fauji Fertilizer)</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('EFERT')">EFERT (Engro Fert)</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('MARI')">MARI (Mari Petroleum)</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('OGDC')">OGDC (Oil & Gas Dev)</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('SYS')">SYS (Systems Limited)</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('LUCK')">LUCK (Lucky Cement)</span>
+                
+                <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
+                    <label style="font-size:0.85rem; font-weight:600; color:#8a90a6;">Browse All Tickers:</label>
+                    <select class="select-menu" id="shariahDropdown" onchange="triggerDirectTickerQuery(this.value)">
+                        <option value="">-- Select Listed Asset --</option>
+                        <option value="FFC">FFC - Fauji Fertilizer</option>
+                        <option value="EFERT">EFERT - Engro Fertilizers</option>
+                        <option value="FATIMA">FATIMA - Fatima Fertilizer</option>
+                        <option value="ENGRO">ENGRO - Engro Corporation</option>
+                        <option value="DAWH">DAWH - Dawood Hercules</option>
+                        <option value="MARI">MARI - Mari Petroleum</option>
+                        <option value="OGDC">OGDC - Oil & Gas Dev Corp</option>
+                        <option value="PPL">PPL - Pakistan Petroleum Ltd</option>
+                        <option value="POL">POL - Pakistan Oilfields Ltd</option>
+                        <option value="SNGP">SNGP - Sui Northern Gas</option>
+                        <option value="SYS">SYS - Systems Limited</option>
+                        <option value="TRG">TRG - TRG Pakistan</option>
+                        <option value="OCTOS">OCTOS - Octano Systems</option>
+                        <option value="AVN">AVN - Avanceon Limited</option>
+                        <option value="NETSOL">NETSOL - NetSol Tech</option>
+                        <option value="HUBC">HUBC - Hub Power Company</option>
+                        <option value="KEL">KEL - K-Electric Limited</option>
+                        <option value="MEBL">MEBL - Meezan Bank Limited</option>
+                        <option value="LUCK">LUCK - Lucky Cement</option>
+                        <option value="DGKC">DGKC - DG Khan Cement</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <div class="workspace">
             
-            <div class="sidebar-panel">
+            <!-- Left Side-Column Panel Alignment: Dedicated Monetization & Trackers -->
+            <div class="left-panel" style="display:flex; flex-direction:column; gap:1.5rem;">
                 
-                <div class="panel-box">
-                    <h3>Analyze New Security</h3>
+                <div class="adsense-space left-skyscraper">
+                    Google AdSense<br>Vertical Skyscraper Block<br>Monetization Display Placement
+                </div>
+
+                <div class="panel-box" style="width: 300px;">
+                    <h3>Manual Terminal Entry</h3>
                     <div class="search-container" style="margin-top:0.75rem;">
-                        <input type="text" id="targetInput" placeholder="Enter Symbol (e.g. FFC, SYS, MARI)...">
-                        <button onclick="triggerSearch()">Fetch</button>
+                        <input type="text" id="targetInput" placeholder="Symbol Ticker (e.g. FFC)...">
+                        <button onclick="triggerSearch()">Pull</button>
                     </div>
                 </div>
 
-                <div class="panel-box">
-                    <h3>Strategic Sector Rankings</h3>
-                    <div class="scroller-list" id="rankingContainer"></div>
-                </div>
-
-                <div class="panel-box">
-                    <h3>Terminal Watchlist</h3>
+                <div class="panel-box" style="width: 300px;">
+                    <h3>Active Watchlist</h3>
                     <div class="scroller-list" id="watchlistContainer"></div>
                 </div>
 
-                <div class="adsense-space sidebar-ad"></div>
-
             </div>
 
+            <!-- Main Panel -->
             <div class="main-panel">
                 
-                <div class="panel-box">
-                    <div class="section-header">
-                        <h3 id="displayTitle">Company Research Profile</h3>
-                        <button class="filter-btn" onclick="toggleWatchlist()">+/- Watchlist</button>
+                <div style="display:grid; grid-template-columns: 1fr 320px; gap: 1.5rem; width:100%;">
+                    <!-- Profile Header Details -->
+                    <div class="panel-box">
+                        <div class="section-header">
+                            <h3 id="displayTitle">Company Research Profile</h3>
+                            <button class="filter-btn" onclick="toggleWatchlist()">+/- Watchlist</button>
+                        </div>
+                        <div class="snapshot-grid">
+                            <div class="stat-card"><label>Symbol</label><div class="value" id="lblSym">---</div></div>
+                            <div class="stat-card"><label>Sector Link</label><div class="value" style="font-size:1rem;" id="lblSector">---</div></div>
+                            <div class="stat-card"><label>Current Share Price</label><div class="value" id="lblPrice">Rs. 0.00</div></div>
+                            <div class="stat-card"><label>Previous Close</label><div class="value" id="lblPrev">Rs. 0.00</div></div>
+                            <div class="stat-card"><label>52-Week Range</label><div class="value" style="font-size:1rem;" id="lbl52Range">---</div></div>
+                            <div class="stat-card"><label>Market Capitalization</label><div class="value" id="lblCap">---</div></div>
+                        </div>
                     </div>
 
-                    <div class="snapshot-grid">
-                        <div class="stat-card"><label>Symbol</label><div class="value" id="lblSym">---</div></div>
-                        <div class="stat-card"><label>Sector Link</label><div class="value" style="font-size:1.05rem;" id="lblSector">---</div></div>
-                        <div class="stat-card"><label>Current Share Price</label><div class="value" id="lblPrice">Rs. 0.00</div></div>
-                        <div class="stat-card"><label>Previous Close</label><div class="value" id="lblPrev">Rs. 0.00</div></div>
-                        <div class="stat-card"><label>52-Week High / Low</label><div class="value" style="font-size:1.1rem;" id="lbl52Range">---</div></div>
-                        <div class="stat-card"><label>Market Capitalization</label><div class="value" id="lblCap">---</div></div>
-                        <div class="stat-card"><label>Shares Outstanding</label><div class="value" style="font-size:1.1rem;" id="lblShares">---</div></div>
-                        <div class="stat-card"><label>Free Float</label><div class="value" id="lblFloat">---</div></div>
-                        <div class="stat-card"><label>Last Updated Date</label><div class="value" style="font-size:1.05rem;" id="lblDate">---</div></div>
+                    <!-- Sector Rankings Linked to Peers -->
+                    <div class="panel-box">
+                        <h3>Sector Competitor Peer Rankings</h3>
+                        <div class="scroller-list" id="rankingContainer"></div>
                     </div>
                 </div>
 
+                <!-- Strategic Quick-Looks -->
                 <div class="panel-box">
-                    <div class="section-header"><h3>Investor Quick View Ratings</h3></div>
+                    <div class="section-header"><h3>Investor Screening & Security Health Indicators</h3></div>
                     <div class="snapshot-grid">
                         <div class="stat-card"><label>Shariah Compliant Status</label><div class="quick-badge" id="lblShariahBadge">---</div></div>
-                        <div class="stat-card"><label>Business Quality</label><div class="quick-badge badge-green">Premium Core Tier</div></div>
-                        <div class="stat-card"><label>Dividend Quality</label><div class="quick-badge badge-green">High Consistent</div></div>
-                        <div class="stat-card"><label>Financial Strength</label><div class="quick-badge badge-orange">Stable Buffer</div></div>
-                        <div class="stat-card"><label>Valuation Rating</label><div class="quick-badge" id="lblValBadge">Calculating...</div></div>
+                        <div class="stat-card"><label>Altman Z-Score Solvency</label><div class="quick-badge" id="lblSolvencyBadge">---</div></div>
+                        <div class="stat-card"><label>FCF Yield Valuation</label><div class="quick-badge" id="lblFcfBadge">---</div></div>
+                        <div class="stat-card"><label>Valuation Rating Multiple</label><div class="quick-badge" id="lblValBadge">Calculating...</div></div>
                     </div>
                 </div>
 
+                <!-- Financial Valuation Metrics -->
                 <div class="panel-box">
                     <div class="section-header"><h3>Valuation & Valuation Analysis Fundamentals</h3></div>
                     <div class="snapshot-grid">
@@ -148,6 +201,7 @@
                     </div>
                 </div>
 
+                <!-- Text Framework Splitting Matrices -->
                 <div class="info-split">
                     <div class="info-block">
                         <h4>Business Overview & Competitive Position</h4>
@@ -163,6 +217,7 @@
                     </div>
                 </div>
 
+                <!-- 5-Year Accounting Metrics Matrices -->
                 <div class="panel-box">
                     <div class="section-header"><h3>Historical Year-to-Year Financial Statements (5-Year Matrix)</h3></div>
                     <div style="overflow-x:auto;">
@@ -173,6 +228,7 @@
                     </div>
                 </div>
 
+                <!-- Debt Accounting Profile Matrices -->
                 <div class="panel-box">
                     <div class="section-header"><h3>Debt Accounting Analysis Profile Metrics</h3></div>
                     <div class="snapshot-grid">
@@ -183,6 +239,7 @@
                     </div>
                 </div>
 
+                <!-- Forecast and Forward Targets Matrices -->
                 <div class="panel-box">
                     <div class="section-header"><h3>Forward Forecast Engine & Future Risks Management Matrix</h3></div>
                     <div class="info-split" style="margin-top:0.5rem; margin-bottom:1.25rem;">
@@ -204,6 +261,7 @@
                     </div>
                 </div>
 
+                <!-- Capital Allocation Tool -->
                 <div class="panel-box">
                     <div class="section-header"><h3>Portfolio Builder Allocation Framework Tool</h3></div>
                     <div class="search-container" style="max-width:500px; margin-bottom:1.25rem;">
@@ -213,6 +271,7 @@
                     <div class="snapshot-grid" id="portfolioReport"></div>
                 </div>
 
+                <!-- Benchmarking Comparative View Framework -->
                 <div class="panel-box">
                     <div class="section-header"><h3>Multi-Ticker Competitive Benchmarking Core Matrix (Up to 5 Companies)</h3></div>
                     <div class="comp-tags" id="comparisonTags"></div>
@@ -222,15 +281,6 @@
                             <thead><tr id="compHeaders"><th>Benchmark Parameter Line Metrics</th></tr></thead>
                             <tbody id="compBody"></tbody>
                         </table>
-                    </div>
-                </div>
-
-                <div class="panel-box">
-                    <div class="section-header"><h3>Corporate Reports & Announcement Hub Center</h3></div>
-                    <div class="snapshot-grid">
-                        <div class="stat-card" style="cursor:pointer;" onclick="alert('Accessing Annual/Quarterly Financial Report Repositories...')"><label>Reports Center Download</label><span style="font-size:0.85rem; color:var(--accent);">Mirror Node 1 Online</span></div>
-                        <div class="stat-card" style="cursor:pointer;" onclick="alert('Accessing Historical Corporate Dividends & Actions Filings...')"><label>Announcements Center Registry</label><span style="font-size:0.85rem; color:var(--accent);">Mirror Node 1 Online</span></div>
-                        <div class="stat-card" style="cursor:pointer;" onclick="alert('Accessing Core Investment Suitability Verdict Framework Indices...')"><label>Investor Verdict Matrix</label><span style="font-size:0.85rem; color:var(--accent);">Open Direct View</span></div>
                     </div>
                 </div>
 

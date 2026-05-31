@@ -4,137 +4,218 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSX Investor Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-surface: #1e1e1e;
+            --accent-gold: #d4af37;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --success-green: #00cc66;
+            --error-red: #ff3333;
+            --border-color: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        header h1 span {
+            color: var(--accent-gold);
+        }
+
+        /* Universal Search Control Bar Style */
+        .control-panel {
+            background-color: var(--bg-surface);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .search-wrapper {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+        }
+
+        .search-wrapper input {
+            flex: 1;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-wrapper input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .search-wrapper button {
+            background-color: var(--accent-gold);
+            color: #000000;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .search-wrapper button:hover {
+            opacity: 0.9;
+        }
+
+        /* Main Dashboard Cards Display Layout */
+        .main-display {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .company-info h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .company-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .ticker-badge {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+
+        .metric-card label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-card .value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Fixed Branding Upper-Right Corner -->
-    <div class="branding">
-        Hammad Hanif
+    <div class="dashboard-container">
+        
+        <header>
+            <h1>PSX Investor <span>Dashboard</span></h1>
+        </header>
+
+        <!-- Universal Search Control Bar -->
+        <div class="control-panel">
+            <div class="search-wrapper">
+                <input type="text" id="searchBox" placeholder="Enter any PSX Symbol (e.g., PPL, HUBC, KEL, SYS, OGDC)..." autocomplete="off">
+                <button id="searchButton" onclick="executeLiveSearch()">Fetch Market Data</button>
+            </div>
+        </div>
+
+        <!-- Main Output Metric Display -->
+        <div class="main-display">
+            <div class="company-header">
+                <div class="company-info">
+                    <h2 id="companyName">Select or Type a Company Symbol</h2>
+                    <p id="companySector">Pakistan Stock Exchange Listed Security</p>
+                </div>
+                <div class="ticker-badge" id="tickerSymbol">---</div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <label>Current Price</label>
+                    <div class="value" id="stockPrice">Rs. 0.00</div>
+                </div>
+                <div class="metric-card">
+                    <label>Day Change</label>
+                    <div class="value" id="stockChange">0.00%</div>
+                </div>
+                <div class="metric-card">
+                    <label>Trading Volume</label>
+                    <div class="value" id="tradeVolume">-</div>
+                </div>
+                <div class="metric-card">
+                    <label>P/E Ratio</label>
+                    <div class="value" id="peRatio">-</div>
+                </div>
+                <div class="metric-card">
+                    <label>Dividend Yield</label>
+                    <div class="value" id="divYield">-</div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Header Section -->
-    <header>
-        <h1>PSX Investor Dashboard</h1>
-        <div class="search-area">
-            <input type="text" id="companySearch" placeholder="Search Company / Symbol (e.g., ENGRO, SYS)">
-            <select id="companyFilter">
-                <option value="all">All Companies</option>
-                <option value="shariah">Shariah Only</option>
-            </select>
-            <button id="searchBtn">Search</button>
-        </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main>
-        
-        <!-- 1. Company Snapshot -->
-        <section class="card">
-            <h2>Company Snapshot</h2>
-            <div class="grid">
-                <div class="info-box"><h3>Company Name</h3><p id="companyName">-</p></div>
-                <div class="info-box"><h3>Symbol</h3><p id="symbol">-</p></div>
-                <div class="info-box"><h3>Sector</h3><p id="sector">-</p></div>
-                <div class="info-box"><h3>Price</h3><p id="price">-</p></div>
-                <div class="info-box"><h3>P/E</h3><p id="pe">-</p></div>
-                <div class="info-box"><h3>Book Value</h3><p id="bookValue">-</p></div>
-                <div class="info-box"><h3>P/B Ratio</h3><p id="pb">-</p></div>
-                <div class="info-box"><h3>Dividend Yield</h3><p id="yield">-</p></div>
-            </div>
-        </section>
-
-        <!-- 2. Business Overview -->
-        <section class="card">
-            <h2>Business Overview</h2>
-            <div class="overview-grid">
-                <div class="overview-box">
-                    <h3>What Company Does</h3>
-                    <p id="bizWhat">Search a company to load overview profiles.</p>
-                </div>
-                <div class="overview-box">
-                    <h3>Revenue Sources</h3>
-                    <p id="bizRevenue">-</p>
-                </div>
-                <div class="overview-box">
-                    <h3>Industry Position</h3>
-                    <p id="bizPosition">-</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. Reports Center -->
-        <section class="card">
-            <h2>Reports Center</h2>
-            <div class="list-container" id="reportsArea">
-                <p class="placeholder-text">No reports loaded. Search a company code above.</p>
-            </div>
-        </section>
-
-        <!-- 4. Announcements Center -->
-        <section class="card">
-            <h2>Announcements Center</h2>
-            <div class="list-container" id="announcementArea">
-                <p class="placeholder-text">No announcements loaded. Search a company code above.</p>
-            </div>
-        </section>
-
-        <!-- 5. Investor Summary (Simple Language) -->
-        <section class="card">
-            <h2>Investor Summary</h2>
-            <div class="grid">
-                <div class="info-box highlight">
-                    <h3>Business Quality</h3>
-                    <p id="qBusiness">-</p>
-                </div>
-                <div class="info-box highlight">
-                    <h3>Dividend Quality</h3>
-                    <p id="qDividend">-</p>
-                </div>
-                <div class="info-box highlight">
-                    <h3>Debt Quality</h3>
-                    <p id="qDebt">-</p>
-                </div>
-                <div class="info-box highlight">
-                    <h3>Valuation</h3>
-                    <p id="qValuation">-</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6. Investment Journal (Stored in Browser Cache) -->
-        <section class="card journal-section">
-            <h2>Investment Journal <span class="tag">Local Cache</span></h2>
-            <p class="journal-sub">Document your investment logic for the selected asset to evaluate performance drivers months later.</p>
-            <div class="journal-grid">
-                <div class="journal-box">
-                    <label for="journalBought">Why I Bought</label>
-                    <textarea id="journalBought" placeholder="List triggers, entry points, or catalytic arguments..."></textarea>
-                </div>
-                <div class="journal-box">
-                    <label for="journalNotBought">Why I Didn't Buy</label>
-                    <textarea id="journalNotBought" placeholder="List dynamic risks, overvaluation metrics, or dealbreakers..."></textarea>
-                </div>
-                <div class="journal-box">
-                    <label for="journalNotes">General Notes</label>
-                    <textarea id="journalNotes" placeholder="General earnings updates, management track record observations..."></textarea>
-                </div>
-            </div>
-            <button id="saveJournalBtn" disabled>Save Journal Entries</button>
-        </section>
-
-    </main>
-
-    <!-- Footer Section -->
-    <footer>
-        <p>Developed by <strong>Hammad Hanif</strong></p>
-        <p>Current Version 1.0</p>
-        <div class="footer-actions">
-            <button id="checkLatest" onclick="alert('Checking updates via Vercel registry... Up to date.')">Check Latest Version</button>
-            <button id="downloadLatest">Download Latest Version</button>
-        </div>
-    </footer>
-
+    <!-- Wire up the core controller mechanics -->
     <script src="app.js"></script>
 </body>
 </html>

@@ -43,7 +43,6 @@ async function triggerDirectTickerQuery(symbol) {
     if (!symbol) return;
     const cleanedSym = symbol.trim().toUpperCase();
     
-    // Sync dropdown position if available
     const dropdown = document.getElementById('shariahDropdown');
     if (dropdown) {
         if ([...dropdown.options].some(option => option.value === cleanedSym)) {
@@ -79,7 +78,6 @@ async function triggerDirectTickerQuery(symbol) {
 function mapCorporateNodeToTerminalUI(node) {
     focusedCorporateDataNode = node;
     
-    // Base Snapshot
     document.getElementById('lblSym').innerText = node.symbol;
     document.getElementById('displayTitle').innerText = `${node.name} Comprehensive Terminal Analysis`;
     document.getElementById('lblSector').innerText = node.sector;
@@ -88,7 +86,6 @@ function mapCorporateNodeToTerminalUI(node) {
     document.getElementById('lbl52Range').innerText = `Rs. ${node.low52} - Rs. ${node.high52}`;
     document.getElementById('lblCap').innerText = `Rs. ${node.marketCap}`;
     
-    // Ratios Mapping Matrix
     document.getElementById('lblEps').innerText = `Rs. ${node.eps}`;
     document.getElementById('lblPe').innerText = `${node.pe}x`;
     document.getElementById('lblBv').innerText = `Rs. ${node.bookValue}`;
@@ -97,12 +94,10 @@ function mapCorporateNodeToTerminalUI(node) {
     document.getElementById('lblEv').innerText = `Rs. ${node.ev}`;
     document.getElementById('lblDesc').innerText = node.description;
 
-    // Render Shariah Status Compliance Indicators Instead of Blocking
     const shariahBadge = document.getElementById('lblShariahBadge');
     shariahBadge.innerText = node.isShariah === "YES" ? "Shariah Compliant" : "Non-Compliant";
     shariahBadge.className = node.isShariah === "YES" ? "quick-badge badge-green" : "quick-badge badge-red";
 
-    // Advanced Health Guardrails Mapping (Altman Z & FCF)
     const solvencyBadge = document.getElementById('lblSolvencyBadge');
     const zScore = parseFloat(node.altmanZ);
     solvencyBadge.innerText = `Z-Score: ${zScore}`;
@@ -114,14 +109,12 @@ function mapCorporateNodeToTerminalUI(node) {
     fcfBadge.innerText = `Yield: ${node.fcfYield}`;
     fcfBadge.className = parseFloat(node.fcfYield) > 12 ? "quick-badge badge-green" : "quick-badge badge-orange";
 
-    // Valuation Rating Multiples
     const valBadge = document.getElementById('lblValBadge');
     const peFloat = parseFloat(node.pe);
     if (peFloat < 5.5) { valBadge.innerText = "Undervalued"; valBadge.className = "quick-badge badge-green"; }
     else if (peFloat <= 9.5) { valBadge.innerText = "Fair Value"; valBadge.className = "quick-badge badge-orange"; }
     else { valBadge.innerText = "Overvalued"; valBadge.className = "quick-badge badge-red"; }
 
-    // Rebuild Content Lists
     const revContainer = document.getElementById('revenueList'); revContainer.innerHTML = "";
     node.mainRevenue.forEach(i => revContainer.innerHTML += `<li>${i}</li>`);
     
@@ -131,19 +124,16 @@ function mapCorporateNodeToTerminalUI(node) {
     const futContainer = document.getElementById('futureList'); futContainer.innerHTML = "";
     node.futurePlans.forEach(i => futContainer.innerHTML += `<li>${i}</li>`);
 
-    // Red Flags Logic Engine
     const rfContainer = document.getElementById('redFlagsList'); rfContainer.innerHTML = "";
     if (parseFloat(node.debt.deRatio) > 1.1) rfContainer.innerHTML += `<li>⚠️ Balance Sheet Gearing: Debt Equity exceeds safety thresholds.</li>`;
     if (zScore < 1.2) rfContainer.innerHTML += `<li>⚠️ Distress Risk Warning: Low Altman Z-Score index metrics.</li>`;
     if (rfContainer.innerHTML === "") rfContainer.innerHTML = `<li style='color:var(--green);'>No core financial stress indicators found.</li>`;
 
-    // Debt Mapping
     document.getElementById('lblTotalDebt').innerText = `Rs. ${node.debt.total}`;
     document.getElementById('lblDeRatio').innerText = node.debt.deRatio;
     document.getElementById('lblFinCost').innerText = `Rs. ${node.debt.financeCost}`;
     document.getElementById('lblCoverage').innerText = `${node.debt.coverage}x`;
 
-    // Process Year-over-Year Accounting Data Tables Including New Dividend Payout Ratios
     const tableBody = document.querySelector('#financialTable tbody');
     tableBody.innerHTML = `
         <tr><td><strong>Topline Revenue Matrix</strong></td>${node.history.rev.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
@@ -154,7 +144,6 @@ function mapCorporateNodeToTerminalUI(node) {
         <tr><td><strong>Dividend Payout Ratio (%)</strong></td>${node.history.payoutRatio.map(v => `<td>${v}</td>`).join('')}</tr>
     `;
 
-    // Process Projections Numbers Explicitly
     const forecastBody = document.querySelector('#forecastTable tbody');
     const baseRev = parseFloat(node.history.rev[4]);
     const baseNet = parseFloat(node.history.net[4]);
@@ -168,7 +157,6 @@ function mapCorporateNodeToTerminalUI(node) {
         <tr><td><strong>Projected Cash Dividend Yield</strong></td><td>${(baseDiv * 1.04).toFixed(1)}%</td><td>${(baseDiv * 1.09).toFixed(1)}%</td><td>Secured Asset Capital Reserves</td></tr>
     `;
 
-    // Render Competitor Sector Rankings Sidebar Dynamically
     rebuildSectorRankingsEngine(node.relatedPeers);
     calculatePortfolioDeployment();
 }
@@ -176,7 +164,6 @@ function mapCorporateNodeToTerminalUI(node) {
 function rebuildSectorRankingsEngine(peersArray) {
     const container = document.getElementById('rankingContainer');
     container.innerHTML = "";
-    
     peersArray.forEach((peer, idx) => {
         container.innerHTML += `
             <div class='list-item' onclick="triggerDirectTickerQuery('${peer}')">

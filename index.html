@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSX Investor Terminal</title>
+    <!-- Google AdSense Global Verification Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5541065584184121" crossorigin="anonymous"></script>
     <style>
         :root {
             --primary-bg: #090a0f; --surface-bg: #12141c; --card-bg: #1a1d29;
@@ -26,14 +28,13 @@
         .quick-chip:hover { background: #2ecc71; color: #000; }
         .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.2rem; border-radius: 6px; outline:none; font-weight:600; cursor: pointer; }
         
-        /* AdSense Layout Engine Matrix Rules */
-        .adsense-space { background: #131722; border: 1px dashed #3a3f58; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem; border-radius: 8px; text-align: center; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-        .top-banner { height: 90px; width: 100%; }
-        .left-skyscraper { width: 300px; height: 600px; position: sticky; top: 1.5rem; }
+        /* Ad Containers */
+        .top-banner { width: 100%; min-height: 90px; margin-bottom: 0.5rem; }
+        .left-skyscraper { width: 300px; min-height: 600px; position: sticky; top: 1.5rem; }
         
         /* Dual Column Core Container */
         .workspace { display: flex; gap: 1.5rem; }
-        @media (max-width: 1100px) { .workspace { flex-direction: column; } .left-skyscraper { width: 100%; height: 150px; position: static; } }
+        @media (max-width: 1100px) { .workspace { flex-direction: column; } .left-skyscraper { width: 100%; min-height: 150px; position: static; } }
         
         .main-panel { flex: 1; display: flex; flex-direction: column; gap: 1.5rem; }
         .panel-box { background: var(--surface-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
@@ -77,7 +78,18 @@
 
     <div class="wrapper">
         
-        <div class="adsense-space top-banner">Google AdSense Landscape Leaderboard Space Banner Slot</div>
+        <!-- Live Top Leaderboard Banner Unit -->
+        <div class="top-banner">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-5541065584184121"
+                 data-ad-slot="default"
+                 data-ad-format="horizontal"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
 
         <header>
             <div class="brand-text">
@@ -128,11 +140,19 @@
 
         <div class="workspace">
             
-            <!-- Left Side-Column Panel Alignment: Dedicated Monetization & Trackers -->
+            <!-- Left Side Panel Content: Vertical Skyscraper Ad Placement -->
             <div class="left-panel" style="display:flex; flex-direction:column; gap:1.5rem;">
                 
-                <div class="adsense-space left-skyscraper">
-                    Google AdSense<br>Vertical Skyscraper Block<br>Monetization Display Placement
+                <div class="left-skyscraper">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-5541065584184121"
+                         data-ad-slot="default"
+                         data-ad-format="vertical"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
 
                 <div class="panel-box" style="width: 300px;">

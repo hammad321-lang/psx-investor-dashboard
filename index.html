@@ -14,18 +14,14 @@
         body { background-color: var(--primary-bg); color: var(--text); padding: 1.5rem; }
         .wrapper { max-width: 1600px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         
-        /* Layout Header Elements */
         header { display: flex; justify-content: space-between; align-items: center; background: var(--surface-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); }
         .brand-text span { color: var(--accent); }
         .user-stamp { font-weight: 600; color: var(--accent); letter-spacing: 0.5px; }
         
-        /* Banner Spaces (Google AdSense Mockups) */
-        .adsense-space { background: #131722; border: 1px dashed #3a3f58; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem; border-radius: 8px; overflow: hidden; }
+        .adsense-space { background: #131722; border: 1px dashed #3a3f58; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem; border-radius: 8px; }
         .top-banner { height: 90px; width: 100%; }
-        .sidebar-ad { height: 400px; width: 100%; }
-        .content-ad { height: 120px; width: 100%; margin: 1.5rem 0; }
+        .sidebar-ad { height: 350px; width: 100%; }
         
-        /* Operational Grid Layouts */
         .workspace { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
         @media (max-width: 1024px) { .workspace { grid-template-columns: 1fr; } }
         
@@ -33,46 +29,38 @@
         .main-panel { display: flex; flex-direction: column; gap: 1.5rem; }
         
         .panel-box { background: var(--surface-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
-        .filter-group { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
-        .filter-btn { flex: 1; background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .filter-btn.active { border-color: var(--accent); background: rgba(212,175,55,0.1); color: var(--accent); }
         
         .search-container { display: flex; gap: 0.5rem; }
         .search-container input { flex:1; background: var(--primary-bg); border:1px solid var(--border); padding: 0.75rem; border-radius:6px; color:var(--text); outline:none; }
         .search-container button { background: var(--accent); color:#000; border:none; padding: 0.75rem 1.2rem; border-radius:6px; font-weight:700; cursor:pointer; }
         
-        /* List Scrollers */
-        .scroller-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; }
-        .list-item { background: var(--card-bg); padding: 0.6rem 0.8rem; border-radius: 6px; border: 1px solid var(--border); display: flex; justify-content: space-between; cursor: pointer; font-size: 0.9rem; }
+        .scroller-list { max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; }
+        .list-item { background: var(--card-bg); padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 0.9rem; }
         
-        /* Tabular Layouts & Matrices */
-        .snapshot-grid, .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .stat-card { background: var(--card-bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); }
-        .stat-card label { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.4rem; }
+        .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
+        .stat-card label { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.4rem; letter-spacing: 0.5px; }
         .stat-card .value { font-size: 1.3rem; font-weight: 700; }
         
-        .quick-badge { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700; background: var(--primary-bg); border: 1px solid var(--border); }
+        .quick-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; background: var(--primary-bg); border: 1px solid var(--border); }
         .badge-green { color: var(--green); border-color: var(--green); }
         .badge-orange { color: var(--accent); border-color: var(--accent); }
         .badge-red { color: var(--red); border-color: var(--red); }
         
-        /* Dual Column Text Block Layouts */
-        .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
         .info-block { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
         .info-block h4 { margin-bottom: 0.6rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; font-size: 0.95rem; text-transform: uppercase; }
         
-        /* Table Matrix Displays */
-        table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.9rem; }
-        th, td { padding: 0.6rem; text-align: left; border-bottom: 1px solid var(--border); }
-        th { color: var(--text-muted); font-weight: 600; }
+        table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.9rem; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { color: var(--text-muted); font-weight: 600; background-color: rgba(255,255,255,0.02); }
         
-        /* Comparative View Framework */
         .comp-tags { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
         .comp-badge { background: var(--card-bg); border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
         .comp-badge span { color: var(--red); cursor: pointer; font-weight: 700; }
         
-        /* Dynamic Matrix Section Header Controls */
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 0.5rem; }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
         
         footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 2rem 0; border-top: 1px solid var(--border); margin-top: 2rem; }
     </style>
@@ -81,8 +69,7 @@
 
     <div class="wrapper">
         
-        <!-- AdSense Header Module -->
-        <div class="adsense-space top-banner"><!-- Google AdSense Responsive Header Banner Placement --></div>
+        <div class="adsense-space top-banner"></div>
 
         <header>
             <div class="brand-text">
@@ -93,186 +80,166 @@
 
         <div class="workspace">
             
-            <!-- Left Sidebar Navigation Layout -->
             <div class="sidebar-panel">
                 
                 <div class="panel-box">
-                    <div class="filter-group">
-                        <button class="filter-btn active" id="btnAll" onclick="setMode('ALL')">All Listed</button>
-                        <button class="filter-btn" id="btnShariah" onclick="setMode('SHARIAH')">Shariah Only</button>
-                    </div>
-                    
-                    <div class="search-container">
-                        <input type="text" id="targetInput" placeholder="Symbol or Name (e.g., FFC, SYS)...">
-                        <button onclick="triggerSearch()">Pull</button>
+                    <h3>Analyze New Security</h3>
+                    <div class="search-container" style="margin-top:0.75rem;">
+                        <input type="text" id="targetInput" placeholder="Enter Symbol (e.g. FFC, SYS, MARI)...">
+                        <button onclick="triggerSearch()">Fetch</button>
                     </div>
                 </div>
 
                 <div class="panel-box">
-                    <h3>Active Watchlist</h3>
-                    <div class="scroller-list" id="watchlistContainer"></div>
-                </div>
-
-                <div class="panel-box">
-                    <h3>Strategic Rankings</h3>
-                    <div class="filter-group" style="margin-top:0.5rem;">
-                        <button class="filter-btn active" style="padding:0.4rem; font-size:0.75rem;" onclick="runRankings('DIVIDEND')">Dividend</button>
-                        <button class="filter-btn" style="padding:0.4rem; font-size:0.75rem;" onclick="runRankings('GROWTH')">Growth</button>
-                        <button class="filter-btn" style="padding:0.4rem; font-size:0.75rem;" onclick="runRankings('VALUE')">Value</button>
-                    </div>
+                    <h3>Strategic Sector Rankings</h3>
                     <div class="scroller-list" id="rankingContainer"></div>
                 </div>
 
-                <!-- AdSense Sidebar Column Alignment -->
-                <div class="adsense-space sidebar-ad"><!-- Google AdSense Vertical Display Multi-Responsive Placement --></div>
+                <div class="panel-box">
+                    <h3>Terminal Watchlist</h3>
+                    <div class="scroller-list" id="watchlistContainer"></div>
+                </div>
+
+                <div class="adsense-space sidebar-ad"></div>
 
             </div>
 
-            <!-- Main Operational Dashboard Output Column -->
             <div class="main-panel">
                 
-                <!-- Terminal Display Dashboard Snapshot -->
                 <div class="panel-box">
                     <div class="section-header">
                         <h3 id="displayTitle">Company Research Profile</h3>
-                        <button class="filter-btn" style="flex:none; padding:0.4rem 1rem;" onclick="toggleWatchlist()">+/- Watchlist</button>
+                        <button class="filter-btn" onclick="toggleWatchlist()">+/- Watchlist</button>
                     </div>
 
                     <div class="snapshot-grid">
                         <div class="stat-card"><label>Symbol</label><div class="value" id="lblSym">---</div></div>
-                        <div class="stat-card"><label>Sector</label><div class="value" style="font-size:1rem;" id="lblSector">---</div></div>
-                        <div class="stat-card"><label>Current Price</label><div class="value" id="lblPrice">Rs. 0.00</div></div>
+                        <div class="stat-card"><label>Sector Link</label><div class="value" style="font-size:1.05rem;" id="lblSector">---</div></div>
+                        <div class="stat-card"><label>Current Share Price</label><div class="value" id="lblPrice">Rs. 0.00</div></div>
                         <div class="stat-card"><label>Previous Close</label><div class="value" id="lblPrev">Rs. 0.00</div></div>
-                        <div class="stat-card"><label>52W High / Low</label><div class="value" style="font-size:1.1rem;" id="lbl52Range">---</div></div>
-                        <div class="stat-card"><label>Market Cap</label><div class="value" id="lblCap">---</div></div>
+                        <div class="stat-card"><label>52-Week High / Low</label><div class="value" style="font-size:1.1rem;" id="lbl52Range">---</div></div>
+                        <div class="stat-card"><label>Market Capitalization</label><div class="value" id="lblCap">---</div></div>
+                        <div class="stat-card"><label>Shares Outstanding</label><div class="value" style="font-size:1.1rem;" id="lblShares">---</div></div>
                         <div class="stat-card"><label>Free Float</label><div class="value" id="lblFloat">---</div></div>
-                        <div class="stat-card"><label>Last Updated</label><div class="value" style="font-size:1rem;" id="lblDate">---</div></div>
+                        <div class="stat-card"><label>Last Updated Date</label><div class="value" style="font-size:1.05rem;" id="lblDate">---</div></div>
                     </div>
                 </div>
 
-                <!-- Analytical Quick-Look Matrices -->
                 <div class="panel-box">
                     <div class="section-header"><h3>Investor Quick View Ratings</h3></div>
                     <div class="snapshot-grid">
-                        <div class="stat-card"><label>Business Quality</label><div class="quick-badge badge-green">Premium Tier</div></div>
-                        <div class="stat-card"><label>Dividend Yield Quality</label><div class="quick-badge badge-green">High Consistent</div></div>
-                        <div class="stat-card"><label>Financial Baseline Strength</label><div class="quick-badge badge-orange">Stable Core</div></div>
-                        <div class="stat-card"><label>Debt Quality Matrix</label><div class="quick-badge badge-green">Low Leverage</div></div>
-                        <div class="stat-card"><label>Valuation Matrix Score</label><div class="quick-badge id="lblValBadge" badge-orange">Calculating...</div></div>
+                        <div class="stat-card"><label>Shariah Compliant Status</label><div class="quick-badge" id="lblShariahBadge">---</div></div>
+                        <div class="stat-card"><label>Business Quality</label><div class="quick-badge badge-green">Premium Core Tier</div></div>
+                        <div class="stat-card"><label>Dividend Quality</label><div class="quick-badge badge-green">High Consistent</div></div>
+                        <div class="stat-card"><label>Financial Strength</label><div class="quick-badge badge-orange">Stable Buffer</div></div>
+                        <div class="stat-card"><label>Valuation Rating</label><div class="quick-badge" id="lblValBadge">Calculating...</div></div>
                     </div>
                 </div>
 
-                <!-- Comprehensive Valuation and Fundamentals Metrics Grid -->
                 <div class="panel-box">
-                    <div class="section-header"><h3>Valuation & Fundamentals Architecture</h3></div>
+                    <div class="section-header"><h3>Valuation & Valuation Analysis Fundamentals</h3></div>
                     <div class="snapshot-grid">
                         <div class="stat-card"><label>EPS</label><div class="value" id="lblEps">-</div></div>
                         <div class="stat-card"><label>P/E Ratio</label><div class="value" id="lblPe">-</div></div>
-                        <div class="stat-card"><label>Book Value / Share</label><div class="value" id="lblBv">-</div></div>
-                        <div class="stat-card"><label>P/B Ratio</label><div class="value" id="lblPb">-</div></div>
+                        <div class="stat-card"><label>Book Value Per Share</label><div class="value" id="lblBv">-</div></div>
+                        <div class="stat-card"><label>Price-to-Book Ratio (P/B)</label><div class="value" id="lblPb">-</div></div>
                         <div class="stat-card"><label>Dividend Yield</label><div class="value" id="lblYield">-</div></div>
                         <div class="stat-card"><label>Enterprise Value</label><div class="value" id="lblEv">-</div></div>
                     </div>
                 </div>
 
-                <!-- Structural Accounting Flow Framework Tables -->
+                <div class="info-split">
+                    <div class="info-block">
+                        <h4>Business Overview & Competitive Position</h4>
+                        <p style="font-size:0.9rem; line-height:1.5; color:var(--text-muted);" id="lblDesc">Enter a ticker to generate profile.</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>Revenue Breakdown Channels</h4>
+                        <ul style="padding-left:1.1rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem;" id="revenueList"></ul>
+                    </div>
+                    <div class="info-block">
+                        <h4>Other Non-Core Income Tracking Analysis</h4>
+                        <ul style="padding-left:1.1rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem;" id="incomeList"></ul>
+                    </div>
+                </div>
+
                 <div class="panel-box">
-                    <div class="section-header"><h3>Historical Corporate Financial Statements (5-Year Matrix)</h3></div>
+                    <div class="section-header"><h3>Historical Year-to-Year Financial Statements (5-Year Matrix)</h3></div>
                     <div style="overflow-x:auto;">
                         <table id="financialTable">
-                            <thead><tr><th>Metric Matrix Line</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th></tr></thead>
-                            <tbody><tr><td colspan="6">Pull a corporate dataset to initialize the baseline sequence matrix elements.</td></tr></tbody>
+                            <thead><tr><th>Metric Matrix Historical Line</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th></tr></thead>
+                            <tbody><tr><td colspan="6">Pull a corporate dataset to initialize the historical baseline view grids.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Dual Segment Operational Data Splitting Matrices -->
-                <div class="info-split">
-                    <div class="info-block">
-                        <h4>Revenue Stream Distributions</h4>
-                        <ul style="padding-left:1.2rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem;" id="revenueList"></ul>
-                    </div>
-                    <div class="info-block">
-                        <h4>Other Non-Core Income Tracking Analysis</h4>
-                        <ul style="padding-left:1.2rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem;" id="incomeList"></ul>
-                    </div>
-                </div>
-
-                <!-- Debt Profile Risk Analytics Mapping Blocks -->
                 <div class="panel-box">
-                    <div class="section-header"><h3>Debt Profile Risk Metrics Mapping Analysis</h3></div>
+                    <div class="section-header"><h3>Debt Accounting Analysis Profile Metrics</h3></div>
                     <div class="snapshot-grid">
-                        <div class="stat-card"><label>Total Outstanding Debt</label><div class="value" id="lblTotalDebt">-</div></div>
+                        <div class="stat-card"><label>Total Debt</label><div class="value" id="lblTotalDebt">-</div></div>
                         <div class="stat-card"><label>Debt-to-Equity Ratio</label><div class="value" id="lblDeRatio">-</div></div>
-                        <div class="stat-card"><label>Annualised Finance Costs</label><div class="value" id="lblFinCost">-</div></div>
+                        <div class="stat-card"><label>Finance Cost</label><div class="value" id="lblFinCost">-</div></div>
                         <div class="stat-card"><label>Interest Coverage Ratio</label><div class="value" id="lblCoverage">-</div></div>
                     </div>
                 </div>
 
-                <!-- Future Structural Projections Framework Panels -->
                 <div class="panel-box">
-                    <div class="section-header"><h3>Forward Execution Projections & Operational Forecast Matrix</h3></div>
-                    <div class="info-split" style="margin-top:0.5rem;">
+                    <div class="section-header"><h3>Forward Forecast Engine & Future Risks Management Matrix</h3></div>
+                    <div class="info-split" style="margin-top:0.5rem; margin-bottom:1.25rem;">
                         <div class="info-block">
-                            <h4>Target Operational Expansion Layout</h4>
-                            <ul style="padding-left:1.2rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem;" id="futureList"></ul>
+                            <h4>Target Operational Expansion Plans</h4>
+                            <ul style="padding-left:1.1rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem;" id="futureList"></ul>
                         </div>
                         <div class="info-block">
                             <h4>Algorithmic Red Flag Warnings Matrix</h4>
-                            <ul style="padding-left:1.2rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem; color:var(--red);" id="redFlagsList"></ul>
+                            <ul style="padding-left:1.1rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem; color:var(--red);" id="redFlagsList"></ul>
                         </div>
                     </div>
                     
-                    <div style="overflow-x:auto; margin-top:1rem;">
+                    <div style="overflow-x:auto;">
                         <table id="forecastTable">
-                            <thead><tr><th>Forecast Estimates Matrix</th><th>2027 Proj</th><th>2028 Proj</th><th>Confidence Band Limit</th></tr></thead>
-                            <tbody><tr><td colspan="4">No data metrics processed.</td></tr></tbody>
+                            <thead><tr><th>Forward Financial Projections (Estimates)</th><th>2027 Proj Target</th><th>2028 Proj Target</th><th>Confidence Band Limit Bounds</th></tr></thead>
+                            <tbody><tr><td colspan="4">Initialize accounting structures to trigger projections.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Strategic Asset Allocation Optimization Tools -->
                 <div class="panel-box">
-                    <div class="section-header"><h3>Strategic Capital Deployment Framework Tool</h3></div>
-                    <div class="search-container" style="max-width:500px; margin-bottom:1rem;">
+                    <div class="section-header"><h3>Portfolio Builder Allocation Framework Tool</h3></div>
+                    <div class="search-container" style="max-width:500px; margin-bottom:1.25rem;">
                         <input type="number" id="portfolioCapital" placeholder="Capital Amount Allocation (Rs.)..." value="500000">
-                        <button onclick="calculatePortfolioDeployment()">Generate Allocation Matrix</button>
+                        <button onclick="calculatePortfolioDeployment()">Formulate Allocations</button>
                     </div>
                     <div class="snapshot-grid" id="portfolioReport"></div>
                 </div>
 
-                <!-- Comprehensive Multi-Company Cross Comparison Matrices Section -->
                 <div class="panel-box">
-                    <div class="section-header"><h3>Multi-Ticker Competitive Benchmarking Core Matrix</h3></div>
+                    <div class="section-header"><h3>Multi-Ticker Competitive Benchmarking Core Matrix (Up to 5 Companies)</h3></div>
                     <div class="comp-tags" id="comparisonTags"></div>
-                    <button class="filter-btn" style="max-width:250px; margin-bottom:1rem;" onclick="addToComparison()">Stage Active Security for Side-by-Side View</button>
+                    <button class="filter-btn" style="margin-bottom:1.25rem;" onclick="addToComparison()">Stage Active Security for Cross Comparison View</button>
                     <div style="overflow-x:auto;">
                         <table id="comparisonMatrixTable">
-                            <thead><tr id="compHeaders"><th>Benchmark Parameter</th></tr></thead>
+                            <thead><tr id="compHeaders"><th>Benchmark Parameter Line Metrics</th></tr></thead>
                             <tbody id="compBody"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Enterprise Level Documentation Asset Hub Panel -->
                 <div class="panel-box">
-                    <div class="section-header"><h3>Corporate Documentation Repository Asset Center</h3></div>
+                    <div class="section-header"><h3>Corporate Reports & Announcement Hub Center</h3></div>
                     <div class="snapshot-grid">
-                        <div class="stat-card" style="cursor:pointer;" onclick="alert('Downloading Certified Financial Compilation Asset Package...')"><label>Annual Financial Reports</label><span style="font-size:0.85rem; color:var(--accent);">Download Server Mirror 1</span></div>
-                        <div class="stat-card" style="cursor:pointer;" onclick="alert('Downloading Certified Structural Briefing Data Elements...')"><label>Quarterly/Half-Year Filings</label><span style="font-size:0.85rem; color:var(--accent);">Download Server Mirror 1</span></div>
-                        <div class="stat-card" style="cursor:pointer;" onclick="alert('Accessing Integrated Corporate Strategy Deck...')"><label>Investor Briefing Arrays</label><span style="font-size:0.85rem; color:var(--accent);">Open Direct Link Instance</span></div>
+                        <div class="stat-card" style="cursor:pointer;" onclick="alert('Accessing Annual/Quarterly Financial Report Repositories...')"><label>Reports Center Download</label><span style="font-size:0.85rem; color:var(--accent);">Mirror Node 1 Online</span></div>
+                        <div class="stat-card" style="cursor:pointer;" onclick="alert('Accessing Historical Corporate Dividends & Actions Filings...')"><label>Announcements Center Registry</label><span style="font-size:0.85rem; color:var(--accent);">Mirror Node 1 Online</span></div>
+                        <div class="stat-card" style="cursor:pointer;" onclick="alert('Accessing Core Investment Suitability Verdict Framework Indices...')"><label>Investor Verdict Matrix</label><span style="font-size:0.85rem; color:var(--accent);">Open Direct View</span></div>
                     </div>
                 </div>
-
-                <!-- AdSense In-Content Layout Intercept Space Mockup -->
-                <div class="adsense-space content-ad"><!-- Google AdSense Fluid In-Content Programmatic Dynamic Native Placement --></div>
 
             </div>
 
         </div>
 
         <footer>
-            <p>PSX Investor Terminal Baseline Structure Engine Model Portfolio Environment Trackers</p>
+            <p>PSX Investment Research Analytic Dashboard Framework Environment Solutions</p>
             <p style="margin-top:0.5rem; color:var(--accent); font-weight:600;">Developed by Hammad Hanif</p>
         </footer>
 

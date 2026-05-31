@@ -26,7 +26,7 @@
         .hub-flex { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
         .quick-chip { background: rgba(46,204,113,0.15); border: 1px solid #2ecc71; color: #2ecc71; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
         .quick-chip:hover { background: #2ecc71; color: #000; }
-        .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.2rem; border-radius: 6px; outline:none; font-weight:600; cursor: pointer; }
+        .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.2rem; border-radius: 6px; outline:none; font-weight:600; cursor: pointer; width: 280px; }
         
         /* Ad Containers */
         .top-banner { width: 100%; min-height: 90px; margin-bottom: 0.5rem; }
@@ -51,7 +51,7 @@
         .stat-card label { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.4rem; letter-spacing: 0.5px; }
         .stat-card .value { font-size: 1.3rem; font-weight: 700; }
         
-        .quick-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; background: var(--primary-bg); border: 1px solid var(--border); }
+        .quick-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; background: var(--primary-bg); border: 1px solid var(--border); text-align: center; }
         .badge-green { color: var(--green); border-color: var(--green); }
         .badge-orange { color: var(--accent); border-color: var(--accent); }
         .badge-red { color: var(--red); border-color: var(--red); }
@@ -65,8 +65,8 @@
         th { color: var(--text-muted); font-weight: 600; background-color: rgba(255,255,255,0.02); }
         
         .comp-tags { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .comp-badge { background: var(--card-bg); border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
-        .comp-badge span { color: var(--red); cursor: pointer; font-weight: 700; }
+        .comp-badge { background: var(--card-bg); border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; }
+        .comp-badge span { color: var(--red); cursor: pointer; font-weight: 700; font-size: 1.1rem; }
         
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 0.5rem; }
         .filter-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
@@ -98,41 +98,66 @@
             <div class="user-stamp" id="headerUser">Hammad Hanif</div>
         </header>
 
-        <!-- Top Discovery Hub: Shariah Screener -->
+        <!-- Top Discovery Hub: Shariah Screener (Expanded Dropdown Layout) -->
         <div class="shariah-hub">
-            <h3>🕌 Shariah Compliance Screening Quick-Access Center</h3>
+            <h3>漏 Shariah Compliance Screening Quick-Access Center</h3>
             <div class="hub-flex">
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('FFC')">FFC (Fauji Fertilizer)</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('EFERT')">EFERT (Engro Fert)</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('MARI')">MARI (Mari Petroleum)</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('OGDC')">OGDC (Oil & Gas Dev)</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('SYS')">SYS (Systems Limited)</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('LUCK')">LUCK (Lucky Cement)</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('FFC')">FFC</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('EFERT')">EFERT</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('MARI')">MARI</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('OGDC')">OGDC</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('SYS')">SYS</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('LUCK')">LUCK</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('MEBL')">MEBL</span>
+                <span class="quick-chip" onclick="triggerDirectTickerQuery('SAZEW')">SAZEW</span>
                 
                 <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
-                    <label style="font-size:0.85rem; font-weight:600; color:#8a90a6;">Browse All Tickers:</label>
+                    <label style="font-size:0.85rem; font-weight:600; color:#8a90a6;">All Listed Assets Dropdown:</label>
                     <select class="select-menu" id="shariahDropdown" onchange="triggerDirectTickerQuery(this.value)">
-                        <option value="">-- Select Listed Asset --</option>
-                        <option value="FFC">FFC - Fauji Fertilizer</option>
-                        <option value="EFERT">EFERT - Engro Fertilizers</option>
-                        <option value="FATIMA">FATIMA - Fatima Fertilizer</option>
-                        <option value="ENGRO">ENGRO - Engro Corporation</option>
-                        <option value="DAWH">DAWH - Dawood Hercules</option>
-                        <option value="MARI">MARI - Mari Petroleum</option>
-                        <option value="OGDC">OGDC - Oil & Gas Dev Corp</option>
-                        <option value="PPL">PPL - Pakistan Petroleum Ltd</option>
-                        <option value="POL">POL - Pakistan Oilfields Ltd</option>
-                        <option value="SNGP">SNGP - Sui Northern Gas</option>
-                        <option value="SYS">SYS - Systems Limited</option>
-                        <option value="TRG">TRG - TRG Pakistan</option>
-                        <option value="OCTOS">OCTOS - Octano Systems</option>
-                        <option value="AVN">AVN - Avanceon Limited</option>
-                        <option value="NETSOL">NETSOL - NetSol Tech</option>
-                        <option value="HUBC">HUBC - Hub Power Company</option>
-                        <option value="KEL">KEL - K-Electric Limited</option>
-                        <option value="MEBL">MEBL - Meezan Bank Limited</option>
-                        <option value="LUCK">LUCK - Lucky Cement</option>
-                        <option value="DGKC">DGKC - DG Khan Cement</option>
+                        <option value="">-- Select Corporate Security --</option>
+                        <!-- Grouped dynamically for fast clean selection -->
+                        <optgroup label="Fertilizer & Chemicals">
+                            <option value="FFC">FFC - Fauji Fertilizer Co.</option>
+                            <option value="EFERT">EFERT - Engro Fertilizers</option>
+                            <option value="FATIMA">FATIMA - Fatima Fertilizer</option>
+                            <option value="ENGRO">ENGRO - Engro Corporation</option>
+                            <option value="DAWH">DAWH - Dawood Hercules</option>
+                        </optgroup>
+                        <optgroup label="Oil & Gas Exploration">
+                            <option value="MARI">MARI - Mari Petroleum</option>
+                            <option value="OGDC">OGDC - Oil & Gas Dev Corp</option>
+                            <option value="PPL">PPL - Pakistan Petroleum Ltd</option>
+                            <option value="POL">POL - Pakistan Oilfields Ltd</option>
+                            <option value="SNGP">SNGP - Sui Northern Gas</option>
+                        </optgroup>
+                        <optgroup label="Technology & IT Services">
+                            <option value="SYS">SYS - Systems Limited</option>
+                            <option value="TRG">TRG - TRG Pakistan</option>
+                            <option value="OCTOS">OCTOS - Octopus Digital</option>
+                            <option value="AVN">AVN - Avanceon Limited</option>
+                            <option value="NETSOL">NETSOL - NetSol Tech</option>
+                        </optgroup>
+                        <optgroup label="Cement & Infrastructure">
+                            <option value="LUCK">LUCK - Lucky Cement</option>
+                            <option value="DGKC">DGKC - DG Khan Cement</option>
+                            <option value="CHCC">CHCC - Cherat Cement</option>
+                            <option value="ACPL">ACPL - Attock Cement</option>
+                            <option value="MLCF">MLCF - Maple Leaf Cement</option>
+                        </optgroup>
+                        <optgroup label="Automotive & Assembly">
+                            <option value="SAZEW">SAZEW - Sazgar Engineering</option>
+                            <option value="MTL">MTL - Millat Tractors</option>
+                            <option value="INDU">INDU - Indus Motor Company</option>
+                            <option value="PSMC">PSMC - Pak Suzuki Motors</option>
+                        </optgroup>
+                        <optgroup label="Power & Utilities">
+                            <option value="HUBC">HUBC - Hub Power Company</option>
+                            <option value="KEL">KEL - K-Electric Limited</option>
+                            <option value="KAPCO">KAPCO - Kot Addu Power</option>
+                        </optgroup>
+                        <optgroup label="Islamic Banking">
+                            <option value="MEBL">MEBL - Meezan Bank Limited</option>
+                        </optgroup>
                     </select>
                 </div>
             </div>
@@ -173,6 +198,28 @@
             <!-- Main Panel -->
             <div class="main-panel">
                 
+                <!-- Cross-Comparison Framework Table Layout Matrix (Companies Horizontal, Analytics Vertical) -->
+                <div class="panel-box">
+                    <div class="section-header">
+                        <h3>5-Company Comparative Valuation Matrix Framework</h3>
+                        <button class="filter-btn" onclick="addToComparison()">Stage Current Security for Analysis</button>
+                    </div>
+                    <div class="comp-tags" id="comparisonTags"></div>
+                    <div style="overflow-x:auto;">
+                        <table id="comparisonMatrixTable">
+                            <thead>
+                                <tr id="compHeaders">
+                                    <th>Benchmark Parameters Matrix Column</th>
+                                    <!-- Dynamic Horizontal Headers go here -->
+                                </tr>
+                            </thead>
+                            <tbody id="compBody">
+                                <tr><td colspan="6" style="color:var(--text-muted); text-align:center; padding:2rem;">No companies added to the horizontal benchmark layout toolbar yet. Click "Stage Current Security" above to start comparing assets.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <div style="display:grid; grid-template-columns: 1fr 320px; gap: 1.5rem; width:100%;">
                     <!-- Profile Header Details -->
                     <div class="panel-box">
@@ -202,8 +249,8 @@
                     <div class="section-header"><h3>Investor Screening & Security Health Indicators</h3></div>
                     <div class="snapshot-grid">
                         <div class="stat-card"><label>Shariah Compliant Status</label><div class="quick-badge" id="lblShariahBadge">---</div></div>
-                        <div class="stat-card"><label>Altman Z-Score Solvency</label><div class="quick-badge" id="lblSolvencyBadge">---</div></div>
-                        <div class="stat-card"><label>FCF Yield Valuation</label><div class="quick-badge" id="lblFcfBadge">---</div></div>
+                        <div class="stat-card"><label>Horizon Categorization</label><div class="quick-badge" id="lblHorizonBadge">---</div></div>
+                        <div class="stat-card"><label>Risk Assessment Class</label><div class="quick-badge" id="lblRiskBadge">---</div></div>
                         <div class="stat-card"><label>Valuation Rating Multiple</label><div class="quick-badge" id="lblValBadge">Calculating...</div></div>
                     </div>
                 </div>
@@ -272,13 +319,6 @@
                             <ul style="padding-left:1.1rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem; color:var(--red);" id="redFlagsList"></ul>
                         </div>
                     </div>
-                    
-                    <div style="overflow-x:auto;">
-                        <table id="forecastTable">
-                            <thead><tr><th>Forward Financial Projections (Estimates)</th><th>2027 Proj Target</th><th>2028 Proj Target</th><th>Confidence Band Limit Bounds</th></tr></thead>
-                            <tbody><tr><td colspan="4">Initialize accounting structures to trigger projections.</td></tr></tbody>
-                        </table>
-                    </div>
                 </div>
 
                 <!-- Capital Allocation Tool -->
@@ -289,19 +329,6 @@
                         <button onclick="calculatePortfolioDeployment()">Formulate Allocations</button>
                     </div>
                     <div class="snapshot-grid" id="portfolioReport"></div>
-                </div>
-
-                <!-- Benchmarking Comparative View Framework -->
-                <div class="panel-box">
-                    <div class="section-header"><h3>Multi-Ticker Competitive Benchmarking Core Matrix (Up to 5 Companies)</h3></div>
-                    <div class="comp-tags" id="comparisonTags"></div>
-                    <button class="filter-btn" style="margin-bottom:1.25rem;" onclick="addToComparison()">Stage Active Security for Cross Comparison View</button>
-                    <div style="overflow-x:auto;">
-                        <table id="comparisonMatrixTable">
-                            <thead><tr id="compHeaders"><th>Benchmark Parameter Line Metrics</th></tr></thead>
-                            <tbody id="compBody"></tbody>
-                        </table>
-                    </div>
                 </div>
 
             </div>

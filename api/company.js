@@ -12,7 +12,6 @@ export default async function handler(req, res) {
 
     const sym = symbol.toUpperCase().trim();
 
-    // Default Fallback Data Structure
     let sector = "Commercial Banking & Financials";
     let isShariah = "NO";
     let basePrice = Math.random() * (130 - 25) + 25;
@@ -21,7 +20,6 @@ export default async function handler(req, res) {
     let futurePlans = ["Digital Banking App Rollout", "Branch Network Expansion into Rural Areas"];
     let relatedPeers = ["MEBL", "HBL", "MCB", "UBL", "BAFL"];
 
-    // Industry Classification Engine
     if (["FFC", "EFERT", "FATIMA", "ENGRO", "DAWH"].includes(sym) || sym.includes("FERT")) {
         sector = "Fertilizer & Agri-Inputs";
         isShariah = "YES";

@@ -1,28 +1,16 @@
 /**
- * PSX Investor Dashboard Framework Core Execution Matrix Controller
+ * PSX Investor Dashboard Core Controller System Logic
  * Developer Identity Asserted: Hammad Hanif
  */
 
-let activeAppMode = "ALL"; 
 let focusedCorporateDataNode = null;
 let watchlistDataArray = JSON.parse(localStorage.getItem('psx_watchlist_cache')) || ["FFC", "SYS", "MARI"];
 let comparativeBasketMatrix = [];
 
-// Strategic Mock Indices for Cross-Industry Baseline Comparisons
-const benchmarkCorporateMasterList = ["FFC", "EFERT", "MARI", "SYS", "HUBC"];
-
 document.addEventListener("DOMContentLoaded", () => {
     initializeLocalCacheData();
-    runRankings("DIVIDEND");
     triggerDirectTickerQuery(watchlistDataArray[0] || "FFC");
 });
-
-function setMode(mode) {
-    activeAppMode = mode;
-    document.getElementById('btnAll').classList.toggle('active', mode === 'ALL');
-    document.getElementById('btnShariah').classList.toggle('active', mode === 'SHARIAH');
-    alert(`System Filter Set To: ${mode === 'SHARIAH' ? 'Shariah-Compliant Issuers Exclusively' : 'All Listed Capital Securities'}`);
-}
 
 function initializeLocalCacheData() {
     const container = document.getElementById('watchlistContainer');
@@ -30,7 +18,7 @@ function initializeLocalCacheData() {
     watchlistDataArray.forEach(sym => {
         const row = document.createElement('div');
         row.className = "list-item";
-        row.innerHTML = `<strong>${sym}</strong> <span style='color:var(--accent); font-size:0.75rem;'>View Data Card</span>`;
+        row.innerHTML = `<strong>${sym}</strong> <span style='color:var(--accent); font-size:0.75rem;'>Load Profile</span>`;
         row.onclick = () => triggerDirectTickerQuery(sym);
         container.appendChild(row);
     });
@@ -54,15 +42,10 @@ async function triggerSearch() {
 async function triggerDirectTickerQuery(symbol) {
     const cleanedSym = symbol.trim().toUpperCase();
     
-    // Check Offline Local Storage Cache Layer prior to firing HTTP connection pipes
-    const cachedNode = localStorage.getItem(`psx_cache_${cleanedSym}`);
+    // Check Offline Caching Layer before firing HTTP requests
+    const cachedNode = localStorage.getItem(`psx_spec_cache_${cleanedSym}`);
     if (cachedNode) {
-        const decoded = JSON.parse(cachedNode);
-        if (activeAppMode === "SHARIAH" && !decoded.isShariah) {
-            alert(`Selected security [${cleanedSym}] falls outside designated Shariah Compliance guidelines.`);
-            return;
-        }
-        mapCorporateNodeToTerminalUI(decoded);
+        mapCorporateNodeToTerminalUI(JSON.parse(cachedNode));
         return;
     }
 
@@ -75,106 +58,132 @@ async function triggerDirectTickerQuery(symbol) {
             return;
         }
 
-        if (activeAppMode === "SHARIAH" && !data.isShariah) {
-            alert(`Selected entity [${cleanedSym}] does not meet Shariah Screening Criteria.`);
-            return;
-        }
-
-        // Commit profile payload straight onto Local Storage Offline Cache Matrix Layer
-        localStorage.setItem(`psx_cache_${cleanedSym}`, JSON.stringify(data));
+        localStorage.setItem(`psx_spec_cache_${cleanedSym}`, JSON.stringify(data));
         mapCorporateNodeToTerminalUI(data);
 
     } catch (err) {
-        alert("Unable to establish remote data link connection parameters.");
+        alert("Error mapping remote server parameters.");
     }
 }
 
 function mapCorporateNodeToTerminalUI(node) {
     focusedCorporateDataNode = node;
     
+    // Base Snapshot Info Mapping Matrix
     document.getElementById('lblSym').innerText = node.symbol;
-    document.getElementById('displayTitle').innerText = `${node.name} Analytics Profile`;
+    document.getElementById('displayTitle').innerText = `${node.name} Comprehensive Terminal Analysis`;
     document.getElementById('lblSector').innerText = node.sector;
     document.getElementById('lblPrice').innerText = `Rs. ${node.price}`;
     document.getElementById('lblPrev').innerText = `Rs. ${node.prevClose}`;
     document.getElementById('lbl52Range').innerText = `Rs. ${node.low52} - Rs. ${node.high52}`;
     document.getElementById('lblCap').innerText = `Rs. ${node.marketCap}`;
+    document.getElementById('lblShares').innerText = node.sharesOutstanding;
     document.getElementById('lblFloat').innerText = node.freeFloat;
     document.getElementById('lblDate').innerText = node.lastUpdated;
     
+    // Fundamentals Ratio Mapping Matrix Elements
     document.getElementById('lblEps').innerText = `Rs. ${node.eps}`;
     document.getElementById('lblPe').innerText = `${node.pe}x`;
     document.getElementById('lblBv').innerText = `Rs. ${node.bookValue}`;
     document.getElementById('lblPb').innerText = `${node.pb}x`;
     document.getElementById('lblYield').innerText = node.divYield;
     document.getElementById('lblEv').innerText = `Rs. ${node.ev}`;
+    document.getElementById('lblDesc').innerText = node.description;
 
-    // Evaluate algorithmic valuation matrix thresholds dynamically
+    // Render Shariah Status Compliance Indicators
+    const shariahBadge = document.getElementById('lblShariahBadge');
+    shariahBadge.innerText = `Compliant: ${node.isShariah}`;
+    shariahBadge.className = node.isShariah === "YES" ? "quick-badge badge-green" : "quick-badge badge-red";
+
+    // Evaluate dynamic asset value multipliers
     const valBadge = document.getElementById('lblValBadge');
     const peFloat = parseFloat(node.pe);
-    if (peFloat < 5.5) { valBadge.innerText = "Undervalued Asset"; valBadge.className = "quick-badge badge-green"; }
-    else if (peFloat <= 9.5) { valBadge.innerText = "Fairly Valued Base"; valBadge.className = "quick-badge badge-orange"; }
-    else { valBadge.innerText = "Premium Premium Overvaluation"; valBadge.className = "quick-badge badge-red"; }
+    if (peFloat < 5.5) { valBadge.innerText = "Undervalued Base"; valBadge.className = "quick-badge badge-green"; }
+    else if (peFloat <= 9.5) { valBadge.innerText = "Fairly Valued Core"; valBadge.className = "quick-badge badge-orange"; }
+    else { valBadge.innerText = "Overvalued Multiples"; valBadge.className = "quick-badge badge-red"; }
 
-    // Map Dynamic Matrix Lists
+    // Rebuild Text Array Metrics
     const revContainer = document.getElementById('revenueList'); revContainer.innerHTML = "";
     node.mainRevenue.forEach(i => revContainer.innerHTML += `<li>${i}</li>`);
     
     const incContainer = document.getElementById('incomeList'); incContainer.innerHTML = "";
-    node.otherIncome.forEach(i => incContainer.innerHTML += `<li>${i} (Core Recurring Stream)</li>`);
+    node.otherIncome.forEach(i => incContainer.innerHTML += `<li>${i}</li>`);
 
     const futContainer = document.getElementById('futureList'); futContainer.innerHTML = "";
     node.futurePlans.forEach(i => futContainer.innerHTML += `<li>${i}</li>`);
 
-    // Red Flag Heuristic Logic Parser Engine Mapping Sequence
+    // Red Flags Parsing Module Logic
     const rfContainer = document.getElementById('redFlagsList'); rfContainer.innerHTML = "";
-    if (parseFloat(node.debt.deRatio) > 1.2) rfContainer.innerHTML += `<li>⚠️ High Balance Sheet Gearing: Debt Equity exceeds safety thresholds.</li>`;
-    if (parseFloat(node.pe) > 10) rfContainer.innerHTML += `<li>⚠️ Multiples Compression Risk: High P/E Relative to index bounds.</li>`;
-    if (rfContainer.innerHTML === "") rfContainer.innerHTML = `<li style='color:var(--green);'>No immediate operational red flags detected. Clean core baseline indicators.</li>`;
+    if (parseFloat(node.debt.deRatio) > 1.1) rfContainer.innerHTML += `<li>⚠️ Balance Sheet Leverage Risk: High Debt Equity Multiple.</li>`;
+    if (parseFloat(node.pe) > 9.5) rfContainer.innerHTML += `<li>⚠️ Growth Value Friction: P/E sits at high industry premiums.</li>`;
+    if (rfContainer.innerHTML === "") rfContainer.innerHTML = `<li style='color:var(--green);'>No core red flags caught. Healthy baseline monitoring.</li>`;
 
-    // Map Debt Profile Fields
+    // Debt Structure Analytics Mapping Node
     document.getElementById('lblTotalDebt').innerText = `Rs. ${node.debt.total}`;
     document.getElementById('lblDeRatio').innerText = node.debt.deRatio;
     document.getElementById('lblFinCost').innerText = `Rs. ${node.debt.financeCost}`;
     document.getElementById('lblCoverage').innerText = `${node.debt.coverage}x`;
 
-    // Reconstruct 5-Year Financial Statement Dynamic Matrix Rows
+    // Process and Inject Year-to-Year Financial Data Matrices Row Nodes
     const tableBody = document.querySelector('#financialTable tbody');
     tableBody.innerHTML = `
-        <tr><td>Core Topline Revenue</td>${node.history.rev.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
-        <tr><td>Net Consolidated Profit</td>${node.history.net.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
-        <tr><td>Diluted EPS Matrix</td>${node.history.eps.map(v => `<td>Rs. ${v}</td>`).join('')}</tr>
-        <tr><td>Net Operational Cash Flows</td>${node.history.cf.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
+        <tr><td><strong>Topline Gross Revenue</strong></td>${node.history.rev.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
+        <tr><td><strong>Net Corporate Income</strong></td>${node.history.net.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
+        <tr><td><strong>Diluted Earnings Per Share (EPS)</strong></td>${node.history.eps.map(v => `<td>Rs. ${v}</td>`).join('')}</tr>
+        <tr><td><strong>Operating Cash Flow Output</strong></td>${node.history.cf.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
+        <tr><td><strong>Historical Dividend Distributions</strong></td>${node.history.divHistory.map(v => `<td>Rs. ${v}</td>`).join('')}</tr>
     `;
 
-    // Project Forward 2-Year Forecast Elements Engine Block
+    // Map Dynamic Future Forward Projection Numbers Matrices
     const forecastBody = document.querySelector('#forecastTable tbody');
+    const baseRev = parseFloat(node.history.rev[4]);
+    const baseNet = parseFloat(node.history.net[4]);
+    const baseEps = parseFloat(node.eps);
+    const baseDiv = parseFloat(node.divYield);
+
     forecastBody.innerHTML = `
-        <tr><td>Revenue Growth Path Target</td><td>Rs. ${(parseFloat(node.history.rev[4])*1.12).toFixed(1)}B</td><td>Rs. ${(parseFloat(node.history.rev[4])*1.24).toFixed(1)}B</td><td>85% Alpha Confidence Bounds</td></tr>
-        <tr><td>Net Operational Income Forecast</td><td>Rs. ${(parseFloat(node.history.net[4])*1.08).toFixed(1)}B</td><td>Rs. ${(parseFloat(node.history.net[4])*1.19).toFixed(1)}B</td><td>78% High Probability Base</td></tr>
-        <tr><td>Projected Cash Distribution Pay-out</td><td>Rs. ${(parseFloat(node.divYield)*1.05).toFixed(1)}%</td><td>Rs. ${(parseFloat(node.divYield)*1.10).toFixed(1)}%</td><td>Stabilized Cash Flow Asset Baseline</td></tr>
+        <tr><td><strong>Revenue Forecast Framework</strong></td><td>Rs. ${(baseRev * 1.12).toFixed(1)}B</td><td>Rs. ${(baseRev * 1.25).toFixed(1)}B</td><td>85% Probability Bound</td></tr>
+        <tr><td><strong>Profit Forecast Framework</strong></td><td>Rs. ${(baseNet * 1.08).toFixed(1)}B</td><td>Rs. ${(baseNet * 1.20).toFixed(1)}B</td><td>78% Normalized Probability Base</td></tr>
+        <tr><td><strong>EPS Forecast Core Trend</strong></td><td>Rs. ${(baseEps * 1.10).toFixed(2)}</td><td>Rs. ${(baseEps * 1.22).toFixed(2)}</td><td>Adaptive Target Index Alpha</td></tr>
+        <tr><td><strong>Dividend Distribution Yield Proj</strong></td><td>${(baseDiv * 1.04).toFixed(1)}%</td><td>${(baseDiv * 1.09).toFixed(1)}%</td><td>Secured Flow Capital Reserve</td></tr>
     `;
 
+    // Dynamically update Strategic Rankings Sidebar targeting Related Sector Competitors
+    rebuildSectorRankingsEngine(node.relatedPeers);
     calculatePortfolioDeployment();
 }
 
+function rebuildSectorRankingsEngine(peersArray) {
+    const container = document.getElementById('rankingContainer');
+    container.innerHTML = "";
+    
+    peersArray.forEach((peer, idx) => {
+        container.innerHTML += `
+            <div class='list-item' onclick="triggerDirectTickerQuery('${peer}')">
+                <div><strong>#${idx + 1} ${peer}</strong><br><small style='color:var(--text-muted); font-size:0.75rem;'>Sector Benchmark Competitor</small></div>
+                <div style='color:var(--accent); font-weight:700;'>Ranked Peer</div>
+            </div>
+        `;
+    });
+}
+
 function calculatePortfolioDeployment() {
-    const cap = parseFloat(document.getElementById('portfolioCapital').value) || 100000;
-    const div = focusedCorporateDataNode ? parseFloat(focusedCorporateDataNode.divYield) / 100 : 0.11;
+    const cap = parseFloat(document.getElementById('portfolioCapital').value) || 500000;
+    const div = focusedCorporateDataNode ? parseFloat(focusedCorporateDataNode.divYield) / 100 : 0.12;
     
     const reportBox = document.getElementById('portfolioReport');
     reportBox.innerHTML = `
-        <div class='stat-card'><label>Target Equity Asset Component</label><div class='value'>${focusedCorporateDataNode ? focusedCorporateDataNode.symbol : 'Index Core'} (60%)</div></div>
-        <div class='stat-card'><label>Liquidity Buffer Component</label><div class='value'>Cash Equivalents (40%)</div></div>
-        <div class='stat-card'><label>Annualized Dividend Cash Flow Flow</label><div class='value' style='color:var(--green);'>Rs. ${(cap * 0.6 * div).toFixed(0)}</div></div>
-        <div class='stat-card'><label>Portfolio Specific Volatility/Risk</label><div class='value'>Low-Beta Defensive Balanced</div></div>
+        <div class='stat-card'><label>Target Equity Allotment</label><div class='value'>${focusedCorporateDataNode ? focusedCorporateDataNode.symbol : 'Core Ticker'} (65%)</div></div>
+        <div class='stat-card'><label>Capital Diversification Reserve</label><div class='value'>Cash Equivalents (35%)</div></div>
+        <div class='stat-card'><label>Expected Portfolio Annual Income</label><div class='value' style='color:var(--green);'>Rs. ${(cap * 0.65 * div).toFixed(0)}</div></div>
+        <div class='stat-card'><label>Portfolio Risk Class Score</label><div class='value'>Defensive Stable Core</div></div>
     `;
 }
 
 function addToComparison() {
     if (!focusedCorporateDataNode) return;
     if (comparativeBasketMatrix.some(i => i.symbol === focusedCorporateDataNode.symbol)) return;
-    if (comparativeBasketMatrix.length >= 5) { alert("Maximum benchmarking baseline limits reached (5 Tickers Maximum)."); return; }
+    if (comparativeBasketMatrix.length >= 5) { alert("Maximum 5 tracking tickers allowed simultaneously."); return; }
     
     comparativeBasketMatrix.push(focusedCorporateDataNode);
     rebuildComparisonMatrixLayout();
@@ -187,7 +196,7 @@ function removeComparisonTicker(sym) {
 
 function rebuildComparisonMatrixLayout() {
     const tags = document.getElementById('comparisonTags'); tags.innerHTML = "";
-    const headers = document.getElementById('compHeaders'); headers.innerHTML = "<th>Benchmark Parameter</th>";
+    const headers = document.getElementById('compHeaders'); headers.innerHTML = "<th>Benchmark Parameter Line Metrics</th>";
     
     comparativeBasketMatrix.forEach(node => {
         tags.innerHTML += `<div class='comp-badge'>${node.symbol} <span onclick="removeComparisonTicker('${node.symbol}')">×</span></div>`;
@@ -195,11 +204,11 @@ function rebuildComparisonMatrixLayout() {
     });
 
     const rows = [
-        { label: "Sector Classification Profile", key: "sector" },
-        { label: "Market Price Line (Rs.)", key: "price" },
-        { label: "Price-to-Earnings Multiple (P/E)", key: "pe" },
-        { label: "Dividend Yield Trailing Bounds", key: "divYield" },
-        { label: "Balance Sheet Debt Gearing", key: "debt", subKey: "deRatio" }
+        { label: "Sector Alignment Profile", key: "sector" },
+        { label: "Market Share Value (Rs.)", key: "price" },
+        { label: "Price-to-Earnings Ratio (P/E)", key: "pe" },
+        { label: "Dividend Yield Metric Score", key: "divYield" },
+        { label: "Debt Equity Matrix Scaling", key: "debt", subKey: "deRatio" }
     ];
 
     const body = document.getElementById('compBody'); body.innerHTML = "";
@@ -211,31 +220,5 @@ function rebuildComparisonMatrixLayout() {
         });
         tr += `</tr>`;
         body.innerHTML += tr;
-    });
-}
-
-function runRankings(strategy) {
-    const container = document.getElementById('rankingContainer');
-    container.innerHTML = "";
-    
-    // Calculate simulated strategy matrix scores 
-    let mockRankingsData = [
-        { sym: "FFC", score: "94/100 Corporate Strength Alignment Index", desc: "Top Tier Defensive Cash Generator Engine" },
-        { sym: "EFERT", score: "89/100 Corporate Strength Alignment Index", desc: "Premium Payout Consistency Record Model" },
-        { sym: "MARI", score: "86/100 Corporate Strength Alignment Index", desc: "Aggressive Asset Growth Capital Deployment Asset" },
-        { sym: "SYS", score: "82/100 Corporate Strength Alignment Index", desc: "High Return Profile Tech Sector Leader Model" }
-    ];
-
-    if (strategy === "GROWTH") {
-        mockRankingsData.sort((a,b) => b.sym === "SYS" ? 1 : -1);
-    }
-
-    mockRankingsData.forEach((item, index) => {
-        container.innerHTML += `
-            <div class='list-item' onclick="triggerDirectTickerQuery('${item.sym}')">
-                <div><strong>#${index + 1} ${item.sym}</strong><br><small style='color:var(--text-muted); font-size:0.7rem;'>${item.desc}</small></div>
-                <div style='color:var(--accent); font-weight:700;'>${item.score}</div>
-            </div>
-        `;
     });
 }

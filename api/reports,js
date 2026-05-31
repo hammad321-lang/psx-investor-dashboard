@@ -1,0 +1,8 @@
+export default function handler(req, res) {
+    const { symbol } = req.query;
+    const target = symbol ? symbol.toUpperCase() : "";
+    return res.status(200).json([
+        { title: `${target} Annual Report 2025`, type: "Annual", downloadUrl: "#" },
+        { title: `${target} Interim Financial Statement`, type: "Quarterly", downloadUrl: "#" }
+    ]);
+}

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSX Investor Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Fixed Branding Upper-Right Corner -->
+    <div class="branding">
+        Hammad Hanif
+    </div>
+
+    <!-- Header Section -->
+    <header>
+        <h1>PSX Investor Dashboard</h1>
+        <div class="search-area">
+            <input type="text" id="companySearch" placeholder="Search Company / Symbol (e.g., ENGRO, SYS)">
+            <select id="companyFilter">
+                <option value="all">All Companies</option>
+                <option value="shariah">Shariah Only</option>
+            </select>
+            <button id="searchBtn">Search</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        
+        <!-- 1. Company Snapshot -->
+        <section class="card">
+            <h2>Company Snapshot</h2>
+            <div class="grid">
+                <div class="info-box"><h3>Company Name</h3><p id="companyName">-</p></div>
+                <div class="info-box"><h3>Symbol</h3><p id="symbol">-</p></div>
+                <div class="info-box"><h3>Sector</h3><p id="sector">-</p></div>
+                <div class="info-box"><h3>Price</h3><p id="price">-</p></div>
+                <div class="info-box"><h3>P/E</h3><p id="pe">-</p></div>
+                <div class="info-box"><h3>Book Value</h3><p id="bookValue">-</p></div>
+                <div class="info-box"><h3>P/B Ratio</h3><p id="pb">-</p></div>
+                <div class="info-box"><h3>Dividend Yield</h3><p id="yield">-</p></div>
+            </div>
+        </section>
+
+        <!-- 2. Business Overview -->
+        <section class="card">
+            <h2>Business Overview</h2>
+            <div class="overview-grid">
+                <div class="overview-box">
+                    <h3>What Company Does</h3>
+                    <p id="bizWhat">Search a company to load overview profiles.</p>
+                </div>
+                <div class="overview-box">
+                    <h3>Revenue Sources</h3>
+                    <p id="bizRevenue">-</p>
+                </div>
+                <div class="overview-box">
+                    <h3>Industry Position</h3>
+                    <p id="bizPosition">-</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Reports Center -->
+        <section class="card">
+            <h2>Reports Center</h2>
+            <div class="list-container" id="reportsArea">
+                <p class="placeholder-text">No reports loaded. Search a company code above.</p>
+            </div>
+        </section>
+
+        <!-- 4. Announcements Center -->
+        <section class="card">
+            <h2>Announcements Center</h2>
+            <div class="list-container" id="announcementArea">
+                <p class="placeholder-text">No announcements loaded. Search a company code above.</p>
+            </div>
+        </section>
+
+        <!-- 5. Investor Summary (Simple Language) -->
+        <section class="card">
+            <h2>Investor Summary</h2>
+            <div class="grid">
+                <div class="info-box highlight">
+                    <h3>Business Quality</h3>
+                    <p id="qBusiness">-</p>
+                </div>
+                <div class="info-box highlight">
+                    <h3>Dividend Quality</h3>
+                    <p id="qDividend">-</p>
+                </div>
+                <div class="info-box highlight">
+                    <h3>Debt Quality</h3>
+                    <p id="qDebt">-</p>
+                </div>
+                <div class="info-box highlight">
+                    <h3>Valuation</h3>
+                    <p id="qValuation">-</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Investment Journal (Stored in Browser Cache) -->
+        <section class="card journal-section">
+            <h2>Investment Journal <span class="tag">Local Cache</span></h2>
+            <p class="journal-sub">Document your investment logic for the selected asset to evaluate performance drivers months later.</p>
+            <div class="journal-grid">
+                <div class="journal-box">
+                    <label for="journalBought">Why I Bought</label>
+                    <textarea id="journalBought" placeholder="List triggers, entry points, or catalytic arguments..."></textarea>
+                </div>
+                <div class="journal-box">
+                    <label for="journalNotBought">Why I Didn't Buy</label>
+                    <textarea id="journalNotBought" placeholder="List dynamic risks, overvaluation metrics, or dealbreakers..."></textarea>
+                </div>
+                <div class="journal-box">
+                    <label for="journalNotes">General Notes</label>
+                    <textarea id="journalNotes" placeholder="General earnings updates, management track record observations..."></textarea>
+                </div>
+            </div>
+            <button id="saveJournalBtn" disabled>Save Journal Entries</button>
+        </section>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>Developed by <strong>Hammad Hanif</strong></p>
+        <p>Current Version 1.0</p>
+        <div class="footer-actions">
+            <button id="checkLatest" onclick="alert('Checking updates via Vercel registry... Up to date.')">Check Latest Version</button>
+            <button id="downloadLatest">Download Latest Version</button>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-// Universal Serverless Engine for All 600+ PSX Companies
+// Universal Serverless Engine for PSX Company Data & Analytics
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,47 +12,56 @@ export default async function handler(req, res) {
 
     const sym = symbol.toUpperCase().trim();
 
-    // Industry Classification & Custom Tailored Matrix Arrays
+    // Default Fallback Data Structure
     let sector = "Commercial Banking & Financials";
     let isShariah = "NO";
     let basePrice = Math.random() * (130 - 25) + 25;
     let mainRevenue = ["Interest Income (65%)", "Fee & Commission (20%)", "Investment Gains (15%)"];
     let otherIncome = ["Treasury Bill Yields (Recurring)", "Subsidiary Dividends (Recurring)"];
     let futurePlans = ["Digital Banking App Rollout", "Branch Network Expansion into Rural Areas"];
-    let relatedPeers = ["HBL", "MCB", "UBL", "MEBL", "BAFL"];
+    let relatedPeers = ["MEBL", "HBL", "MCB", "UBL", "BAFL"];
 
-    if (["FFC", "EFERT", "FATIMA"].includes(sym) || sym.includes("FERT")) {
+    // Industry Classification Engine
+    if (["FFC", "EFERT", "FATIMA", "ENGRO", "DAWH"].includes(sym) || sym.includes("FERT")) {
         sector = "Fertilizer & Agri-Inputs";
         isShariah = "YES";
         basePrice = Math.random() * (220 - 90) + 90;
         mainRevenue = ["Urea Sales (55%)", "DAP Sales (30%)", "Agri-Tech Services (15%)"];
-        otherIncome = ["GIDC Legal Provision Reversals (Non-Recurring)", "Bank Deposit Interest (Recurring)"];
+        otherIncome = ["GIDC Legal Provision Reversals", "Bank Deposit Interest (Recurring)"];
         futurePlans = ["Coal Gasification Pilot Project", "International Export Hub Setup"];
         relatedPeers = ["FFC", "EFERT", "FATIMA", "ENGRO", "DAWH"];
-    } else if (["MARI", "OGDC", "PPL", "POL"].includes(sym) || sym.includes("OIL") || sym.includes("GAS")) {
+    } else if (["MARI", "OGDC", "PPL", "POL", "SNGP"].includes(sym) || sym.includes("OIL") || sym.includes("GAS")) {
         sector = "Oil & Gas Exploration";
         isShariah = "YES";
         basePrice = Math.random() * (480 - 110) + 110;
         mainRevenue = ["Gas Production (60%)", "Crude Oil Extraction (30%)", "LPG Sales (10%)"];
-        otherIncome = ["Exchange Gains on FX Accounts (Non-Recurring)", "Circular Debt Interest Reversals (Recurring)"];
+        otherIncome = ["Exchange Gains on FX Accounts", "Circular Debt Interest Reversals"];
         futurePlans = ["Deepwater Exploration Drilling", "Tight Gas Production Ramp-up"];
         relatedPeers = ["MARI", "OGDC", "PPL", "POL", "SNGP"];
-    } else if (["SYS", "TRG", "OCTOS"].includes(sym) || sym.includes("TEC")) {
+    } else if (["SYS", "TRG", "OCTOS", "AVN", "NETSOL"].includes(sym) || sym.includes("TEC")) {
         sector = "Technology & Global IT Services";
         isShariah = "YES";
         basePrice = Math.random() * (650 - 150) + 150;
         mainRevenue = ["Offshore IT Exports (70%)", "Domestic Managed Services (20%)", "SaaS Licensing (10%)"];
-        otherIncome = ["Venture Capital Revaluations (Non-Recurring)", "Export Incentive Remittances (Recurring)"];
+        otherIncome = ["Venture Capital Revaluations", "Export Incentive Remittances"];
         futurePlans = ["AI Integration Hub Launch in Middle East", "Cloud Migration Consulting Expansion"];
         relatedPeers = ["SYS", "TRG", "OCTOS", "AVN", "NETSOL"];
-    } else if (["HUBC", "KEL", "NPL", "NCPL"].includes(sym) || sym.includes("POW")) {
+    } else if (["HUBC", "KEL", "NPL", "NCPL", "KAPCO"].includes(sym) || sym.includes("POW")) {
         sector = "Power Generation & Utilities";
         isShariah = "NO";
         basePrice = Math.random() * (160 - 30) + 30;
         mainRevenue = ["Capacity Charges (75%)", "Energy Generation Output (25%)"];
-        otherIncome = ["Late Payment Surcharges from CPPA-G (Recurring)", "Short Term Investments (Recurring)"];
+        otherIncome = ["Late Payment Surcharges from CPPA-G", "Short Term Investments"];
         futurePlans = ["Solar Photovoltaic Plant Conversion", "Transmission Line Infrastructure Upgrade"];
         relatedPeers = ["HUBC", "KEL", "NPL", "NCPL", "KAPCO"];
+    } else if (["LUCK", "DGKC", "ACPL", "CHCC", "MLCF"].includes(sym) || sym.includes("CEM")) {
+        sector = "Cement Infrastructure & Manufacturing";
+        isShariah = "YES";
+        basePrice = Math.random() * (180 - 40) + 40;
+        mainRevenue = ["Local Infrastructure Supply (75%)", "Sea Route Exports (20%)", "Waste Heat Recovery Savings (5%)"];
+        otherIncome = ["Optimized Scrap Realization", "Coal Hedging Inventory Markups"];
+        futurePlans = ["Line-3 Expansion Strategy", "Alternative Green Fuel Processing Transition"];
+        relatedPeers = ["LUCK", "DGKC", "ACPL", "CHCC", "MLCF"];
     }
 
     try {
@@ -82,7 +91,9 @@ export default async function handler(req, res) {
             pb: pb.toFixed(2),
             divYield: divYield.toFixed(1) + "%",
             ev: (basePrice * 1.18).toFixed(2) + " Billion",
-            description: `${sym} is an active industry representative operating within the ${sector} framework, tracking solid fundamentals.`,
+            fcfYield: (Math.random() * (22 - 5) + 5).toFixed(1) + "%",
+            altmanZ: (Math.random() * (4.5 - 0.5) + 0.5).toFixed(2),
+            description: `${sym} is an active industry representative operating within the ${sector} framework, tracking solid fundamentals for long-term investments.`,
             mainRevenue: mainRevenue,
             otherIncome: otherIncome,
             futurePlans: futurePlans,
@@ -99,12 +110,13 @@ export default async function handler(req, res) {
                 net: Array.from({length: 5}, () => (Math.random() * (30 - 6) + 6).toFixed(1)),
                 eps: Array.from({length: 5}, () => (Math.random() * (20 - 3) + 3).toFixed(2)),
                 cf: Array.from({length: 5}, () => (Math.random() * (35 - 10) + 10).toFixed(1)),
-                divHistory: Array.from({length: 5}, () => (Math.random() * (15 - 2) + 2).toFixed(1))
+                divHistory: Array.from({length: 5}, () => (Math.random() * (15 - 2) + 2).toFixed(1)),
+                payoutRatio: Array.from({length: 5}, () => Math.floor(Math.random() * (75 - 30) + 30) + "%")
             }
         };
 
         return res.status(200).json(dataPayload);
     } catch (e) {
-        return res.status(500).json({ error: "Internal functional matrix processing failure" });
+        return res.status(500).json({ error: "Internal processing structural failure" });
     }
 }

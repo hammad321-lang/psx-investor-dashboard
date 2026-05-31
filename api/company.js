@@ -12,104 +12,137 @@ export default async function handler(req, res) {
 
     const sym = symbol.toUpperCase().trim();
 
-    let sector = "Commercial Banking & Financials";
-    let isShariah = "NO";
-    let basePrice = Math.random() * (130 - 25) + 25;
-    let mainRevenue = ["Interest Income (65%)", "Fee & Commission (20%)", "Investment Gains (15%)"];
-    let otherIncome = ["Treasury Bill Yields (Recurring)", "Subsidiary Dividends (Recurring)"];
-    let futurePlans = ["Digital Banking App Rollout", "Branch Network Expansion into Rural Areas"];
-    let relatedPeers = ["MEBL", "HBL", "MCB", "UBL", "BAFL"];
+    // Algorithmic defaults
+    let sector = "Industrial Operations & Holdings";
+    let isShariah = "YES";
+    let basePrice = Math.random() * (190 - 45) + 45;
+    let horizon = "Moderate-Term";
+    let riskClass = "Moderate Risk";
+    let growthDriver = "Operational optimization & localized production channels.";
+    
+    let mainRevenue = ["Core Domestic Distribution (70%)", "Secondary Framework Offtake (30%)"];
+    let otherIncome = ["Short-term Treasury Returns", "Scrap Inventory Realization"];
+    let futurePlans = ["Regional Network Optimization", "Energy Efficiency Overhaul"];
+    let relatedPeers = ["FFC", "SYS", "MARI", "LUCK", "MEBL"];
 
-    if (["FFC", "EFERT", "FATIMA", "ENGRO", "DAWH"].includes(sym) || sym.includes("FERT")) {
+    // Sector & Business Logic Routing Matrix
+    if (["FFC", "EFERT", "FATIMA", "ENGRO", "DAWH"].includes(sym)) {
         sector = "Fertilizer & Agri-Inputs";
         isShariah = "YES";
-        basePrice = Math.random() * (220 - 90) + 90;
-        mainRevenue = ["Urea Sales (55%)", "DAP Sales (30%)", "Agri-Tech Services (15%)"];
-        otherIncome = ["GIDC Legal Provision Reversals", "Bank Deposit Interest (Recurring)"];
-        futurePlans = ["Coal Gasification Pilot Project", "International Export Hub Setup"];
-        relatedPeers = ["FFC", "EFERT", "FATIMA", "ENGRO", "DAWH"];
-    } else if (["MARI", "OGDC", "PPL", "POL", "SNGP"].includes(sym) || sym.includes("OIL") || sym.includes("GAS")) {
+        basePrice = Math.random() * (220 - 110) + 110;
+        horizon = "Long-Term Stable";
+        riskClass = "Low Risk";
+        growthDriver = "Agri-tech capacity extension & export balancing quotas.";
+        mainRevenue = ["Urea Wholesale Distribution (60%)", "DAP Import Volumes (30%)", "Specialized Bio-Agri Inputs (10%)"];
+        otherIncome = ["Subsidiary Equity Dividends", "GIDC Provision Reversals"];
+        futurePlans = ["Coal Gasification Pilot Project", "Alternative Sustainable Energy Integration"];
+    } else if (["MARI", "OGDC", "PPL", "POL", "SNGP"].includes(sym)) {
         sector = "Oil & Gas Exploration";
         isShariah = "YES";
-        basePrice = Math.random() * (480 - 110) + 110;
-        mainRevenue = ["Gas Production (60%)", "Crude Oil Extraction (30%)", "LPG Sales (10%)"];
-        otherIncome = ["Exchange Gains on FX Accounts", "Circular Debt Interest Reversals"];
-        futurePlans = ["Deepwater Exploration Drilling", "Tight Gas Production Ramp-up"];
-        relatedPeers = ["MARI", "OGDC", "PPL", "POL", "SNGP"];
-    } else if (["SYS", "TRG", "OCTOS", "AVN", "NETSOL"].includes(sym) || sym.includes("TEC")) {
-        sector = "Technology & Global IT Services";
+        basePrice = Math.random() * (450 - 130) + 130;
+        horizon = "Moderate-Term Opportunity";
+        riskClass = "Moderate Risk";
+        growthDriver = "Tight gas field optimization & circular debt settlement matrix accounts.";
+        mainRevenue = ["Wellhead Gas Offtake (65%)", "Crude Extraction Sales (25%)", "LPG Retailing Networks (10%)"];
+        otherIncome = ["Foreign Currency Valuation Exchange Gains", "Asset Revaluation Base"];
+        futurePlans = ["Deepwater Exploratory Drilling Ventures", "Infrastructure Modernization Plans"];
+    } else if (["SYS", "TRG", "OCTOS", "AVN", "NETSOL"].includes(sym)) {
+        sector = "Technology & Global IT";
         isShariah = "YES";
-        basePrice = Math.random() * (650 - 150) + 150;
-        mainRevenue = ["Offshore IT Exports (70%)", "Domestic Managed Services (20%)", "SaaS Licensing (10%)"];
-        otherIncome = ["Venture Capital Revaluations", "Export Incentive Remittances"];
-        futurePlans = ["AI Integration Hub Launch in Middle East", "Cloud Migration Consulting Expansion"];
-        relatedPeers = ["SYS", "TRG", "OCTOS", "AVN", "NETSOL"];
-    } else if (["HUBC", "KEL", "NPL", "NCPL", "KAPCO"].includes(sym) || sym.includes("POW")) {
+        basePrice = Math.random() * (550 - 180) + 180;
+        horizon = "Long-Term Compounding";
+        riskClass = "Moderate to High";
+        growthDriver = "Offshore IT export expansion & specialized AI infrastructure delivery models.";
+        mainRevenue = ["Offshore Managed Services Exports (75%)", "SaaS Licensing Integration (15%)", "Local Enterprise Transformation (10%)"];
+        otherIncome = ["Venture Incubation Gains", "Export Incentive Remittances"];
+        futurePlans = ["AI Integration Hub Launch in Middle East Markets", "Cloud Infrastructure Delivery Models"];
+    } else if (["LUCK", "DGKC", "CHCC", "ACPL", "MLCF"].includes(sym)) {
+        sector = "Cement & Infrastructure";
+        isShariah = "YES";
+        basePrice = Math.random() * (160 - 55) + 55;
+        horizon = "Moderate-Term Cyclical";
+        riskClass = "Moderate Risk";
+        growthDriver = "Regional infrastructure spend recovery & international grinding outposts.";
+        mainRevenue = ["Domestic Commercial Supply (70%)", "Sea Route Clinker Exports (25%)", "Waste Heat Savings (5%)"];
+        otherIncome = ["Optimized Scrap Realization", "Coal Hedging Valuation Markups"];
+        futurePlans = ["Alternative Green Fuel Line Integration", "Production Optimization Upgrades"];
+    } else if (["SAZEW", "MTL", "INDU", "PSMC"].includes(sym)) {
+        sector = "Automotive & Assembly";
+        isShariah = "YES";
+        basePrice = Math.random() * (850 - 250) + 250;
+        horizon = "Short-Term Tactical Momentum";
+        riskClass = "High Risk";
+        growthDriver = "Hybrid vehicle consumer transition & electric framework delivery models.";
+        mainRevenue = ["Passenger Vehicle Fleet Deliveries (80%)", "Three-Wheeler Assembly Channels (20%)"];
+        otherIncome = ["Customer Advance Deposit Financing", "Asset Scrap Optimizations"];
+        futurePlans = ["Localized EV Plant Footprint Optimization", "Regional Cross-Border Export Channels"];
+    } else if (sym === "MEBL") {
+        sector = "Islamic Banking";
+        isShariah = "YES";
+        basePrice = Math.random() * (260 - 140) + 140;
+        horizon = "Long-Term Safe Anchor";
+        riskClass = "Low to Moderate";
+        growthDriver = "Systemic shift toward Shariah financing models & digital consumer onboarding metrics.";
+        mainRevenue = ["Corporate Islamic Financing (55%)", "Sovereign Sukuk Investment Income (35%)", "Digital Consumer Banking Fees (10%)"];
+        otherIncome = ["Trade Finance Commission Structures", "Foreign Exchange Desk Returns"];
+        futurePlans = ["Digital Branchless Asset Banking Rollout", "Agricultural Finance Network Optimization"];
+    } else if (["HUBC", "KEL", "KAPCO"].includes(sym)) {
         sector = "Power Generation & Utilities";
         isShariah = "NO";
-        basePrice = Math.random() * (160 - 30) + 30;
-        mainRevenue = ["Capacity Charges (75%)", "Energy Generation Output (25%)"];
-        otherIncome = ["Late Payment Surcharges from CPPA-G", "Short Term Investments"];
-        futurePlans = ["Solar Photovoltaic Plant Conversion", "Transmission Line Infrastructure Upgrade"];
-        relatedPeers = ["HUBC", "KEL", "NPL", "NCPL", "KAPCO"];
-    } else if (["LUCK", "DGKC", "ACPL", "CHCC", "MLCF"].includes(sym) || sym.includes("CEM")) {
-        sector = "Cement Infrastructure & Manufacturing";
-        isShariah = "YES";
-        basePrice = Math.random() * (180 - 40) + 40;
-        mainRevenue = ["Local Infrastructure Supply (75%)", "Sea Route Exports (20%)", "Waste Heat Recovery Savings (5%)"];
-        otherIncome = ["Optimized Scrap Realization", "Coal Hedging Inventory Markups"];
-        futurePlans = ["Line-3 Expansion Strategy", "Alternative Green Fuel Processing Transition"];
-        relatedPeers = ["LUCK", "DGKC", "ACPL", "CHCC", "MLCF"];
+        basePrice = Math.random() * (150 - 15) + 15;
+        horizon = "Moderate Defensive Income";
+        riskClass = "Moderate Risk";
+        growthDriver = "Diversified industrial energy off-takes & mining project asset returns.";
     }
 
     try {
-        const prevClose = basePrice * (Math.random() * (1.05 - 0.95) + 0.95);
-        const pe = Math.random() * (12 - 3) + 3;
+        const pe = Math.random() * (11 - 3.5) + 3.5;
         const eps = basePrice / pe;
-        const pb = Math.random() * (3.5 - 0.8) + 0.8;
+        const pb = Math.random() * (3.2 - 0.7) + 0.7;
         const bookValue = basePrice / pb;
-        const divYield = Math.random() * (16 - 2) + 2;
+        const divYield = Math.random() * (15 - 1.5) + 1.5;
 
         const dataPayload = {
             symbol: sym,
             name: `${sym} Pakistan Corporation Ltd`,
             sector: sector,
             isShariah: isShariah,
+            horizon: horizon,
+            riskClass: riskClass,
+            growthDriver: growthDriver,
             price: basePrice.toFixed(2),
-            prevClose: prevClose.toFixed(2),
-            high52: (basePrice * 1.25).toFixed(2),
-            low52: (basePrice * 0.80).toFixed(2),
-            marketCap: (Math.random() * (320 - 15) + 15).toFixed(2) + " Billion",
-            sharesOutstanding: Math.floor(Math.random() * 1500000000 + 100000000).toLocaleString(),
-            freeFloat: Math.floor(Math.random() * (70 - 20) + 20) + "%",
+            prevClose: (basePrice * (Math.random() * (1.03 - 0.97) + 0.97)).toFixed(2),
+            high52: (basePrice * 1.3).toFixed(2),
+            low52: (basePrice * 0.75).toFixed(2),
+            marketCap: (Math.random() * (340 - 12) + 12).toFixed(2) + "B",
+            sharesOutstanding: Math.floor(Math.random() * 1200000000 + 100000000).toLocaleString(),
+            freeFloat: Math.floor(Math.random() * (75 - 20) + 20) + "%",
             lastUpdated: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
             eps: eps.toFixed(2),
             pe: pe.toFixed(1),
             bookValue: bookValue.toFixed(2),
             pb: pb.toFixed(2),
             divYield: divYield.toFixed(1) + "%",
-            ev: (basePrice * 1.18).toFixed(2) + " Billion",
-            fcfYield: (Math.random() * (22 - 5) + 5).toFixed(1) + "%",
-            altmanZ: (Math.random() * (4.5 - 0.5) + 0.5).toFixed(2),
-            description: `${sym} is an active industry representative operating within the ${sector} framework, tracking solid fundamentals for long-term investments.`,
+            ev: (basePrice * 1.15).toFixed(2) + "B",
             mainRevenue: mainRevenue,
             otherIncome: otherIncome,
             futurePlans: futurePlans,
             relatedPeers: relatedPeers,
             debt: {
-                total: (Math.random() * (60 - 5) + 5).toFixed(2) + " Billion",
-                deRatio: (Math.random() * (1.5 - 0.1) + 0.1).toFixed(2),
-                financeCost: (Math.random() * (6 - 0.3) + 0.3).toFixed(2) + " Billion",
-                coverage: (Math.random() * (7 - 1.5) + 1.5).toFixed(1)
+                total: (Math.random() * (50 - 4) + 4).toFixed(2) + "B",
+                deRatio: (Math.random() * (1.4 - 0.05) + 0.05).toFixed(2),
+                financeCost: (Math.random() * (5 - 0.2) + 0.2).toFixed(2) + "B",
+                coverage: (Math.random() * (8 - 1.2) + 1.2).toFixed(1)
             },
             history: {
                 years: ["2022", "2023", "2024", "2025", "2026"],
-                rev: Array.from({length: 5}, () => (Math.random() * (140 - 50) + 50).toFixed(1)),
-                net: Array.from({length: 5}, () => (Math.random() * (30 - 6) + 6).toFixed(1)),
-                eps: Array.from({length: 5}, () => (Math.random() * (20 - 3) + 3).toFixed(2)),
-                cf: Array.from({length: 5}, () => (Math.random() * (35 - 10) + 10).toFixed(1)),
-                divHistory: Array.from({length: 5}, () => (Math.random() * (15 - 2) + 2).toFixed(1)),
-                payoutRatio: Array.from({length: 5}, () => Math.floor(Math.random() * (75 - 30) + 30) + "%")
+                rev: Array.from({length: 5}, () => (Math.random() * (150 - 40) + 40).toFixed(1)),
+                gp: Array.from({length: 5}, () => (Math.random() * (45 - 15) + 15).toFixed(1)),
+                np: Array.from({length: 5}, () => (Math.random() * (25 - 5) + 5).toFixed(1)),
+                eps: Array.from({length: 5}, () => (Math.random() * (18 - 2) + 2).toFixed(2)),
+                cf: Array.from({length: 5}, () => (Math.random() * (30 - 8) + 8).toFixed(1)),
+                divHistory: Array.from({length: 5}, () => (Math.random() * (12 - 1) + 1).toFixed(1)),
+                payoutRatio: Array.from({length: 5}, () => Math.floor(Math.random() * (70 - 25) + 25) + "%")
             }
         };
 

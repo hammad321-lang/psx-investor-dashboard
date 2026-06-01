@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSX Prescriptive Terminal & Underdog Radar</title>
+    <title>PSX Secure Investor Terminal</title>
     <style>
         :root {
             --primary-bg: #090a0f; --surface-bg: #12141c; --card-bg: #1a1d29;
@@ -11,8 +11,23 @@
             --green: #2ecc71; --red: #e74c3c; --border: #25293a;
         }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',system-ui,sans-serif; }
-        body { background-color: var(--primary-bg); color: var(--text); padding: 1.5rem; }
-        .wrapper { max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
+        
+        /* FIX: Sets background color for the entire browser screen */
+        body { 
+            background-color: var(--primary-bg); 
+            color: var(--text); 
+            padding: 1.5rem; 
+        }
+        
+        /* FIX: Centers your content on desktop and leaves safe margins for AdSense on the sides */
+        .wrapper { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1.5rem; 
+        }
+        
         header { display: flex; justify-content: space-between; align-items: center; background: var(--surface-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); }
         .brand-text span { color: var(--accent); }
         .user-stamp { font-weight: 600; color: var(--accent); }
@@ -23,7 +38,10 @@
         .quick-chip { background: rgba(46,204,113,0.15); border: 1px solid #2ecc71; color: #2ecc71; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
         .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.2rem; border-radius: 6px; outline:none; font-weight:600; cursor: pointer; width: 280px; }
 
-        .workspace { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
+        /* Left Sidebar & Main Panel Alignment Grid */
+        .workspace { display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem; }
+        @media (max-width: 900px) { .workspace { grid-template-columns: 1fr; } }
+        
         .left-panel { display: flex; flex-direction: column; gap: 1.5rem; }
         .panel-box { background: var(--surface-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; position: relative; }
         
@@ -34,30 +52,29 @@
         .main-panel { display: flex; flex-direction: column; gap: 1.5rem; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 0.5rem; }
         
-        .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); position: relative; cursor: pointer; }
+        .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); position: relative; }
         .stat-card label { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.4rem; }
         .stat-card .value { font-size: 1.3rem; font-weight: 700; }
         
-        /* Advanced Beginner Tooltip System */
-        .tooltip-trigger { position: relative; }
+        /* Tooltip Popup Settings */
+        .tooltip-trigger { position: relative; cursor: help; }
         .tooltip-box { 
             position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%); 
-            width: 320px; background: #1f2336; border: 2px solid var(--accent); padding: 1rem; 
+            width: 280px; background: #1f2336; border: 2px solid var(--accent); padding: 1rem; 
             border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100; 
-            visibility: hidden; opacity: 0; transition: all 0.25s ease-in-out; pointer-events: none;
+            visibility: hidden; opacity: 0; transition: all 0.2s ease-in-out; pointer-events: none;
         }
-        .tooltip-trigger:hover .tooltip-box { visibility: visible; opacity: 1; bottom: 115%; }
-        .tooltip-box h4 { color: var(--accent); font-size: 0.9rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 5px; }
-        .tooltip-box p { font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 0.5rem; }
-        .tooltip-box .safety-flag { background: rgba(46,204,113,0.15); color: var(--green); padding: 0.3rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-align: center; }
+        .tooltip-trigger:hover .tooltip-box { visibility: visible; opacity: 1; bottom: 112%; }
+        .tooltip-box h4 { color: var(--accent); font-size: 0.9rem; margin-bottom: 0.4rem; }
+        .tooltip-box p { font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; }
 
         .quick-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; }
         .badge-green { color: var(--green); background: rgba(46,204,113,0.1); border: 1px solid var(--green); }
         .badge-red { color: var(--red); background: rgba(231,76,60,0.1); border: 1px solid var(--red); }
         .badge-accent { color: var(--accent); background: rgba(212,175,55,0.1); border: 1px solid var(--accent); }
 
-        .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .info-block { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
         .info-block h4 { margin-bottom: 0.6rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
         .info-block ul { padding-left: 1.2rem; font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem; }
@@ -70,7 +87,7 @@
         .calc-input-group label { font-size: 0.75rem; color: var(--text-muted); }
         .calc-input-group input { background: var(--primary-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 4px; color: #fff; outline: none; }
         
-        .radar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .radar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .radar-card { background: linear-gradient(145deg, #1a1d29 0%, #131622 100%); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; border-left: 4px solid var(--green); }
         
         .filter-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
@@ -82,7 +99,7 @@
     <div class="wrapper">
         <header>
             <div class="brand-text"><h2>PSX Secure Investor <span>Terminal</span></h2></div>
-            <div class="user-stamp">Hammad Hanif Engine</div>
+            <div class="user-stamp">Hammad Hanif Framework</div>
         </header>
 
         <div class="shariah-hub">
@@ -92,17 +109,13 @@
                 <span class="quick-chip" onclick="triggerDirectTickerQuery('SYS')">SYS</span>
                 <span class="quick-chip" onclick="triggerDirectTickerQuery('MARI')">MARI</span>
                 <span class="quick-chip" onclick="triggerDirectTickerQuery('NML')">NML</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('MEBL')">MEBL</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('HUBC')">HUBC</span>
-                <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
+                <div style="margin-left: auto;">
                     <select class="select-menu" id="shariahDropdown" onchange="triggerDirectTickerQuery(this.value)">
-                        <option value="">-- Quick Load Dropdown Selector --</option>
+                        <option value="">-- Quick Load Dropdown --</option>
                         <option value="FFC">FFC - Fauji Fertilizer Co.</option>
                         <option value="SYS">SYS - Systems Limited</option>
                         <option value="MARI">MARI - Mari Petroleum</option>
                         <option value="NML">NML - Nishat Mills Ltd</option>
-                        <option value="MEBL">MEBL - Meezan Bank Ltd</option>
-                        <option value="HUBC">HUBC - Hub Power Company</option>
                     </select>
                 </div>
             </div>
@@ -119,31 +132,19 @@
                 </div>
 
                 <div class="panel-box" style="background: rgba(212,175,55,0.02); border-color: var(--accent);">
-                    <h3 style="color: var(--accent); font-size: 1rem; margin-bottom: 0.75rem;">🧮 Interactive Book-Value Checker</h3>
+                    <h3 style="color: var(--accent); font-size: 1rem; margin-bottom: 0.75rem;">🧮 Simple Value Tester</h3>
                     <div class="calc-input-group">
-                        <label>Current Market Price (Rs.)</label>
+                        <label>Current Stock Market Price (Rs.)</label>
                         <input type="number" id="calcPrice" value="75" oninput="runLiveCalculation()">
                     </div>
                     <div class="calc-input-group">
-                        <label>Total Assets (PKR Billions)</label>
-                        <input type="number" id="calcAssets" value="150" oninput="runLiveCalculation()">
-                    </div>
-                    <div class="calc-input-group">
-                        <label>Total Liabilities (PKR Billions)</label>
-                        <input type="number" id="calcLiab" value="60" oninput="runLiveCalculation()">
-                    </div>
-                    <div class="calc-input-group">
-                        <label>Total Shares Outstanding (Millions)</label>
-                        <input type="number" id="calcShares" value="400" oninput="runLiveCalculation()">
+                        <label>Company Asset Net Worth (Per Share)</label>
+                        <input type="number" id="calcBv" value="120" oninput="runLiveCalculation()">
                     </div>
                     <div style="margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem;">
                         <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
-                            <span>Book Value Per Share:</span>
-                            <strong id="calcOutputBv" style="color:var(--accent);">Rs. 225.00</strong>
-                        </div>
-                        <div style="display:flex; justify-content:space-between;">
-                            <span>Price-to-Book (P/B) Ratio:</span>
-                            <strong id="calcOutputPb" style="color:var(--green);">0.33x (Underdog)</strong>
+                            <span>Status Result:</span>
+                            <strong id="calcOutputStatus" style="color:var(--green);">Checking...</strong>
                         </div>
                     </div>
                 </div>
@@ -151,58 +152,43 @@
 
             <div class="main-panel">
                 <div class="panel-box">
-                    <div class="section-header">
-                        <h3 id="displayTitle">Company Research Profile</h3>
-                    </div>
+                    <div class="section-header"><h3 id="displayTitle">Company Research Profile</h3></div>
                     <div class="snapshot-grid">
                         <div class="stat-card"><label>Symbol Ticker</label><div class="value" id="lblSym">---</div></div>
                         <div class="stat-card"><label>Sector Classification</label><div class="value" style="font-size:1.1rem;" id="lblSector">---</div></div>
                         <div class="stat-card"><label>Current Market Price</label><div class="value" id="lblPrice">Rs. 0.00</div></div>
-                        <div class="stat-card"><label>Market Capitalization</label><div class="value" id="lblCap">---</div></div>
+                        <div class="stat-card"><label>Book Value Asset Base</label><div class="value" id="lblBv">Rs. 0.00</div></div>
                     </div>
                 </div>
 
                 <div class="panel-box">
-                    <div class="section-header"><h3>Automated AI Investment Prescriptions <span style="font-size:0.75rem; color:var(--accent); font-weight:normal; margin-left:10px;">💡 Hover over cards for simple step-by-step guidance</span></h3></div>
+                    <div class="section-header"><h3>Automated AI Investment Prescriptions</h3></div>
                     <div class="snapshot-grid">
                         
                         <div class="stat-card tooltip-trigger">
                             <label>Shariah Status Tracking</label>
                             <div class="quick-badge" id="lblShariahBadge">---</div>
                             <div class="tooltip-box">
-                                <h4>🕋 Shariah Tracking System</h4>
-                                <p>Tells you if the business operations align clean with Islamic finance ethical tracking guidelines (debt parameters and asset baselines under KMIALL).</p>
-                                <div class="safety-flag">🛡️ Beginner Protection Verified</div>
+                                <h4>🕋 Shariah Tracking</h4>
+                                <p>Verifies if corporate operations and balance sheet liabilities stay completely aligned under KMIALL Shariah filtering systems.</p>
                             </div>
                         </div>
 
                         <div class="stat-card tooltip-trigger">
-                            <label>Safe Investment Horizon</label>
+                            <label>Safe Holding Horizon</label>
                             <div class="quick-badge" id="lblHorizonBadge">---</div>
                             <div class="tooltip-box">
-                                <h4>⏳ What is your timeline?</h4>
-                                <p id="tipHorizonText">Classifies if the stock is ideal for multi-year secure compilation, mid-term business cycles, or near-term momentum protection tracks.</p>
-                                <div class="safety-flag" style="background:rgba(212,175,55,0.15); color:var(--accent);">⚠️ Keep allocation matched to goals</div>
+                                <h4>⏳ Holding Timeline</h4>
+                                <p id="tipHorizonText">Recommends the perfect secure timeframe you should target to let this company's intrinsic asset valuation realize.</p>
                             </div>
                         </div>
 
                         <div class="stat-card tooltip-trigger">
-                            <label>Loss Prevention Risk Tracker</label>
-                            <div class="quick-badge" id="lblRiskBadge">---</div>
-                            <div class="tooltip-box">
-                                <h4>🛡️ Secure Risk Prevention</h4>
-                                <p id="tipRiskText">Evaluates the total liability debt burden. Low debt keeps companies safe from high KIBOR borrowing rate issues during macro contractions.</p>
-                                <div class="safety-flag">🔒 Vital to prevent capital damage</div>
-                            </div>
-                        </div>
-
-                        <div class="stat-card tooltip-trigger">
-                            <label>Consensus Valuation Signal</label>
+                            <label>Valuation Health Signal</label>
                             <div class="quick-badge" id="lblValBadge">Calculating...</div>
                             <div class="tooltip-box">
-                                <h4>🔥 Target Valuation Scanner</h4>
-                                <p id="tipValText">Combines Benjamin Graham valuation and cash trends to calculate the business's actual worth. Highlights bargains hidden by the market.</p>
-                                <div class="safety-flag">💰 Buy below true value for safety</div>
+                                <h4>🔥 Price-to-Asset Evaluation</h4>
+                                <p id="tipValText">Scans if the business is on an absolute discount sale compared to what it own on paper.</p>
                             </div>
                         </div>
 
@@ -211,24 +197,10 @@
 
                 <div class="panel-box" style="background: linear-gradient(180deg, #12141c 0%, #0d1b15 100%); border-color: #1e3a27;">
                     <div class="section-header" style="border-left-color: var(--green);">
-                        <h3>🚨 Deep Value Underdog Radar System</h3>
-                        <span style="font-size:0.8rem; background:rgba(46,204,113,0.15); color:var(--green); padding:3px 8px; border-radius:4px; font-weight:bold;">Safe & Assets Exceeding Market Price</span>
+                        <h3>🚨 Secure Underdog Radar System</h3>
                     </div>
-                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">These secure underdog companies are priced on the stock exchange for less than the physical worth of their assets ($P/B < 1.0$). If operations remain stable, their stock prices have a strong safety cushion to prevent heavy losses.</p>
-                    <div class="radar-grid" id="underdogRadarContainer">
-                        </div>
-                </div>
-
-                <div class="panel-box">
-                    <div class="section-header"><h3>Valuation & Fundamental Baseline Metrics</h3></div>
-                    <div class="snapshot-grid">
-                        <div class="stat-card"><label>Trailing EPS</label><div class="value" id="lblEps">-</div></div>
-                        <div class="stat-card"><label>P/E Ratio Multiple</label><div class="value" id="lblPe">-</div></div>
-                        <div class="stat-card"><label>Book Value Per Share (BVPS)</label><div class="value" id="lblBv">-</div></div>
-                        <div class="stat-card"><label>Price-to-Book Ratio (P/B)</label><div class="value" id="lblPb">-</div></div>
-                        <div class="stat-card"><label>Dividend Yield Percentage</label><div class="value" id="lblYield">-</div></div>
-                        <div class="stat-card"><label>Debt-to-Equity Ratio</label><div class="value" id="lblDeRatio">-</div></div>
-                    </div>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">These companies are valued on the stock market for less than the paper value of their physical net assets. This structure provides a strong margin of safety against loss.</p>
+                    <div class="radar-grid" id="underdogRadarContainer"></div>
                 </div>
 
                 <div class="info-split">
@@ -244,35 +216,9 @@
             </div>
         </div>
 
-        <div class="panel-box" style="width: 100%;">
-            <div class="section-header">
-                <h3>5-Company Comparative Valuation Matrix Framework</h3>
-                <button class="filter-btn" onclick="stageCurrentToMatrix()">Stage Active Asset to Table Matrix</button>
-            </div>
-            <div style="overflow-x:auto;">
-                <table id="comparisonMatrixTable">
-                    <thead>
-                        <tr>
-                            <th>Ticker Benchmark Field</th>
-                            <th>Sector Category</th>
-                            <th>Market Price</th>
-                            <th>P/E Ratio</th>
-                            <th>P/B Ratio</th>
-                            <th>D/E Ratio</th>
-                            <th>Div Yield</th>
-                            <th>Action Toolbar Removal</th>
-                        </tr>
-                    </thead>
-                    <tbody id="comparisonMatrixBody">
-                        <tr><td colspan="8" style="color:var(--text-muted); text-align:center; padding:2rem;">No companies staged. Run queries above and stage them to execute multi-company comparisons.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
         <footer>
             <p>PSX Investment Research Analytic Dashboard Framework Environment Solutions</p>
-            <p style="margin-top:0.5rem; color:var(--accent); font-weight:600;">Developed for Secure Wealth Optimization - Hammad Hanif</p>
+            <p style="margin-top:0.5rem; color:var(--accent); font-weight:600;">Developed by Hammad Hanif</p>
         </footer>
     </div>
     <script src="app.js"></script>

@@ -3,235 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSX Custom Variable Terminal</title>
+    <title>PSX Elite Strategic Analyst Terminal</title>
     <style>
         :root {
-            --primary-bg: #090a0f; --surface-bg: #12141c; --card-bg: #1a1d29;
-            --accent: #d4af37; --text: #ffffff; --text-muted: #8a90a6;
-            --green: #2ecc71; --red: #e74c3c; --border: #25293a; --blue: #3498db;
+            --primary-bg: #070913; --surface-bg: #0f1222; --card-bg: #161b33;
+            --accent: #dfb73c; --text: #ffffff; --text-muted: #8e96b7;
+            --green: #2ecc71; --red: #e74c3c; --border: #232a4a; --blue: #3498db;
         }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: var(--primary-bg); color: var(--text); padding: 1.5rem; }
-        .wrapper { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
-        header { display: flex; justify-content: space-between; align-items: center; background: var(--surface-bg); padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border); }
+        .wrapper { max-width: 1500px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
+        header { display: flex; justify-content: space-between; align-items: center; background: var(--surface-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
         .brand-text span { color: var(--accent); }
-        .shariah-hub { background: linear-gradient(135deg, #12141c 0%, #112419 100%); border: 1px solid #1e3a27; border-radius: 12px; padding: 1.2rem; }
+        .shariah-hub { background: linear-gradient(135deg, #0f1222 0%, #0d2618 100%); border: 1px solid #1f4d31; border-radius: 12px; padding: 1.5rem; }
         .hub-flex { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
-        .quick-chip { background: rgba(46,204,113,0.15); border: 1px solid #2ecc71; color: #2ecc71; padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.85rem; cursor: pointer; font-weight:600; }
-        .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.2rem; border-radius: 6px; font-weight:600; cursor: pointer; width: 280px; outline: none; }
-        .workspace { display: grid; grid-template-columns: 340px 1fr; gap: 1.5rem; }
-        @media (max-width: 1000px) { .workspace { grid-template-columns: 1fr; } }
+        .quick-chip { background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.4); color: #2ecc71; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight:600; transition: all 0.2s ease; }
+        .quick-chip:hover { background: rgba(46,204,113,0.25); border-color: #2ecc71; }
+        .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.7rem 1.2rem; border-radius: 6px; font-weight:600; cursor: pointer; width: 320px; outline: none; }
+        .workspace { display: grid; grid-template-columns: 360px 1fr; gap: 1.5rem; }
+        @media (max-width: 1100px) { .workspace { grid-template-columns: 1fr; } }
         .left-panel { display: flex; flex-direction: column; gap: 1.5rem; }
-        .panel-box { background: var(--surface-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
+        .panel-box { background: var(--surface-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .search-container { display: flex; gap: 0.5rem; }
-        .search-container input { flex:1; background: var(--primary-bg); border:1px solid var(--border); padding: 0.6rem; border-radius:6px; color:#fff; outline: none; }
-        .search-container button { background: var(--accent); color:#000; border:none; padding: 0.6rem 1rem; border-radius:6px; font-weight:700; cursor:pointer; }
+        .search-container input { flex:1; background: var(--primary-bg); border:1px solid var(--border); padding: 0.7rem; border-radius:6px; color:#fff; outline: none; font-weight: 600; }
+        .search-container button { background: var(--accent); color:#000; border:none; padding: 0.7rem 1.2rem; border-radius:6px; font-weight:700; cursor:pointer; transition: opacity 0.2s; }
+        .search-container button:hover { opacity: 0.9; }
         .main-panel { display: flex; flex-direction: column; gap: 1.5rem; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 0.5rem; }
-        .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .stat-card { background: var(--card-bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); }
-        .stat-card label { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.4rem; }
-        .stat-card .value { font-size: 1.2rem; font-weight: 700; }
-        .calc-group { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem; }
-        .calc-row { display: flex; flex-direction: column; gap: 0.3rem; }
-        .calc-row label { font-size: 0.75rem; color: var(--text-muted); }
-        .calc-row input, .calc-row select { background: var(--primary-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 4px; color: #fff; outline: none; }
-        .quick-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; text-align: center; margin-top: 0.2rem; }
-        .badge-green { color: var(--green); background: rgba(46,204,113,0.1); border: 1px solid var(--green); }
-        .badge-red { color: var(--red); background: rgba(231,76,60,0.1); border: 1px solid var(--red); }
-        .badge-accent { color: var(--accent); background: rgba(212,175,55,0.1); border: 1px solid var(--accent); }
-        .table-container { width: 100%; overflow-x: auto; margin-top: 0.5rem; }
-        .premium-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        .premium-table th { background: var(--card-bg); color: var(--accent); padding: 0.7rem; border: 1px solid var(--border); }
-        .premium-table td { padding: 0.7rem; border: 1px solid var(--border); color: #fff; }
-        .premium-table input { background: transparent; border: none; color: #fff; width: 100%; font-size: 0.9rem; outline: none; padding: 0.2rem; }
-        .premium-table input:focus { background: var(--primary-bg); border-radius: 4px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; border-left: 4px solid var(--accent); padding-left: 0.6rem; }
+        .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
+        .stat-card label { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+        .stat-card .value { font-size: 1.3rem; font-weight: 700; }
+        .calc-group { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.5rem; }
+        .calc-row { display: flex; flex-direction: column; gap: 0.4rem; }
+        .calc-row label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+        .calc-row input, .calc-row select { background: var(--primary-bg); border: 1px solid var(--border); padding: 0.6rem; border-radius: 6px; color: #fff; outline: none; font-size: 0.9rem; }
+        .quick-badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; text-align: center; }
+        .badge-green { color: var(--green); background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); }
+        .badge-red { color: var(--red); background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3); }
+        .table-container { width: 100%; overflow-x: auto; margin-top: 0.5rem; border-radius: 8px; border: 1px solid var(--border); }
+        .premium-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; background: var(--card-bg); }
+        .premium-table th { background: #1c223f; color: var(--accent); padding: 0.9rem; font-weight: 600; border-bottom: 2px solid var(--border); }
+        .premium-table td { padding: 0.9rem; border-bottom: 1px solid var(--border); color: #fff; }
+        .premium-table tr:last-child td { border-bottom: none; }
+        .premium-table input { background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: #fff; width: 100%; font-size: 0.9rem; outline: none; padding: 0.4rem; border-radius: 4px; }
+        .premium-table input:focus { border-color: var(--accent); background: var(--primary-bg); }
         .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-        .info-block { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
-        .info-block h4 { margin-bottom: 0.6rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
-        .info-block ul { padding-left: 1.2rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 1.5rem 0; margin-top: 2rem; border-top: 1px solid var(--border); }
+        .info-block { background: var(--surface-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); }
+        .info-block h4 { margin-bottom: 0.8rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .info-block ul { padding-left: 1.2rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.6rem; color: #d1d5db; }
+        footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 2rem 0; margin-top: 2rem; border-top: 1px solid var(--border); }
     </style>
 </head>
 <body>
     <div class="wrapper">
         <header>
-            <div class="brand-text"><h2>PSX Secure Investor <span>Terminal</span></h2></div>
-            <div style="font-weight: 600; color: var(--accent);">Hammad Hanif Framework v2.0</div>
+            <div class="brand-text"><h2>PSX Institutional Variable <span>Terminal</span></h2></div>
+            <div style="font-weight: 600; color: var(--accent); letter-spacing: 0.5px;">KMIALL Validation Engine • Hammad Hanif Framework</div>
         </header>
 
+        <!-- Complete KMIALL Shariah Tracking Hub -->
         <div class="shariah-hub">
-            <h3 style="color:#2ecc71;">🕋 Shariah Compliance Screening Center (KMIALL Tracking Index)</h3>
-            <div class="hub-flex" style="margin-top:0.75rem;">
-                <span class="quick-chip" onclick="quickLoadAsset('FFC')">FFC</span>
+            <h3 style="color:#2ecc71; display:flex; align-items:center; gap:0.5rem;">🕋 KMI-All Shariah Index Comprehensive Screener</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Directly integrated with the KMI Islamic Index criteria (Debt-to-Assets less than 37%, Shariah Non-Compliant Revenue less than 5%).</p>
+            <div class="hub-flex">
                 <span class="quick-chip" onclick="quickLoadAsset('SYS')">SYS</span>
+                <span class="quick-chip" onclick="quickLoadAsset('FFC')">FFC</span>
+                <span class="quick-chip" onclick="quickLoadAsset('EFERT')">EFERT</span>
                 <span class="quick-chip" onclick="quickLoadAsset('MARI')">MARI</span>
-                <span class="quick-chip" onclick="quickLoadAsset('NML')">NML</span>
-                <span class="quick-chip" onclick="quickLoadAsset('MEBL')">MEBL</span>
+                <span class="quick-chip" onclick="quickLoadAsset('OGDC')">OGDC</span>
+                <span class="quick-chip" onclick="quickLoadAsset('LUCK')">LUCK</span>
+                <span class="quick-chip" onclick="quickLoadAsset('HUBC')">HUBC</span>
                 <div style="margin-left: auto;">
                     <select class="select-menu" id="shariahDropdown" onchange="quickLoadAsset(this.value)">
-                        <option value="">-- Active Index Dropdown --</option>
-                        <option value="FFC">FFC - Fauji Fertilizer Co.</option>
-                        <option value="SYS">SYS - Systems Limited</option>
-                        <option value="MARI">MARI - Mari Petroleum</option>
-                        <option value="NML">NML - Nishat Mills Ltd</option>
-                        <option value="MEBL">MEBL - Meezan Bank Limited</option>
-                        <option value="OGDC">OGDC - Oil & Gas Development Co.</option>
-                        <option value="PPL">PPL - Pakistan Petroleum Ltd</option>
-                        <option value="EFERT">EFERT - Engro Fertilizers</option>
+                        <option value="">-- Complete KMI-All Constituents Dropdown --</option>
+                        <optgroup label="Technology & Communication">
+                            <option value="SYS">SYS - Systems Limited</option>
+                            <option value="AIRLINK">AIRLINK - Air Link Communication</option>
+                        </optgroup>
+                        <optgroup label="Fertilizer & Chemicals">
+                            <option value="FFC">FFC - Fauji Fertilizer Co.</option>
+                            <option value="EFERT">EFERT - Engro Fertilizers Ltd</option>
+                            <option value="ENGRO">ENGRO - Engro Corporation</option>
+                        </optgroup>
+                        <optgroup label="Oil & Gas Exploration (E&P)">
+                            <option value="MARI">MARI - Mari Petroleum Co.</option>
+                            <option value="OGDC">OGDC - Oil & Gas Development Co.</option>
+                            <option value="PPL">PPL - Pakistan Petroleum Ltd</option>
+                        </optgroup>
+                        <optgroup label="Power Generation & Energy">
+                            <option value="HUBC">HUBC - Hub Power Company</option>
+                            <option value="PSO">PSO - Pakistan State Oil</option>
+                        </optgroup>
+                        <optgroup label="Cement Sector">
+                            <option value="LUCK">LUCK - Lucky Cement Limited</option>
+                            <option value="DGKC">DGKC - D.G. Khan Cement</option>
+                            <option value="CHCC">CHCC - Cherat Cement Company</option>
+                        </optgroup>
                     </select>
                 </div>
             </div>
         </div>
 
         <div class="workspace">
+            <!-- Left Panel: Controls & Inputs -->
             <div class="left-panel">
                 <div class="panel-box" style="border-color: var(--accent);">
-                    <h3>🎛️ Terminal Variable Inputs</h3>
+                    <h3 style="margin-bottom: 1rem;">🎛️ Asset Variable Console</h3>
                     <div class="calc-group">
-                        <div class="search-container" style="margin-bottom:0.5rem;">
-                            <input type="text" id="manualTickerInput" placeholder="Enter ANY Ticker...">
+                        <div class="search-container">
+                            <input type="text" id="manualTickerInput" placeholder="Search/Pull Ticker...">
                             <button onclick="pullManualTicker()">Pull</button>
                         </div>
                         <div class="calc-row">
-                            <label>Stock Asset Ticker Label</label>
-                            <input type="text" id="varTicker" value="NML" oninput="runCalculationsEngine()">
+                            <label>Stock Ticker Symbol</label>
+                            <input type="text" id="varTicker" value="SYS" oninput="runCalculationsEngine()">
                         </div>
                         <div class="calc-row">
-                            <label>Sector Classification Group</label>
-                            <input type="text" id="varSector" value="Textile Composite" oninput="runCalculationsEngine()">
+                            <label>Sector Grouping</label>
+                            <input type="text" id="varSector" value="Technology & Communications" oninput="runCalculationsEngine()">
                         </div>
                         <div class="calc-row">
-                            <label>Live Market Price (Rs.)</label>
-                            <input type="number" id="varPrice" value="78.50" step="0.1" oninput="runCalculationsEngine()">
+                            <label>Market Price (Rs.)</label>
+                            <input type="number" id="varPrice" value="435.00" step="0.01" oninput="runCalculationsEngine()">
                         </div>
                         <div class="calc-row">
-                            <label>Net Tangible Book Value (Rs.)</label>
-                            <input type="number" id="varBv" value="280.35" step="0.1" oninput="runCalculationsEngine()">
+                            <label>Net Book Value Per Share (Rs.)</label>
+                            <input type="number" id="varBv" value="114.40" step="0.01" oninput="runCalculationsEngine()">
                         </div>
                         <div class="calc-row">
-                            <label>Shariah Status Mode</label>
+                            <label>Shariah Alignment Status</label>
                             <select id="varShariah" onchange="runCalculationsEngine()">
-                                <option value="YES">🕋 Shariah Compliant</option>
-                                <option value="NO">❌ Non-Compliant</option>
+                                <option value="YES">🕋 Shariah Compliant (KMI Validated)</option>
+                                <option value="NO">❌ Non-Compliant Status</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <div class="panel-box" style="border-color: var(--green);">
-                    <h3 style="color:var(--green);">💼 Portfolio Account Summary</h3>
-                    <div class="calc-group" style="font-size: 0.85rem; gap: 0.5rem;">
-                        <div style="display:flex; justify-content:space-between;"><span>Base Ledger Capital:</span><input type="number" id="portCap" value="2500000" style="width:110px; background:var(--primary-bg); border:1px solid var(--border); color:#fff; text-align:right; font-weight:bold;" oninput="runCalculationsEngine()"></div>
-                        <div style="display:flex; justify-content:space-between;"><span>Calculated Allocation Limit:</span><strong id="lblPortAlloc" style="color:#fff;">Rs. 0</strong></div>
-                        <div style="display:flex; justify-content:space-between;"><span>Liquid Cash Backstop Balance:</span><strong id="lblPortCash" style="color:var(--green);">Rs. 0</strong></div>
+                <!-- Company Account Summary (Replaced Portfolio Module) -->
+                <div class="panel-box" style="border-color: var(--blue);">
+                    <h3 style="color:var(--blue); margin-bottom: 1rem;">🏢 Company Capitalization Summary</h3>
+                    <div class="calc-group" style="font-size: 0.85rem; gap: 0.7rem;">
+                        <div class="calc-row">
+                            <label>Est. Outstanding Shares (Millions)</label>
+                            <input type="number" id="compShares" value="440" style="background:var(--primary-bg);" oninput="runCalculationsEngine()">
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding-top: 0.5rem; border-top: 1px solid var(--border);">
+                            <span>Total Market Capitalization:</span>
+                            <strong id="lblMarketCap" style="color:#fff;">Rs. 0 M</strong>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span>Total Balance Sheet Net Worth:</span>
+                            <strong id="lblNetWorth" style="color:var(--blue);">Rs. 0 M</strong>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Right Panel: Dynamic Analytical Content -->
             <div class="main-panel">
                 <div class="panel-box">
-                    <div class="section-header"><h3>Active Targeted Equity Snapshot</h3></div>
+                    <div class="section-header"><h3>Active Securities Analytical Snapshot</h3></div>
                     <div class="snapshot-grid">
-                        <div class="stat-card"><label>Active Ticker</label><div class="value" id="cardTicker" style="color:var(--accent);">---</div></div>
-                        <div class="stat-card"><label>Target Sector</label><div class="value" id="cardSector" style="font-size:1rem;">---</div></div>
-                        <div class="stat-card"><label>Price-To-Book Multiple</label><div class="value" id="cardPbVal" style="color:var(--green);">---</div></div>
-                        <div class="stat-card"><label>Shariah Screening Status</label><div id="cardShariahBadge">---</div></div>
+                        <div class="stat-card"><label>Active Ticker Target</label><div class="value" id="cardTicker" style="color:var(--accent);">---</div></div>
+                        <div class="stat-card"><label>Sector Group</label><div class="value" id="cardSector" style="font-size:1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">---</div></div>
+                        <div class="stat-card"><label>Price-to-Book Ratio Multiple</label><div class="value" id="cardPbVal" style="color:var(--green);">---</div></div>
+                        <div class="stat-card"><label>Shariah Regulatory Compliance</label><div id="cardShariahBadge" style="margin-top:0.2rem;">---</div></div>
                     </div>
                 </div>
 
+                <!-- 5-Year Automated & Manual Payout Matrix -->
                 <div class="panel-box">
-                    <div class="section-header"><h3>📅 5-Year Corporate Dividend Payout History Ledger Matrix</h3></div>
-                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.5rem;">Adjust base dividend payout rates below to automatically compute live adjusted yields across variable stock price cycles:</p>
+                    <div class="section-header"><h3>📅 5-Year Dividend Performance & Dynamic Yield Matrix</h3></div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 0.8rem;">Changes to historical dividend payouts below automatically re-calculate the trailing and historical asset yield percentages based on your dynamic market price:</p>
                     <div class="table-container">
                         <table class="premium-table">
                             <thead>
                                 <tr>
-                                    <th>Fiscal Target Year</th>
-                                    <th>Variable Dividend Distribution Rate (Rs.)</th>
-                                    <th>Distribution Type Definition</th>
+                                    <th>Fiscal Period</th>
+                                    <th>Dividend Payout (Rs. / Share)</th>
+                                    <th>Distribution Modality</th>
                                     <th>Calculated Yield Output Metric</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>2025</td><td><input type="number" id="div1" value="5.00" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type1" value="Final Cash"></td><td id="yield1" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
-                                <tr><td>2024</td><td><input type="number" id="div2" value="4.50" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type2" value="Final Cash"></td><td id="yield2" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
-                                <tr><td>2023</td><td><input type="number" id="div3" value="4.00" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type3" value="Final Cash"></td><td id="yield3" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
-                                <tr><td>2022</td><td><input type="number" id="div4" value="4.00" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type4" value="Final Cash"></td><td id="yield4" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
-                                <tr><td>2021</td><td><input type="number" id="div5" value="3.50" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type5" value="Final Cash"></td><td id="yield5" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>2025 Financial Year</td><td><input type="number" id="div1" value="8.00" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type1" value="Cash Dividend"></td><td id="yield1" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>2024 Financial Year</td><td><input type="number" id="div2" value="6.00" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type2" value="Cash Dividend"></td><td id="yield2" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>2023 Financial Year</td><td><input type="number" id="div3" value="5.00" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type3" value="Cash + Bonus"></td><td id="yield3" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>2022 Financial Year</td><td><input type="number" id="div4" value="4.00" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type4" value="Cash Dividend"></td><td id="yield4" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>2021 Financial Year</td><td><input type="number" id="div5" value="3.50" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type5" value="Cash Dividend"></td><td id="yield5" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <div class="panel-box" style="background: linear-gradient(180deg, #12141c 0%, #151b30 100%);">
-                    <div class="section-header"><h3>🎯 3-Year Dynamic Intrinsic Valuation Horizon Forecast Models</h3></div>
+                <!-- Strategic Planning & Guidance Forecast Horizon -->
+                <div class="panel-box" style="background: linear-gradient(180deg, #0f1222 0%, #131936 100%);">
+                    <div class="section-header"><h3>🎯 Corporate Plan-Driven 3-Year Valuation Horizon Models</h3></div>
+                    <div style="background: rgba(223,183,60,0.07); padding: 0.8rem; border-left: 3px solid var(--accent); margin-bottom: 1rem; border-radius: 4px;">
+                        <strong style="font-size: 0.85rem; color: var(--accent); display: block;">Active Core Corporate Strategy Target Focus:</strong>
+                        <p id="lblCorporatePlan" style="font-size:0.85rem; color:#e2e8f0; margin-top:0.2rem;">Analyzing base baseline patterns...</p>
+                    </div>
                     <div class="table-container">
                         <table class="premium-table">
                             <thead>
                                 <tr>
-                                    <th>Target Timeline Horizon</th>
-                                    <th>Conservative Valuation Target</th>
-                                    <th>Optimistic Target Projection</th>
-                                    <th>Estimated CAGR Performance Floor</th>
+                                    <th>Target Horizon Timeline</th>
+                                    <th>Conservative Target Floor</th>
+                                    <th>Optimistic Strategy Case</th>
+                                    <th>Estimated Implied CAGR Threshold</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>1 Year Out Projection</td><td id="fcCons1">Rs. 0.00</td><td id="fcOpt1">Rs. 0.00</td><td id="fcCagr1" style="color:var(--accent); font-weight:bold;">0.0%</td></tr>
-                                <tr><td>2 Years Out Projection</td><td id="fcCons2">Rs. 0.00</td><td id="fcOpt2">Rs. 0.00</td><td id="fcCagr2" style="color:var(--accent); font-weight:bold;">0.0%</td></tr>
-                                <tr><td>3 Years Out Projection</td><td id="fcCons3">Rs. 0.00</td><td id="fcOpt3">Rs. 0.00</td><td id="fcCagr3" style="color:var(--accent); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>12-Month Target Forward</td><td id="fcCons1">Rs. 0.00</td><td id="fcOpt1">Rs. 0.00</td><td id="fcCagr1" style="color:var(--accent); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>24-Month Target Forward</td><td id="fcCons2">Rs. 0.00</td><td id="fcOpt2">Rs. 0.00</td><td id="fcCagr2" style="color:var(--accent); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>36-Month Target Forward</td><td id="fcCons3">Rs. 0.00</td><td id="fcOpt3">Rs. 0.00</td><td id="fcCagr3" style="color:var(--accent); font-weight:bold;">0.0%</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
+                <!-- Automated Competitor & Peer Group Matrix -->
                 <div class="panel-box">
-                    <div class="section-header" style="border-left-color: var(--blue);"><h3>📊 Sector Peer Group Benchmarking & Core Comparison Matrix</h3></div>
-                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.5rem;">Input peer stock details directly below to map competitive metrics side-by-side:</p>
+                    <div class="section-header" style="border-left-color: var(--blue);"><h3>📊 Automated Sector Peer Benchmarking Matrix</h3></div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 0.8rem;">Competitors populate automatically based on your active sector classifications. You retain full manual rights to rename ticker paths or adjust financial parameters:</p>
                     <div class="table-container">
                         <table class="premium-table">
                             <thead>
                                 <tr>
-                                    <th>Enterprise Peer Symbol</th>
-                                    <th>Market Price (Rs.)</th>
+                                    <th>Peer Company Code</th>
+                                    <th>Market Value Price (Rs.)</th>
                                     <th>Book Value Base (Rs.)</th>
-                                    <th>Price-To-Book Multiple</th>
-                                    <th>Debt Risk Standing</th>
+                                    <th>Calculated Price-to-Book</th>
+                                    <th>Sector Balance Sheet Health Descriptor</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="text" value="COMPETITOR 1" style="font-weight:bold; color:var(--accent);"></td>
-                                    <td><input type="number" id="peerPrice1" value="65.00" oninput="calculatePeerRatios()"></td>
-                                    <td><input type="number" id="peerBv1" value="180.00" oninput="calculatePeerRatios()"></td>
+                                    <td><input type="text" id="peerName1" value="OCTOPUS" style="font-weight:bold; color:var(--accent);"></td>
+                                    <td><input type="number" id="peerPrice1" value="72.40" step="0.01" oninput="calculatePeerRatios()"></td>
+                                    <td><input type="number" id="peerBv1" value="28.10" step="0.01" oninput="calculatePeerRatios()"></td>
                                     <td id="peerPb1" style="font-weight:bold; color:var(--green);">0.00x</td>
-                                    <td><input type="text" value="Low-Mid Risk Profile"></td>
+                                    <td><input type="text" id="peerRisk1" value="Asset-Light, High Tech Margin"></td>
                                 </tr>
                                 <tr>
-                                    <td><input type="text" value="COMPETITOR 2" style="font-weight:bold; color:var(--accent);"></td>
-                                    <td><input type="number" id="peerPrice2" value="120.00" oninput="calculatePeerRatios()"></td>
-                                    <td><input type="number" id="peerBv2" value="95.00" oninput="calculatePeerRatios()"></td>
+                                    <td><input type="text" id="peerName2" value="AVN" style="font-weight:bold; color:var(--accent);"></td>
+                                    <td><input type="number" id="peerPrice2" value="54.10" step="0.01" oninput="calculatePeerRatios()"></td>
+                                    <td><input type="number" id="peerBv2" value="31.40" step="0.01" oninput="calculatePeerRatios()"></td>
                                     <td id="peerPb2" style="font-weight:bold; color:var(--green);">0.00x</td>
-                                    <td><input type="text" value="High Interest Load"></td>
+                                    <td><input type="text" id="peerRisk2" value="Leveraged Project Order Book"></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
+                <!-- Strategic Risk Advisory & Intelligence Logs -->
                 <div class="info-split">
                     <div class="info-block">
-                        <h4>Target Strategic Suggestions Matrix</h4>
+                        <h4>🎯 Expert Equity Recommendation Matrix</h4>
                         <ul id="suggestBox">
-                            <li>Acquiring physical business equity under book assets establishes an institutional defensive safety floor.</li>
-                            <li>Reinvest distributions to leverage dollar-cost averaging mechanisms during market fluctuations.</li>
+                            <li>Auditing capital structures relative to historic PSX sector trends creates defensive margins.</li>
                         </ul>
                     </div>
                     <div class="info-block" style="border-color: rgba(231,76,60,0.3);">
-                        <h4 style="color:var(--red);">Algorithmic Risk Problems & Vulnerabilities Checklist</h4>
+                        <h4 style="color:var(--red);">⚠️ Structural Risks & Capital Vulnerability Checklist</h4>
                         <ul id="riskBox">
-                            <li style="list-style-type:'⚠️ '; margin-left:5px;">P/B multiples trading above 2.5x increase tracking volatility risk if underlying sector growth stalls.</li>
-                            <li style="list-style-type:'⚠️ '; margin-left:5px;">Ensure tracking models account for changing energy and utilities pricing parameters.</li>
+                            <li>Track policy-driven regulatory adjustments closely across domestic industries.</li>
                         </ul>
                     </div>
                 </div>
@@ -239,7 +278,7 @@
         </div>
 
         <footer>
-            <p>Developed for Hammad Hanif — Full Matrix Variable Terminal Environment</p>
+            <p>Hammad Hanif Equity Analytical Terminal • Built for Full Variables & Multi-Factor Calculations</p>
         </footer>
     </div>
 

@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSX Investor Terminal</title>
-    <!-- Google AdSense Global Verification Script -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5541065584184121" crossorigin="anonymous"></script>
+    <title>PSX Analytics Terminal Engine</title>
     <style>
         :root {
             --primary-bg: #090a0f; --surface-bg: #12141c; --card-bg: #1a1d29;
@@ -14,29 +12,22 @@
         }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',system-ui,sans-serif; }
         body { background-color: var(--primary-bg); color: var(--text); padding: 1.5rem; }
-        .wrapper { max-width: 1600px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
-        
+        .wrapper { max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
         header { display: flex; justify-content: space-between; align-items: center; background: var(--surface-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); }
         .brand-text span { color: var(--accent); }
         .user-stamp { font-weight: 600; color: var(--accent); letter-spacing: 0.5px; }
         
-        /* Shariah Top Navigation Hub Styles */
-        .shariah-hub { background: linear-gradient(135deg, #12141c 0%, #15221b 100%); border: 1px solid #1e3a27; border-radius: 12px; padding: 1.5rem; }
+        .shariah-hub { background: linear-gradient(135deg, #12141c 0%, #112419 100%); border: 1px solid #1e3a27; border-radius: 12px; padding: 1.5rem; }
         .shariah-hub h3 { margin-bottom: 0.75rem; color: #2ecc71; display: flex; align-items: center; gap: 0.5rem; }
         .hub-flex { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
         .quick-chip { background: rgba(46,204,113,0.15); border: 1px solid #2ecc71; color: #2ecc71; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
         .quick-chip:hover { background: #2ecc71; color: #000; }
         .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.2rem; border-radius: 6px; outline:none; font-weight:600; cursor: pointer; width: 280px; }
+
+        .workspace { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
+        @media (max-width: 1100px) { .workspace { grid-template-columns: 1fr; } }
         
-        /* Ad Containers */
-        .top-banner { width: 100%; min-height: 90px; margin-bottom: 0.5rem; }
-        .left-skyscraper { width: 300px; min-height: 600px; position: sticky; top: 1.5rem; }
-        
-        /* Dual Column Core Container */
-        .workspace { display: flex; gap: 1.5rem; }
-        @media (max-width: 1100px) { .workspace { flex-direction: column; } .left-skyscraper { width: 100%; min-height: 150px; position: static; } }
-        
-        .main-panel { flex: 1; display: flex; flex-direction: column; gap: 1.5rem; }
+        .left-panel { display: flex; flex-direction: column; gap: 1.5rem; }
         .panel-box { background: var(--surface-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
         
         .search-container { display: flex; gap: 0.5rem; }
@@ -46,61 +37,47 @@
         .scroller-list { max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; }
         .list-item { background: var(--card-bg); padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 0.9rem; }
         
+        .main-panel { display: flex; flex-direction: column; gap: 1.5rem; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 0.5rem; }
+        
         .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
+        .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); transition: border 0.3s; }
         .stat-card label { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.4rem; letter-spacing: 0.5px; }
         .stat-card .value { font-size: 1.3rem; font-weight: 700; }
+        .stat-card .sub-value { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
         
-        .quick-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; background: var(--primary-bg); border: 1px solid var(--border); text-align: center; }
-        .badge-green { color: var(--green); border-color: var(--green); }
-        .badge-orange { color: var(--accent); border-color: var(--accent); }
-        .badge-red { color: var(--red); border-color: var(--red); }
-        
-        .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+        .quick-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; text-align: center; background: var(--primary-bg); border: 1px solid var(--border); }
+        .badge-green { color: var(--green) !important; border-color: var(--green) !important; background: rgba(46,204,113,0.1) !important; }
+        .badge-red { color: var(--red) !important; border-color: var(--red) !important; background: rgba(231,76,60,0.1) !important; }
+        .badge-accent { color: var(--accent) !important; border-color: var(--accent) !important; background: rgba(212,175,55,0.1) !important; }
+
+        .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
         .info-block { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
         .info-block h4 { margin-bottom: 0.6rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; font-size: 0.95rem; text-transform: uppercase; }
+        .info-block ul { padding-left: 1.2rem; font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem; }
         
+        .red-flag-text { color: #ff6b6b; font-weight: 500; }
+        .suggestion-text { color: #51cf66; font-weight: 500; }
+
         table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 0.9rem; }
         th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
         th { color: var(--text-muted); font-weight: 600; background-color: rgba(255,255,255,0.02); }
         
-        .comp-tags { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .comp-badge { background: var(--card-bg); border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 4px; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; }
-        .comp-badge span { color: var(--red); cursor: pointer; font-weight: 700; font-size: 1.1rem; }
-        
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 0.5rem; }
-        .filter-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        
+        .highlight-val { border: 1px solid var(--green) !important; box-shadow: 0 0 10px rgba(46,204,113,0.1); }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
         footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 2rem 0; border-top: 1px solid var(--border); margin-top: 2rem; }
     </style>
 </head>
 <body>
-
     <div class="wrapper">
-        
-        <!-- Live Top Leaderboard Banner Unit -->
-        <div class="top-banner">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-5541065584184121"
-                 data-ad-slot="default"
-                 data-ad-format="horizontal"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-
         <header>
-            <div class="brand-text">
-                <h2>PSX Investor <span>Terminal</span></h2>
-            </div>
-            <div class="user-stamp" id="headerUser">Hammad Hanif</div>
+            <div class="brand-text"><h2>PSX Analytics <span>Terminal Engine</span></h2></div>
+            <div class="user-stamp">Hammad Hanif</div>
         </header>
 
-        <!-- Top Discovery Hub: Shariah Screener (Expanded Dropdown Layout) -->
         <div class="shariah-hub">
-            <h3>🕋 Shariah Compliance Screening Quick-Access Center</h3>
+            <h3>🕋 Shariah Compliance Screening Center (KMIALL Track)</h3>
             <div class="hub-flex">
                 <span class="quick-chip" onclick="triggerDirectTickerQuery('FFC')">FFC</span>
                 <span class="quick-chip" onclick="triggerDirectTickerQuery('EFERT')">EFERT</span>
@@ -110,49 +87,40 @@
                 <span class="quick-chip" onclick="triggerDirectTickerQuery('LUCK')">LUCK</span>
                 <span class="quick-chip" onclick="triggerDirectTickerQuery('MEBL')">MEBL</span>
                 <span class="quick-chip" onclick="triggerDirectTickerQuery('SAZEW')">SAZEW</span>
-                
                 <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
-                    <label style="font-size:0.85rem; font-weight:600; color:#8a90a6;">All Listed Assets Dropdown:</label>
+                    <label style="font-size:0.85rem; font-weight:600; color:#8a90a6;">Asset Dropdown Selector:</label>
                     <select class="select-menu" id="shariahDropdown" onchange="triggerDirectTickerQuery(this.value)">
-                        <option value="">-- Select Corporate Security --</option>
+                        <option value="">-- Select Security --</option>
                         <optgroup label="Fertilizer & Chemicals">
                             <option value="FFC">FFC - Fauji Fertilizer Co.</option>
                             <option value="EFERT">EFERT - Engro Fertilizers</option>
                             <option value="FATIMA">FATIMA - Fatima Fertilizer</option>
                             <option value="ENGRO">ENGRO - Engro Corporation</option>
-                            <option value="DAWH">DAWH - Dawood Hercules</option>
                         </optgroup>
                         <optgroup label="Oil & Gas Exploration">
                             <option value="MARI">MARI - Mari Petroleum</option>
                             <option value="OGDC">OGDC - Oil & Gas Dev Corp</option>
                             <option value="PPL">PPL - Pakistan Petroleum Ltd</option>
                             <option value="POL">POL - Pakistan Oilfields Ltd</option>
-                            <option value="SNGP">SNGP - Sui Northern Gas</option>
                         </optgroup>
-                        <optgroup label="Technology & IT Services">
+                        <optgroup label="Technology & IT">
                             <option value="SYS">SYS - Systems Limited</option>
                             <option value="TRG">TRG - TRG Pakistan</option>
                             <option value="OCTOS">OCTOS - Octopus Digital</option>
-                            <option value="AVN">AVN - Avanceon Limited</option>
-                            <option value="NETSOL">NETSOL - NetSol Tech</option>
                         </optgroup>
                         <optgroup label="Cement & Infrastructure">
                             <option value="LUCK">LUCK - Lucky Cement</option>
                             <option value="DGKC">DGKC - DG Khan Cement</option>
-                            <option value="CHCC">CHCC - Cherat Cement</option>
-                            <option value="ACPL">ACPL - Attock Cement</option>
                             <option value="MLCF">MLCF - Maple Leaf Cement</option>
                         </optgroup>
                         <optgroup label="Automotive & Assembly">
                             <option value="SAZEW">SAZEW - Sazgar Engineering</option>
                             <option value="MTL">MTL - Millat Tractors</option>
                             <option value="INDU">INDU - Indus Motor Company</option>
-                            <option value="PSMC">PSMC - Pak Suzuki Motors</option>
                         </optgroup>
                         <optgroup label="Power & Utilities">
                             <option value="HUBC">HUBC - Hub Power Company</option>
                             <option value="KEL">KEL - K-Electric Limited</option>
-                            <option value="KAPCO">KAPCO - Kot Addu Power</option>
                         </optgroup>
                         <optgroup label="Islamic Banking">
                             <option value="MEBL">MEBL - Meezan Bank Limited</option>
@@ -163,163 +131,113 @@
         </div>
 
         <div class="workspace">
-            
-            <!-- Left Side Panel Content: Vertical Skyscraper Ad Placement -->
-            <div class="left-panel" style="display:flex; flex-direction:column; gap:1.5rem;">
-                
-                <div class="left-skyscraper">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-5541065584184121"
-                         data-ad-slot="default"
-                         data-ad-format="vertical"
-                         data-full-width-responsive="true"></ins>
-                    <script>
-                         (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
-                </div>
-
-                <div class="panel-box" style="width: 300px;">
-                    <h3>Manual Terminal Entry</h3>
+            <div class="left-panel">
+                <div class="panel-box">
+                    <h3>Manual Terminal Pull</h3>
                     <div class="search-container" style="margin-top:0.75rem;">
-                        <input type="text" id="targetInput" placeholder="Symbol Ticker (e.g. FFC)...">
+                        <input type="text" id="targetInput" placeholder="Symbol Ticker...">
                         <button onclick="triggerSearch()">Pull</button>
                     </div>
                 </div>
-
-                <div class="panel-box" style="width: 300px;">
+                <div class="panel-box">
                     <h3>Active Watchlist</h3>
                     <div class="scroller-list" id="watchlistContainer"></div>
                 </div>
-
             </div>
 
-            <!-- Main Panel -->
             <div class="main-panel">
-                
-                <!-- Cross-Comparison Framework Table Layout Matrix -->
                 <div class="panel-box">
                     <div class="section-header">
-                        <h3>5-Company Comparative Valuation Matrix Framework</h3>
-                        <button class="filter-btn" onclick="addToComparison()">Stage Current Security for Analysis</button>
+                        <h3 id="displayTitle">Company Research Profile</h3>
+                        <button class="filter-btn" onclick="toggleWatchlist()">+/- Watchlist</button>
                     </div>
-                    <div class="comp-tags" id="comparisonTags"></div>
-                    <div style="overflow-x:auto;">
-                        <table id="comparisonMatrixTable">
-                            <thead>
-                                <tr id="compHeaders">
-                                    <th>Benchmark Parameters Matrix Column</th>
-                                </tr>
-                            </thead>
-                            <tbody id="compBody">
-                                <tr><td colspan="6" style="color:var(--text-muted); text-align:center; padding:2rem;">No companies added to the horizontal benchmark layout toolbar yet. Click "Stage Current Security" above to start comparing assets.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div style="display:grid; grid-template-columns: 1fr 320px; gap: 1.5rem; width:100%;">
-                    <div class="panel-box">
-                        <div class="section-header">
-                            <h3 id="displayTitle">Company Research Profile</h3>
-                            <button class="filter-btn" onclick="toggleWatchlist()">+/- Watchlist</button>
-                        </div>
-                        <div class="snapshot-grid">
-                            <div class="stat-card"><label>Symbol</label><div class="value" id="lblSym">---</div></div>
-                            <div class="stat-card"><label>Sector Link</label><div class="value" style="font-size:1rem;" id="lblSector">---</div></div>
-                            <div class="stat-card"><label>Current Share Price</label><div class="value" id="lblPrice">Rs. 0.00</div></div>
-                            <div class="stat-card"><label>Previous Close</label><div class="value" id="lblPrev">Rs. 0.00</div></div>
-                            <div class="stat-card"><label>52-Week Range</label><div class="value" style="font-size:1rem;" id="lbl52Range">---</div></div>
-                            <div class="stat-card"><label>Market Capitalization</label><div class="value" id="lblCap">---</div></div>
-                        </div>
-                    </div>
-
-                    <div class="panel-box">
-                        <h3>Sector Competitor Peer Rankings</h3>
-                        <div class="scroller-list" id="rankingContainer"></div>
+                    <div class="snapshot-grid">
+                        <div class="stat-card"><label>Symbol Ticker</label><div class="value" id="lblSym">---</div></div>
+                        <div class="stat-card"><label>Sector Classification</label><div class="value" style="font-size:1.1rem;" id="lblSector">---</div></div>
+                        <div class="stat-card"><label>Current Market Price</label><div class="value" id="lblPrice">Rs. 0.00</div></div>
+                        <div class="stat-card"><label>Market Capitalization</label><div class="value" id="lblCap">---</div></div>
                     </div>
                 </div>
 
                 <div class="panel-box">
-                    <div class="section-header"><h3>Investor Screening & Security Health Indicators</h3></div>
+                    <div class="section-header"><h3>Automated AI Investment Prescriptions</h3></div>
                     <div class="snapshot-grid">
-                        <div class="stat-card"><label>Shariah Compliant Status</label><div class="quick-badge" id="lblShariahBadge">---</div></div>
-                        <div class="stat-card"><label>Horizon Categorization</label><div class="quick-badge" id="lblHorizonBadge">---</div></div>
-                        <div class="stat-card"><label>Risk Assessment Class</label><div class="quick-badge" id="lblRiskBadge">---</div></div>
-                        <div class="stat-card"><label>Valuation Rating Multiple</label><div class="quick-badge" id="lblValBadge">Calculating...</div></div>
+                        <div class="stat-card"><label>KMIALL Shariah Status</label><div class="quick-badge" id="lblShariahBadge">---</div></div>
+                        <div class="stat-card"><label>Prescriptive Horizon Target</label><div class="quick-badge" id="lblHorizonBadge">---</div></div>
+                        <div class="stat-card"><label>Macro Risk Allocation Tracker</label><div class="quick-badge" id="lblRiskBadge">---</div></div>
+                        <div class="stat-card"><label>Consensus Valuation Signal</label><div class="quick-badge" id="lblValBadge">Calculating...</div></div>
                     </div>
                 </div>
 
                 <div class="panel-box">
-                    <div class="section-header"><h3>Valuation & Fundamental Metrics</h3></div>
+                    <div class="section-header"><h3>Advanced Intrinsic Fair-Value Engine Models</h3></div>
                     <div class="snapshot-grid">
-                        <div class="stat-card"><label>EPS</label><div class="value" id="lblEps">-</div></div>
-                        <div class="stat-card"><label>P/E Ratio</label><div class="value" id="lblPe">-</div></div>
-                        <div class="stat-card"><label>Book Value Per Share</label><div class="value" id="lblBv">-</div></div>
+                        <div class="stat-card"><label>Benjamin Graham Pricing Value</label><div class="value" id="valGraham">-</div><div class="sub-value">Asset & Earnings Asset Valuation Floor</div></div>
+                        <div class="stat-card"><label>Discounted Cash Flow Model (DCF)</label><div class="value" id="valDcf">-</div><div class="sub-value">5-Year Projected FCF Model Analysis Target</div></div>
+                        <div class="stat-card"><label>Dividend Discount Ceiling (DDM)</label><div class="value" id="valDdm">-</div><div class="sub-value">High-Yield Income Optimization Distribution Pricing</div></div>
+                        <div class="stat-card" style="background: rgba(212,175,55,0.05); border-color: var(--accent);"><label>Consensus Target Price Assessment</label><div class="value" style="color: var(--accent);" id="valConsensus">-</div><div class="sub-value">Averaged Core Fundamental Matrix Valuation</div></div>
+                    </div>
+                </div>
+
+                <div class="panel-box">
+                    <div class="section-header"><h3>Valuation & Fundamental Baseline Metrics</h3></div>
+                    <div class="snapshot-grid">
+                        <div class="stat-card"><label>Trailing EPS</label><div class="value" id="lblEps">-</div></div>
+                        <div class="stat-card"><label>P/E Ratio Multiple</label><div class="value" id="lblPe">-</div></div>
+                        <div class="stat-card"><label>Book Value Per Share (BVPS)</label><div class="value" id="lblBv">-</div></div>
                         <div class="stat-card"><label>Price-to-Book Ratio (P/B)</label><div class="value" id="lblPb">-</div></div>
-                        <div class="stat-card"><label>Dividend Yield</label><div class="value" id="lblYield">-</div></div>
-                        <div class="stat-card"><label>Enterprise Value</label><div class="value" id="lblEv">-</div></div>
+                        <div class="stat-card"><label>Dividend Yield Percentage</label><div class="value" id="lblYield">-</div></div>
+                        <div class="stat-card"><label>Debt-to-Equity Ratio</label><div class="value" id="lblDeRatio">-</div></div>
                     </div>
                 </div>
 
                 <div class="info-split">
                     <div class="info-block">
-                        <h4>Business Overview & Competitive Position</h4>
-                        <p style="font-size:0.9rem; line-height:1.5; color:var(--text-muted);" id="lblDesc">Enter a ticker to generate profile.</p>
+                        <h4>Target Strategic Suggestions Matrix</h4>
+                        <ul id="suggestionsList" class="suggestion-text"></ul>
                     </div>
                     <div class="info-block">
-                        <h4>Revenue Breakdown Channels</h4>
-                        <ul style="padding-left:1.1rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem;" id="revenueList"></ul>
-                    </div>
-                    <div class="info-block">
-                        <h4>Other Non-Core Income Tracking Analysis</h4>
-                        <ul style="padding-left:1.1rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem;" id="incomeList"></ul>
+                        <h4>Algorithmic Red Flag Warnings Checklist</h4>
+                        <ul id="redFlagsList" class="red-flag-text"></ul>
                     </div>
                 </div>
 
                 <div class="panel-box">
-                    <div class="section-header"><h3>Historical Year-to-Year Financial Statements (5-Year Matrix)</h3></div>
+                    <div class="section-header"><h3>Historical Financial Statements (5-Year Structural Trajectory)</h3></div>
                     <div style="overflow-x:auto;">
                         <table id="financialTable">
                             <thead><tr><th>Metric Matrix Historical Line</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th></tr></thead>
-                            <tbody><tr><td colspan="6">Pull a corporate dataset to initialize the historical baseline view grids.</td></tr></tbody>
+                            <tbody id="financialBody"><tr><td colspan="6">Pull an asset dataset to initialize the historical baseline grid structures.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="panel-box">
-                    <div class="section-header"><h3>Debt Accounting Analysis Profile Metrics</h3></div>
-                    <div class="snapshot-grid">
-                        <div class="stat-card"><label>Total Debt</label><div class="value" id="lblTotalDebt">-</div></div>
-                        <div class="stat-card"><label>Debt-to-Equity Ratio</label><div class="value" id="lblDeRatio">-</div></div>
-                        <div class="stat-card"><label>Finance Cost</label><div class="value" id="lblFinCost">-</div></div>
-                        <div class="stat-card"><label>Interest Coverage Ratio</label><div class="value" id="lblCoverage">-</div></div>
-                    </div>
-                </div>
-
-                <div class="panel-box">
-                    <div class="section-header"><h3>Forward Forecast Engine & Future Risks Management Matrix</h3></div>
-                    <div class="info-split" style="margin-top:0.5rem; margin-bottom:1.25rem;">
-                        <div class="info-block">
-                            <h4>Target Operational Expansion Plans</h4>
-                            <ul style="padding-left:1.1rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem;" id="futureList"></ul>
-                        </div>
-                        <div class="info-block">
-                            <h4>Algorithmic Red Flag Warnings Matrix</h4>
-                            <ul style="padding-left:1.1rem; font-size:0.9rem; display:flex; flex-direction:column; gap:0.4rem; color:var(--red);" id="redFlagsList"></ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-box">
-                    <div class="section-header"><h3>Portfolio Builder Allocation Framework Tool</h3></div>
-                    <div class="search-container" style="max-width:500px; margin-bottom:1.25rem;">
-                        <input type="number" id="portfolioCapital" placeholder="Capital Amount Allocation (Rs.)..." value="500000">
-                        <button onclick="calculatePortfolioDeployment()">Formulate Allocations</button>
-                    </div>
-                    <div class="snapshot-grid" id="portfolioReport"></div>
-                </div>
-
+        <div class="panel-box" style="width: 100%; margin-top: 1rem;">
+            <div class="section-header">
+                <h3>5-Company Comparative Valuation Matrix Framework</h3>
+                <button class="filter-btn" onclick="stageCurrentToMatrix()">Stage Active Asset to Table Matrix</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table id="comparisonMatrixTable">
+                    <thead>
+                        <tr>
+                            <th>Ticker Benchmark Field</th>
+                            <th>Sector Category</th>
+                            <th>Market Price</th>
+                            <th>P/E Ratio</th>
+                            <th>P/B Ratio</th>
+                            <th>D/E Ratio</th>
+                            <th>Div Yield</th>
+                            <th>Consensus Target Value</th>
+                            <th>Action Toolbar Removal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparisonMatrixBody">
+                        <tr><td colspan="9" style="color:var(--text-muted); text-align:center; padding:2rem;">No companies staged yet. Select from the dropdown and click "Stage Active Asset" to run a cross-comparison pipeline.</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -327,9 +245,7 @@
             <p>PSX Investment Research Analytic Dashboard Framework Environment Solutions</p>
             <p style="margin-top:0.5rem; color:var(--accent); font-weight:600;">Developed by Hammad Hanif</p>
         </footer>
-
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>

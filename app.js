@@ -92,7 +92,9 @@ function mapCorporateNodeToTerminalUI(node) {
     document.getElementById('lblPb').innerText = `${node.pb}x`;
     document.getElementById('lblYield').innerText = node.divYield;
     document.getElementById('lblEv').innerText = `Rs. ${node.ev}`;
-    document.getElementById('lblDesc').innerText = node.description;
+    
+    // Mapped safely to growthDriver node payload
+    document.getElementById('lblDesc').innerText = node.growthDriver;
 
     // AI Suggestions Mapping
     document.getElementById('lblHorizonBadge').innerText = node.horizon;
@@ -130,11 +132,12 @@ function mapCorporateNodeToTerminalUI(node) {
     document.getElementById('lblFinCost').innerText = `Rs. ${node.debt.financeCost}`;
     document.getElementById('lblCoverage').innerText = `${node.debt.coverage}x`;
 
+    // History metric rendering using np instead of net to align parsing objects
     const tableBody = document.querySelector('#financialTable tbody');
     tableBody.innerHTML = `
         <tr><td><strong>Topline Revenue Matrix</strong></td>${node.history.rev.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
         <tr><td><strong>Gross Profit (GP Execution)</strong></td>${node.history.gp.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
-        <tr><td><strong>Net Profit (NP Bottomline)</strong></td>${node.history.net.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
+        <tr><td><strong>Net Profit (NP Bottomline)</strong></td>${node.history.np.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
         <tr><td><strong>Diluted Earnings Per Share (EPS)</strong></td>${node.history.eps.map(v => `<td>Rs. ${v}</td>`).join('')}</tr>
         <tr><td><strong>Operating Cash Flow Output</strong></td>${node.history.cf.map(v => `<td>Rs. ${v}B</td>`).join('')}</tr>
         <tr><td><strong>Dividend Payout Ratio (%)</strong></td>${node.history.payoutRatio.map(v => `<td>${v}</td>`).join('')}</tr>
@@ -195,11 +198,10 @@ function rebuildComparisonMatrixLayout() {
     }
 
     comparativeBasketMatrix.forEach(node => {
-        tags.innerHTML += `<div class='comp-badge'>${node.symbol} <span onclick="removeComparisonTicker('${node.symbol}')">脳</span></div>`;
+        tags.innerHTML += `<div class='comp-badge'>${node.symbol} <span onclick="removeComparisonTicker('${node.symbol}')">×</span></div>`;
         headers.innerHTML += `<th style="color:var(--accent); font-weight:700; text-align:center;">${node.symbol}</th>`;
     });
 
-    // Custom Data Metric Vectors mapping vertical parameters vs horizontal companies
     const rows = [
         { label: "Market Value (Current Price)", render: (n) => `Rs. ${n.price}` },
         { label: "Market Capitalization", render: (n) => `Rs. ${n.marketCap}` },
@@ -209,7 +211,7 @@ function rebuildComparisonMatrixLayout() {
         { label: "Dividend Yield", render: (n) => n.divYield },
         { label: "Current Revenue TTM (Latest Year)", render: (n) => `Rs. ${n.history.rev[4]}B` },
         { label: "Gross Profit GP (Latest Year)", render: (n) => `Rs. ${n.history.gp[4]}B` },
-        { label: "Net Profit NP (Latest Year)", render: (n) => `Rs. ${n.history.net[4]}B` },
+        { label: "Net Profit NP (Latest Year)", render: (n) => `Rs. ${n.history.np[4]}B` },
         { label: "Dividend Payout Ratio (%)", render: (n) => n.history.payoutRatio[4] },
         { label: "AI Suggested Horizon", render: (n) => `<span style="color:var(--accent); font-weight:600;">${n.horizon}</span>` },
         { label: "Risk Profile Classification", render: (n) => n.riskClass },

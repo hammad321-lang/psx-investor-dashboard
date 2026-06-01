@@ -3,116 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSX Secure Investor Terminal</title>
+    <title>PSX Custom Variable Terminal</title>
     <style>
         :root {
             --primary-bg: #090a0f; --surface-bg: #12141c; --card-bg: #1a1d29;
             --accent: #d4af37; --text: #ffffff; --text-muted: #8a90a6;
-            --green: #2ecc71; --red: #e74c3c; --border: #25293a;
+            --green: #2ecc71; --red: #e74c3c; --border: #25293a; --blue: #3498db;
         }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',system-ui,sans-serif; }
-        
-        body { 
-            background-color: var(--primary-bg); 
-            color: var(--text); 
-            padding: 1.5rem; 
-        }
-        
-        .wrapper { 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 1.5rem; 
-        }
-        
-        header { display: flex; justify-content: space-between; align-items: center; background: var(--surface-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
+        body { background-color: var(--primary-bg); color: var(--text); padding: 1.5rem; }
+        .wrapper { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
+        header { display: flex; justify-content: space-between; align-items: center; background: var(--surface-bg); padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border); }
         .brand-text span { color: var(--accent); }
-        .user-stamp { font-weight: 600; color: var(--accent); }
-        
-        .shariah-hub { background: linear-gradient(135deg, #12141c 0%, #112419 100%); border: 1px solid #1e3a27; border-radius: 12px; padding: 1.5rem; }
-        .shariah-hub h3 { margin-bottom: 0.75rem; color: #2ecc71; }
+        .shariah-hub { background: linear-gradient(135deg, #12141c 0%, #112419 100%); border: 1px solid #1e3a27; border-radius: 12px; padding: 1.2rem; }
         .hub-flex { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
-        .quick-chip { background: rgba(46,204,113,0.15); border: 1px solid #2ecc71; color: #2ecc71; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
-        .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.2rem; border-radius: 6px; outline:none; font-weight:600; cursor: pointer; width: 280px; }
-
-        .workspace { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
+        .quick-chip { background: rgba(46,204,113,0.15); border: 1px solid #2ecc71; color: #2ecc71; padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.85rem; cursor: pointer; font-weight:600; }
+        .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.2rem; border-radius: 6px; font-weight:600; cursor: pointer; width: 280px; outline: none; }
+        .workspace { display: grid; grid-template-columns: 340px 1fr; gap: 1.5rem; }
         @media (max-width: 1000px) { .workspace { grid-template-columns: 1fr; } }
-        
         .left-panel { display: flex; flex-direction: column; gap: 1.5rem; }
-        .panel-box { background: var(--surface-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; position: relative; }
-        
+        .panel-box { background: var(--surface-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
         .search-container { display: flex; gap: 0.5rem; }
-        .search-container input { flex:1; background: var(--primary-bg); border:1px solid var(--border); padding: 0.75rem; border-radius:6px; color:var(--text); outline: none; }
-        .search-container input:focus { border-color: var(--accent); }
-        .search-container button { background: var(--accent); color:#000; border:none; padding: 0.75rem 1.2rem; border-radius:6px; font-weight:700; cursor:pointer; }
-        
+        .search-container input { flex:1; background: var(--primary-bg); border:1px solid var(--border); padding: 0.6rem; border-radius:6px; color:#fff; outline: none; }
+        .search-container button { background: var(--accent); color:#000; border:none; padding: 0.6rem 1rem; border-radius:6px; font-weight:700; cursor:pointer; }
         .main-panel { display: flex; flex-direction: column; gap: 1.5rem; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 0.5rem; }
-        
-        .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); position: relative; }
+        .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .stat-card { background: var(--card-bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border); }
         .stat-card label { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.4rem; }
-        .stat-card .value { font-size: 1.3rem; font-weight: 700; }
-        
-        .tooltip-trigger { position: relative; cursor: help; }
-        .tooltip-box { 
-            position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%); 
-            width: 280px; background: #1f2336; border: 2px solid var(--accent); padding: 1rem; 
-            border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100; 
-            visibility: hidden; opacity: 0; transition: all 0.2s ease-in-out; pointer-events: none;
-        }
-        .tooltip-trigger:hover .tooltip-box { visibility: visible; opacity: 1; bottom: 112%; }
-        .tooltip-box h4 { color: var(--accent); font-size: 0.9rem; margin-bottom: 0.4rem; }
-        .tooltip-box p { font-size: 0.8rem; color: #cbd5e1; line-height: 1.4; }
-
-        .quick-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; }
+        .stat-card .value { font-size: 1.2rem; font-weight: 700; }
+        .calc-group { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem; }
+        .calc-row { display: flex; flex-direction: column; gap: 0.3rem; }
+        .calc-row label { font-size: 0.75rem; color: var(--text-muted); }
+        .calc-row input, .calc-row select { background: var(--primary-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 4px; color: #fff; outline: none; }
+        .quick-badge { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.85rem; font-weight: 700; text-align: center; margin-top: 0.2rem; }
         .badge-green { color: var(--green); background: rgba(46,204,113,0.1); border: 1px solid var(--green); }
         .badge-red { color: var(--red); background: rgba(231,76,60,0.1); border: 1px solid var(--red); }
         .badge-accent { color: var(--accent); background: rgba(212,175,55,0.1); border: 1px solid var(--accent); }
-
-        .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
-        .info-block { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
-        .info-block h4 { margin-bottom: 0.6rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
-        .info-block ul { padding-left: 1.2rem; font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        
-        .calc-input-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.8rem; }
-        .calc-input-group label { font-size: 0.75rem; color: var(--text-muted); }
-        .calc-input-group input { background: var(--primary-bg); border: 1px solid var(--border); padding: 0.5rem; border-radius: 4px; color: #fff; outline: none; }
-        .calc-input-group input:focus { border-color: var(--accent); }
-        
-        .radar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .radar-card { background: linear-gradient(145deg, #1a1d29 0%, #131622 100%); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; border-left: 4px solid var(--green); }
-        
-        /* Premium Table Framework Extensions */
         .table-container { width: 100%; overflow-x: auto; margin-top: 0.5rem; }
         .premium-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        .premium-table th { background: var(--card-bg); color: var(--accent); padding: 0.75rem; border: 1px solid var(--border); font-weight: 600; }
-        .premium-table td { padding: 0.75rem; border: 1px solid var(--border); color: #fff; }
-        .premium-table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
-
-        footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 2rem 0; margin-top: 2rem; border-top: 1px solid var(--border); }
+        .premium-table th { background: var(--card-bg); color: var(--accent); padding: 0.7rem; border: 1px solid var(--border); }
+        .premium-table td { padding: 0.7rem; border: 1px solid var(--border); color: #fff; }
+        .premium-table input { background: transparent; border: none; color: #fff; width: 100%; font-size: 0.9rem; outline: none; padding: 0.2rem; }
+        .premium-table input:focus { background: var(--primary-bg); border-radius: 4px; }
+        .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .info-block { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
+        .info-block h4 { margin-bottom: 0.6rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+        .info-block ul { padding-left: 1.2rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 1.5rem 0; margin-top: 2rem; border-top: 1px solid var(--border); }
     </style>
 </head>
 <body>
     <div class="wrapper">
         <header>
             <div class="brand-text"><h2>PSX Secure Investor <span>Terminal</span></h2></div>
-            <div class="user-stamp">Hammad Hanif Framework</div>
+            <div style="font-weight: 600; color: var(--accent);">Hammad Hanif Framework v2.0</div>
         </header>
 
-        <!-- Shariah Hub Tracking Center -->
         <div class="shariah-hub">
-            <h3>🕋 Shariah Compliance Screening Center (KMIALL Track)</h3>
+            <h3 style="color:#2ecc71;">🕋 Shariah Compliance Screening Center (KMIALL Tracking Index)</h3>
             <div class="hub-flex" style="margin-top:0.75rem;">
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('FFC')">FFC</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('SYS')">SYS</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('MARI')">MARI</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('NML')">NML</span>
-                <span class="quick-chip" onclick="triggerDirectTickerQuery('MEBL')">MEBL</span>
+                <span class="quick-chip" onclick="quickLoadAsset('FFC')">FFC</span>
+                <span class="quick-chip" onclick="quickLoadAsset('SYS')">SYS</span>
+                <span class="quick-chip" onclick="quickLoadAsset('MARI')">MARI</span>
+                <span class="quick-chip" onclick="quickLoadAsset('NML')">NML</span>
+                <span class="quick-chip" onclick="quickLoadAsset('MEBL')">MEBL</span>
                 <div style="margin-left: auto;">
-                    <select class="select-menu" id="shariahDropdown" onchange="triggerDirectTickerQuery(this.value)">
-                        <option value="">-- Quick Load Dropdown --</option>
+                    <select class="select-menu" id="shariahDropdown" onchange="quickLoadAsset(this.value)">
+                        <option value="">-- Active Index Dropdown --</option>
                         <option value="FFC">FFC - Fauji Fertilizer Co.</option>
                         <option value="SYS">SYS - Systems Limited</option>
                         <option value="MARI">MARI - Mari Petroleum</option>
@@ -128,176 +86,163 @@
 
         <div class="workspace">
             <div class="left-panel">
-                <!-- Manual Terminal Pull Panel -->
-                <div class="panel-box">
-                    <h3>Manual Terminal Pull</h3>
-                    <div class="search-container" style="margin-top:0.75rem;">
-                        <input type="text" id="targetInput" placeholder="Enter ANY Ticker (OGDC, LUCK, HUBC)..." onkeypress="if(event.key === 'Enter') triggerSearch()">
-                        <button onclick="triggerSearch()">Pull</button>
-                    </div>
-                </div>
-
-                <!-- Account Holding Summary Module -->
-                <div class="panel-box" style="border-color: rgba(46,204,113,0.3);">
-                    <h3 style="color: var(--green); font-size: 1.05rem; margin-bottom: 0.75rem;">💼 Portfolio Summary Account</h3>
-                    <div style="display:flex; flex-direction:column; gap:0.6rem; font-size:0.85rem;">
-                        <div style="display:flex; justify-content:space-between;"><span>Total Base Capital:</span><strong style="color:#fff;">Rs. 2,500,000</strong></div>
-                        <div style="display:flex; justify-content:space-between;"><span>Allocated Capital:</span><strong style="color:#fff;">Rs. 1,850,000</strong></div>
-                        <div style="display:flex; justify-content:space-between;"><span>Cash Reserve Net:</span><strong style="color:var(--green);">Rs. 650,000</strong></div>
-                        <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:0.4rem;"><span>Holding Trackers:</span><strong style="color:var(--accent);">8 Core Assets</strong></div>
-                    </div>
-                </div>
-
-                <!-- Live Variable Testing Box -->
-                <div class="panel-box" style="background: rgba(212,175,55,0.02); border-color: var(--accent);">
-                    <h3 style="color: var(--accent); font-size: 1rem; margin-bottom: 0.75rem;">🧮 Simple Value Tester</h3>
-                    <div class="calc-input-group">
-                        <label>Current Stock Market Price (Rs.)</label>
-                        <input type="number" id="calcPrice" value="75" oninput="runLiveCalculation()">
-                    </div>
-                    <div class="calc-input-group">
-                        <label>Company Asset Net Worth (Per Share)</label>
-                        <input type="number" id="calcBv" value="120" oninput="runLiveCalculation()">
-                    </div>
-                    <div style="margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem; font-size: 0.85rem;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
-                            <span>Status Result:</span>
-                            <strong id="calcOutputStatus" style="color:var(--green);">Checking...</strong>
+                <div class="panel-box" style="border-color: var(--accent);">
+                    <h3>🎛️ Terminal Variable Inputs</h3>
+                    <div class="calc-group">
+                        <div class="search-container" style="margin-bottom:0.5rem;">
+                            <input type="text" id="manualTickerInput" placeholder="Enter ANY Ticker...">
+                            <button onclick="pullManualTicker()">Pull</button>
                         </div>
+                        <div class="calc-row">
+                            <label>Stock Asset Ticker Label</label>
+                            <input type="text" id="varTicker" value="NML" oninput="runCalculationsEngine()">
+                        </div>
+                        <div class="calc-row">
+                            <label>Sector Classification Group</label>
+                            <input type="text" id="varSector" value="Textile Composite" oninput="runCalculationsEngine()">
+                        </div>
+                        <div class="calc-row">
+                            <label>Live Market Price (Rs.)</label>
+                            <input type="number" id="varPrice" value="78.50" step="0.1" oninput="runCalculationsEngine()">
+                        </div>
+                        <div class="calc-row">
+                            <label>Net Tangible Book Value (Rs.)</label>
+                            <input type="number" id="varBv" value="280.35" step="0.1" oninput="runCalculationsEngine()">
+                        </div>
+                        <div class="calc-row">
+                            <label>Shariah Status Mode</label>
+                            <select id="varShariah" onchange="runCalculationsEngine()">
+                                <option value="YES">🕋 Shariah Compliant</option>
+                                <option value="NO">❌ Non-Compliant</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-box" style="border-color: var(--green);">
+                    <h3 style="color:var(--green);">💼 Portfolio Account Summary</h3>
+                    <div class="calc-group" style="font-size: 0.85rem; gap: 0.5rem;">
+                        <div style="display:flex; justify-content:space-between;"><span>Base Ledger Capital:</span><input type="number" id="portCap" value="2500000" style="width:110px; background:var(--primary-bg); border:1px solid var(--border); color:#fff; text-align:right; font-weight:bold;" oninput="runCalculationsEngine()"></div>
+                        <div style="display:flex; justify-content:space-between;"><span>Calculated Allocation Limit:</span><strong id="lblPortAlloc" style="color:#fff;">Rs. 0</strong></div>
+                        <div style="display:flex; justify-content:space-between;"><span>Liquid Cash Backstop Balance:</span><strong id="lblPortCash" style="color:var(--green);">Rs. 0</strong></div>
                     </div>
                 </div>
             </div>
 
             <div class="main-panel">
-                <!-- Base Target Profile Metadata Panel -->
                 <div class="panel-box">
-                    <div class="section-header"><h3 id="displayTitle">Company Research Profile</h3></div>
+                    <div class="section-header"><h3>Active Targeted Equity Snapshot</h3></div>
                     <div class="snapshot-grid">
-                        <div class="stat-card"><label>Symbol Ticker</label><div class="value" id="lblSym">---</div></div>
-                        <div class="stat-card"><label>Sector Classification</label><div class="value" style="font-size:1.05rem;" id="lblSector">---</div></div>
-                        <div class="stat-card"><label>Current Market Price</label><div class="value" id="lblPrice">Rs. 0.00</div></div>
-                        <div class="stat-card"><label>Book Value Asset Base</label><div class="value" id="lblBv">Rs. 0.00</div></div>
+                        <div class="stat-card"><label>Active Ticker</label><div class="value" id="cardTicker" style="color:var(--accent);">---</div></div>
+                        <div class="stat-card"><label>Target Sector</label><div class="value" id="cardSector" style="font-size:1rem;">---</div></div>
+                        <div class="stat-card"><label>Price-To-Book Multiple</label><div class="value" id="cardPbVal" style="color:var(--green);">---</div></div>
+                        <div class="stat-card"><label>Shariah Screening Status</label><div id="cardShariahBadge">---</div></div>
                     </div>
                 </div>
 
-                <!-- Valuation Signals and Strategy Center -->
                 <div class="panel-box">
-                    <div class="section-header"><h3>Automated AI Investment Prescriptions</h3></div>
-                    <div class="snapshot-grid">
-                        <div class="stat-card tooltip-trigger">
-                            <label>Shariah Status Tracking</label>
-                            <div class="quick-badge" id="lblShariahBadge">---</div>
-                            <div class="tooltip-box">
-                                <h4>🕋 Shariah Tracking</h4>
-                                <p>Verifies if corporate operations and balance sheet liabilities stay completely aligned under KMIALL Shariah filtering systems.</p>
-                            </div>
-                        </div>
-                        <div class="stat-card tooltip-trigger">
-                            <label>Safe Holding Horizon</label>
-                            <div class="quick-badge" id="lblHorizonBadge">---</div>
-                            <div class="tooltip-box">
-                                <h4>⏳ Holding Timeline</h4>
-                                <p id="tipHorizonText">Recommends the perfect secure timeframe you should target to let this company's intrinsic asset valuation realize.</p>
-                            </div>
-                        </div>
-                        <div class="stat-card tooltip-trigger">
-                            <label>Valuation Health Signal</label>
-                            <div class="quick-badge" id="lblValBadge">Calculating...</div>
-                            <div class="tooltip-box">
-                                <h4>🔥 Price-to-Asset Evaluation</h4>
-                                <p id="tipValText">Scans if the business is on an absolute discount sale compared to what it owns on paper.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5-Year Historic Payout Ledger Center -->
-                <div class="panel-box">
-                    <div class="section-header" style="border-left-color: var(--accent);"><h3>📅 Historical 5-Year Corporate Cash Dividends Payout Ledger</h3></div>
+                    <div class="section-header"><h3>📅 5-Year Corporate Dividend Payout History Ledger Matrix</h3></div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.5rem;">Adjust base dividend payout rates below to automatically compute live adjusted yields across variable stock price cycles:</p>
                     <div class="table-container">
                         <table class="premium-table">
                             <thead>
                                 <tr>
-                                    <th>Fiscal Tracking Year</th>
-                                    <th>Per Share Cash Dividend Distributed</th>
-                                    <th>Effective Payout Type Status</th>
-                                    <th>Calculated Annual Yield % Metric</th>
+                                    <th>Fiscal Target Year</th>
+                                    <th>Variable Dividend Distribution Rate (Rs.)</th>
+                                    <th>Distribution Type Definition</th>
+                                    <th>Calculated Yield Output Metric</th>
                                 </tr>
                             </thead>
-                            <tbody id="payoutTableBody">
-                                <!-- Loaded dynamically via app.js javascript engine -->
+                            <tbody>
+                                <tr><td>2025</td><td><input type="number" id="div1" value="5.00" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type1" value="Final Cash"></td><td id="yield1" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>2024</td><td><input type="number" id="div2" value="4.50" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type2" value="Final Cash"></td><td id="yield2" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>2023</td><td><input type="number" id="div3" value="4.00" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type3" value="Final Cash"></td><td id="yield3" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>2022</td><td><input type="number" id="div4" value="4.00" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type4" value="Final Cash"></td><td id="yield4" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>2021</td><td><input type="number" id="div5" value="3.50" step="0.1" oninput="runCalculationsEngine()"></td><td><input type="text" id="type5" value="Final Cash"></td><td id="yield5" style="color:var(--green); font-weight:bold;">0.0%</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- 3-Year Strategic Valuation Forecast Models -->
-                <div class="panel-box" style="background: linear-gradient(180deg, #12141c 0%, #151b30 100%); border-color: rgba(214,175,55,0.15);">
-                    <div class="section-header" style="border-left-color: var(--accent);"><h3>🎯 3-Year Intrinsic Valuation Horizon Projections & Forecasts</h3></div>
+                <div class="panel-box" style="background: linear-gradient(180deg, #12141c 0%, #151b30 100%);">
+                    <div class="section-header"><h3>🎯 3-Year Dynamic Intrinsic Valuation Horizon Forecast Models</h3></div>
                     <div class="table-container">
                         <table class="premium-table">
                             <thead>
                                 <tr>
-                                    <th>Target Timeline Target</th>
-                                    <th>Conservative Price Forecast Target</th>
-                                    <th>Optimistic Growth Projection</th>
-                                    <th>Estimated Compounded Annual Return Floor</th>
+                                    <th>Target Timeline Horizon</th>
+                                    <th>Conservative Valuation Target</th>
+                                    <th>Optimistic Target Projection</th>
+                                    <th>Estimated CAGR Performance Floor</th>
                                 </tr>
                             </thead>
-                            <tbody id="forecastTableBody">
-                                <!-- Loaded dynamically via app.js javascript engine -->
+                            <tbody>
+                                <tr><td>1 Year Out Projection</td><td id="fcCons1">Rs. 0.00</td><td id="fcOpt1">Rs. 0.00</td><td id="fcCagr1" style="color:var(--accent); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>2 Years Out Projection</td><td id="fcCons2">Rs. 0.00</td><td id="fcOpt2">Rs. 0.00</td><td id="fcCagr2" style="color:var(--accent); font-weight:bold;">0.0%</td></tr>
+                                <tr><td>3 Years Out Projection</td><td id="fcCons3">Rs. 0.00</td><td id="fcOpt3">Rs. 0.00</td><td id="fcCagr3" style="color:var(--accent); font-weight:bold;">0.0%</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Cross-Peer Competitive Landscape Comparisons Matrix -->
                 <div class="panel-box">
-                    <div class="section-header" style="border-left-color: #3498db;"><h3>📊 Sector Peer Group Benchmarking & Core Comparison Matrix</h3></div>
+                    <div class="section-header" style="border-left-color: var(--blue);"><h3>📊 Sector Peer Group Benchmarking & Core Comparison Matrix</h3></div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.5rem;">Input peer stock details directly below to map competitive metrics side-by-side:</p>
                     <div class="table-container">
                         <table class="premium-table">
                             <thead>
                                 <tr>
-                                    <th>Enterprise Peer Asset</th>
-                                    <th>Current Market Price</th>
-                                    <th>Price-to-Book Valuation Multiple</th>
-                                    <th>Return on Equity (ROE) Performance</th>
-                                    <th>Leverage Debt-to-Equity Ratio Risk</th>
+                                    <th>Enterprise Peer Symbol</th>
+                                    <th>Market Price (Rs.)</th>
+                                    <th>Book Value Base (Rs.)</th>
+                                    <th>Price-To-Book Multiple</th>
+                                    <th>Debt Risk Standing</th>
                                 </tr>
                             </thead>
-                            <tbody id="comparisonTableBody">
-                                <!-- Loaded dynamically via app.js javascript engine -->
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" value="COMPETITOR 1" style="font-weight:bold; color:var(--accent);"></td>
+                                    <td><input type="number" id="peerPrice1" value="65.00" oninput="calculatePeerRatios()"></td>
+                                    <td><input type="number" id="peerBv1" value="180.00" oninput="calculatePeerRatios()"></td>
+                                    <td id="peerPb1" style="font-weight:bold; color:var(--green);">0.00x</td>
+                                    <td><input type="text" value="Low-Mid Risk Profile"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" value="COMPETITOR 2" style="font-weight:bold; color:var(--accent);"></td>
+                                    <td><input type="number" id="peerPrice2" value="120.00" oninput="calculatePeerRatios()"></td>
+                                    <td><input type="number" id="peerBv2" value="95.00" oninput="calculatePeerRatios()"></td>
+                                    <td id="peerPb2" style="font-weight:bold; color:var(--green);">0.00x</td>
+                                    <td><input type="text" value="High Interest Load"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Strategic Safety Defensive Radar Display Layout -->
-                <div class="panel-box" style="background: linear-gradient(180deg, #12141c 0%, #0d1b15 100%); border-color: #1e3a27;">
-                    <div class="section-header" style="border-left-color: var(--green);"><h3>🚨 Secure Underdog Safety Radar Systems</h3></div>
-                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">These companies are valued on the stock market for less than the paper value of their physical net assets. This structure provides a strong margin of safety against loss.</p>
-                    <div class="radar-grid" id="underdogRadarContainer"></div>
-                </div>
-
-                <!-- Splitted Strategic Details and Core System Operational Risks Problems Profiles -->
                 <div class="info-split">
                     <div class="info-block">
                         <h4>Target Strategic Suggestions Matrix</h4>
-                        <ul id="suggestionsList" class="suggestion-text"></ul>
+                        <ul id="suggestBox">
+                            <li>Acquiring physical business equity under book assets establishes an institutional defensive safety floor.</li>
+                            <li>Reinvest distributions to leverage dollar-cost averaging mechanisms during market fluctuations.</li>
+                        </ul>
                     </div>
-                    <div class="info-block" style="border-color: rgba(231,76,60,0.2);">
+                    <div class="info-block" style="border-color: rgba(231,76,60,0.3);">
                         <h4 style="color:var(--red);">Algorithmic Risk Problems & Vulnerabilities Checklist</h4>
-                        <ul id="redFlagsList" class="red-flag-text"></ul>
+                        <ul id="riskBox">
+                            <li style="list-style-type:'⚠️ '; margin-left:5px;">P/B multiples trading above 2.5x increase tracking volatility risk if underlying sector growth stalls.</li>
+                            <li style="list-style-type:'⚠️ '; margin-left:5px;">Ensure tracking models account for changing energy and utilities pricing parameters.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
 
         <footer>
-            <p>PSX Investment Research Analytic Dashboard Framework Environment Solutions</p>
-            <p style="margin-top:0.5rem; color:var(--accent); font-weight:600;">Developed by Hammad Hanif</p>
+            <p>Developed for Hammad Hanif — Full Matrix Variable Terminal Environment</p>
         </footer>
     </div>
+
     <script src="app.js"></script>
 </body>
 </html>

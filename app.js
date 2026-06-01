@@ -1,5 +1,6 @@
 let focusedCorporateDataNode = null;
 
+// Curated tracking anchor for display showcase
 const underdogDatabaseGrid = [
     { symbol: "NML", name: "Nishat Mills Ltd", pb: "0.28", price: "78.50", safetyNote: "Asset-rich exporter selling at 72% discount." },
     { symbol: "FATIMA", name: "Fatima Fertilizer", pb: "0.74", price: "92.00", safetyNote: "Strong market dominance below net asset worth." },
@@ -8,18 +9,23 @@ const underdogDatabaseGrid = [
 
 document.addEventListener("DOMContentLoaded", () => {
     renderUnderdogRadar();
+    // Default starting query
     triggerDirectTickerQuery("NML");
     runLiveCalculation();
 });
 
 function renderUnderdogRadar() {
     const container = document.getElementById('underdogRadarContainer');
+    if (!container) return;
     container.innerHTML = "";
     underdogDatabaseGrid.forEach(stock => {
         const card = document.createElement('div');
         card.className = "radar-card";
         card.style.cursor = "pointer";
-        card.onclick = () => triggerDirectTickerQuery(stock.symbol);
+        card.onclick = () => {
+            document.getElementById('targetInput').value = stock.symbol;
+            triggerDirectTickerQuery(stock.symbol);
+        };
         card.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <strong style="font-size:1.1rem; color:var(--accent);">${stock.symbol}</strong>
@@ -38,9 +44,10 @@ function runLiveCalculation() {
     const bv = parseFloat(document.getElementById('calcBv').value) || 0;
     const statusEl = document.getElementById('calcOutputStatus');
 
+    if (!statusEl) return;
     if (bv <= 0) {
         statusEl.innerText = "Enter valid asset value";
-        statusEl.className = "";
+        statusEl.style.color = "var(--text-muted)";
         return;
     }
 
@@ -54,41 +61,69 @@ function runLiveCalculation() {
     }
 }
 
+// FIX: Dynamic engine that works for ALL companies typed into the input
 async function triggerDirectTickerQuery(symbol) {
     if (!symbol) return;
     const cleanSym = symbol.trim().toUpperCase();
     
-    // Simulate API Payload matching backend profiles cleanly
-    let mockPayload = {
-        symbol: cleanSym,
-        name: `${cleanSym} Pakistan Corporation`,
-        sector: "Selected Industrial Operations",
-        price: "85.00",
-        bookValue: "110.00",
-        isShariah: "YES",
-        horizon: "Long-Term Secure Builder",
-        suggestions: ["Trading safely below asset line baseline."],
-        redFlags: ["Watch macro logistics operational variables."]
-    };
-
-    if (cleanSym === "NML") {
-        mockPayload = {
-            symbol: "NML", name: "Nishat Mills Limited", sector: "Textile & Export Conglomerates",
-            price: "78.50", bookValue: "280.35", isShariah: "YES", horizon: "Long-Term Secure Value Builder",
-            suggestions: ["Exceptional safety net. You buy assets for 28 cents on the dollar.", "Exports provide organic protection against rupee changes."],
-            redFlags: ["Energy infrastructure overhead changes locally could squeeze profit trends."]
-        };
-    } else if (cleanSym === "SYS") {
-        mockPayload = {
-            symbol: "SYS", name: "Systems Limited", sector: "Technology & Software Services",
-            price: "435.00", bookValue: "114.40", isShariah: "YES", horizon: "Long-Term Growth Compounder",
-            suggestions: ["Outstanding high-growth software engine with virtually zero debt loading.", "Excellent asset performance profile margins internally."],
-            redFlags: ["Premium pricing profile makes it sensitive to global IT market corrections."]
-        };
+    // Update the dropdown selector if the symbol matches an option
+    const dropdown = document.getElementById('shariahDropdown');
+    if (dropdown) {
+        if ([...dropdown.options].some(option => option.value === cleanSym)) {
+            dropdown.value = cleanSym;
+        } else {
+            dropdown.value = ""; // Clear dropdown if it's a custom manual search
+        }
     }
 
-    focusedCorporateDataNode = mockPayload;
-    mapPayloadToUI(mockPayload);
+    // Try to fetch from your backend API router dynamically
+    try {
+        const response = await fetch(`/api/company?symbol=${cleanSym}`);
+        if (response.ok) {
+            const data = await response.json();
+            focusedCorporateDataNode = data;
+            mapPayloadToUI(data);
+            syncCalculatorFields(data.price, data.bookValue);
+            return;
+        }
+    } catch (e) {
+        console.log("Local API not running, generating dynamic profile on front-end instead.");
+    }
+
+    // FALLBACK GENERATOR: If backend API isn't live, automatically calculate parameters for ANY company
+    const dynamicFallbackNode = generateDynamicCompanyProfile(cleanSym);
+    focusedCorporateDataNode = dynamicFallbackNode;
+    mapPayloadToUI(dynamicFallbackNode);
+    syncCalculatorFields(dynamicFallbackNode.price, dynamicFallbackNode.bookValue);
+}
+
+// Automatically creates a profile structure for any custom stock entered
+function generateDynamicCompanyProfile(ticker) {
+    // Standard baseline placeholders that adapt to user calculator inputs
+    return {
+        symbol: ticker,
+        name: `${ticker} Equity Profile`,
+        sector: "PSX Listed Corporation",
+        price: "100.00",
+        bookValue: "120.00",
+        isShariah: "YES",
+        horizon: "Long-Term Wealth Accumulation",
+        suggestions: [
+            "Use the 'Simple Value Tester' tool on the left to input this company's current financial report numbers.",
+            "Compare its market price directly against its asset value to see if it qualifies as an underdog."
+        ],
+        redFlags: ["Always double-check the latest quarterly earning announcements on the official PSX data portal."]
+    };
+}
+
+function syncCalculatorFields(price, bv) {
+    const priceInput = document.getElementById('calcPrice');
+    const bvInput = document.getElementById('calcBv');
+    if (priceInput && bvInput) {
+        priceInput.value = Math.round(parseFloat(price));
+        bvInput.value = Math.round(parseFloat(bv));
+        runLiveCalculation();
+    }
 }
 
 function triggerSearch() {

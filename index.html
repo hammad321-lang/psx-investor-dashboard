@@ -19,7 +19,7 @@
         }
         
         .wrapper { 
-            max-width: 1200px; 
+            max-width: 1400px; 
             margin: 0 auto; 
             display: flex; 
             flex-direction: column; 
@@ -36,8 +36,8 @@
         .quick-chip { background: rgba(46,204,113,0.15); border: 1px solid #2ecc71; color: #2ecc71; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
         .select-menu { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1.2rem; border-radius: 6px; outline:none; font-weight:600; cursor: pointer; width: 280px; }
 
-        .workspace { display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem; }
-        @media (max-width: 900px) { .workspace { grid-template-columns: 1fr; } }
+        .workspace { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
+        @media (max-width: 1000px) { .workspace { grid-template-columns: 1fr; } }
         
         .left-panel { display: flex; flex-direction: column; gap: 1.5rem; }
         .panel-box { background: var(--surface-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; position: relative; }
@@ -50,7 +50,7 @@
         .main-panel { display: flex; flex-direction: column; gap: 1.5rem; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 0.5rem; }
         
-        .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); position: relative; }
         .stat-card label { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.4rem; }
         .stat-card .value { font-size: 1.3rem; font-weight: 700; }
@@ -71,7 +71,7 @@
         .badge-red { color: var(--red); background: rgba(231,76,60,0.1); border: 1px solid var(--red); }
         .badge-accent { color: var(--accent); background: rgba(212,175,55,0.1); border: 1px solid var(--accent); }
 
-        .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .info-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
         .info-block { background: var(--card-bg); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--border); }
         .info-block h4 { margin-bottom: 0.6rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
         .info-block ul { padding-left: 1.2rem; font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem; }
@@ -84,6 +84,13 @@
         .radar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .radar-card { background: linear-gradient(145deg, #1a1d29 0%, #131622 100%); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; border-left: 4px solid var(--green); }
         
+        /* Premium Table Framework Extensions */
+        .table-container { width: 100%; overflow-x: auto; margin-top: 0.5rem; }
+        .premium-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+        .premium-table th { background: var(--card-bg); color: var(--accent); padding: 0.75rem; border: 1px solid var(--border); font-weight: 600; }
+        .premium-table td { padding: 0.75rem; border: 1px solid var(--border); color: #fff; }
+        .premium-table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
         footer { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 2rem 0; margin-top: 2rem; border-top: 1px solid var(--border); }
     </style>
 </head>
@@ -94,6 +101,7 @@
             <div class="user-stamp">Hammad Hanif Framework</div>
         </header>
 
+        <!-- Shariah Hub Tracking Center -->
         <div class="shariah-hub">
             <h3>🕋 Shariah Compliance Screening Center (KMIALL Track)</h3>
             <div class="hub-flex" style="margin-top:0.75rem;">
@@ -120,14 +128,27 @@
 
         <div class="workspace">
             <div class="left-panel">
+                <!-- Manual Terminal Pull Panel -->
                 <div class="panel-box">
                     <h3>Manual Terminal Pull</h3>
                     <div class="search-container" style="margin-top:0.75rem;">
-                        <input type="text" id="targetInput" placeholder="Enter ANY Ticker (OGDC, LUCK, PPL)..." onkeypress="if(event.key === 'Enter') triggerSearch()">
+                        <input type="text" id="targetInput" placeholder="Enter ANY Ticker (OGDC, LUCK, HUBC)..." onkeypress="if(event.key === 'Enter') triggerSearch()">
                         <button onclick="triggerSearch()">Pull</button>
                     </div>
                 </div>
 
+                <!-- Account Holding Summary Module -->
+                <div class="panel-box" style="border-color: rgba(46,204,113,0.3);">
+                    <h3 style="color: var(--green); font-size: 1.05rem; margin-bottom: 0.75rem;">💼 Portfolio Summary Account</h3>
+                    <div style="display:flex; flex-direction:column; gap:0.6rem; font-size:0.85rem;">
+                        <div style="display:flex; justify-content:space-between;"><span>Total Base Capital:</span><strong style="color:#fff;">Rs. 2,500,000</strong></div>
+                        <div style="display:flex; justify-content:space-between;"><span>Allocated Capital:</span><strong style="color:#fff;">Rs. 1,850,000</strong></div>
+                        <div style="display:flex; justify-content:space-between;"><span>Cash Reserve Net:</span><strong style="color:var(--green);">Rs. 650,000</strong></div>
+                        <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:0.4rem;"><span>Holding Trackers:</span><strong style="color:var(--accent);">8 Core Assets</strong></div>
+                    </div>
+                </div>
+
+                <!-- Live Variable Testing Box -->
                 <div class="panel-box" style="background: rgba(212,175,55,0.02); border-color: var(--accent);">
                     <h3 style="color: var(--accent); font-size: 1rem; margin-bottom: 0.75rem;">🧮 Simple Value Tester</h3>
                     <div class="calc-input-group">
@@ -148,20 +169,21 @@
             </div>
 
             <div class="main-panel">
+                <!-- Base Target Profile Metadata Panel -->
                 <div class="panel-box">
                     <div class="section-header"><h3 id="displayTitle">Company Research Profile</h3></div>
                     <div class="snapshot-grid">
                         <div class="stat-card"><label>Symbol Ticker</label><div class="value" id="lblSym">---</div></div>
-                        <div class="stat-card"><label>Sector Classification</label><div class="value" style="font-size:1.1rem;" id="lblSector">---</div></div>
+                        <div class="stat-card"><label>Sector Classification</label><div class="value" style="font-size:1.05rem;" id="lblSector">---</div></div>
                         <div class="stat-card"><label>Current Market Price</label><div class="value" id="lblPrice">Rs. 0.00</div></div>
                         <div class="stat-card"><label>Book Value Asset Base</label><div class="value" id="lblBv">Rs. 0.00</div></div>
                     </div>
                 </div>
 
+                <!-- Valuation Signals and Strategy Center -->
                 <div class="panel-box">
                     <div class="section-header"><h3>Automated AI Investment Prescriptions</h3></div>
                     <div class="snapshot-grid">
-                        
                         <div class="stat-card tooltip-trigger">
                             <label>Shariah Status Tracking</label>
                             <div class="quick-badge" id="lblShariahBadge">---</div>
@@ -170,7 +192,6 @@
                                 <p>Verifies if corporate operations and balance sheet liabilities stay completely aligned under KMIALL Shariah filtering systems.</p>
                             </div>
                         </div>
-
                         <div class="stat-card tooltip-trigger">
                             <label>Safe Holding Horizon</label>
                             <div class="quick-badge" id="lblHorizonBadge">---</div>
@@ -179,7 +200,6 @@
                                 <p id="tipHorizonText">Recommends the perfect secure timeframe you should target to let this company's intrinsic asset valuation realize.</p>
                             </div>
                         </div>
-
                         <div class="stat-card tooltip-trigger">
                             <label>Valuation Health Signal</label>
                             <div class="quick-badge" id="lblValBadge">Calculating...</div>
@@ -188,25 +208,85 @@
                                 <p id="tipValText">Scans if the business is on an absolute discount sale compared to what it owns on paper.</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
-                <div class="panel-box" style="background: linear-gradient(180deg, #12141c 0%, #0d1b15 100%); border-color: #1e3a27;">
-                    <div class="section-header" style="border-left-color: var(--green);">
-                        <h3>🚨 Secure Underdog Radar System</h3>
+                <!-- 5-Year Historic Payout Ledger Center -->
+                <div class="panel-box">
+                    <div class="section-header" style="border-left-color: var(--accent);"><h3>📅 Historical 5-Year Corporate Cash Dividends Payout Ledger</h3></div>
+                    <div class="table-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Fiscal Tracking Year</th>
+                                    <th>Per Share Cash Dividend Distributed</th>
+                                    <th>Effective Payout Type Status</th>
+                                    <th>Calculated Annual Yield % Metric</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payoutTableBody">
+                                <!-- Loaded dynamically via app.js javascript engine -->
+                            </tbody>
+                        </table>
                     </div>
+                </div>
+
+                <!-- 3-Year Strategic Valuation Forecast Models -->
+                <div class="panel-box" style="background: linear-gradient(180deg, #12141c 0%, #151b30 100%); border-color: rgba(214,175,55,0.15);">
+                    <div class="section-header" style="border-left-color: var(--accent);"><h3>🎯 3-Year Intrinsic Valuation Horizon Projections & Forecasts</h3></div>
+                    <div class="table-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Target Timeline Target</th>
+                                    <th>Conservative Price Forecast Target</th>
+                                    <th>Optimistic Growth Projection</th>
+                                    <th>Estimated Compounded Annual Return Floor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="forecastTableBody">
+                                <!-- Loaded dynamically via app.js javascript engine -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Cross-Peer Competitive Landscape Comparisons Matrix -->
+                <div class="panel-box">
+                    <div class="section-header" style="border-left-color: #3498db;"><h3>📊 Sector Peer Group Benchmarking & Core Comparison Matrix</h3></div>
+                    <div class="table-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Enterprise Peer Asset</th>
+                                    <th>Current Market Price</th>
+                                    <th>Price-to-Book Valuation Multiple</th>
+                                    <th>Return on Equity (ROE) Performance</th>
+                                    <th>Leverage Debt-to-Equity Ratio Risk</th>
+                                </tr>
+                            </thead>
+                            <tbody id="comparisonTableBody">
+                                <!-- Loaded dynamically via app.js javascript engine -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Strategic Safety Defensive Radar Display Layout -->
+                <div class="panel-box" style="background: linear-gradient(180deg, #12141c 0%, #0d1b15 100%); border-color: #1e3a27;">
+                    <div class="section-header" style="border-left-color: var(--green);"><h3>🚨 Secure Underdog Safety Radar Systems</h3></div>
                     <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">These companies are valued on the stock market for less than the paper value of their physical net assets. This structure provides a strong margin of safety against loss.</p>
                     <div class="radar-grid" id="underdogRadarContainer"></div>
                 </div>
 
+                <!-- Splitted Strategic Details and Core System Operational Risks Problems Profiles -->
                 <div class="info-split">
                     <div class="info-block">
                         <h4>Target Strategic Suggestions Matrix</h4>
                         <ul id="suggestionsList" class="suggestion-text"></ul>
                     </div>
-                    <div class="info-block">
-                        <h4>Algorithmic Red Flag Warnings Checklist</h4>
+                    <div class="info-block" style="border-color: rgba(231,76,60,0.2);">
+                        <h4 style="color:var(--red);">Algorithmic Risk Problems & Vulnerabilities Checklist</h4>
                         <ul id="redFlagsList" class="red-flag-text"></ul>
                     </div>
                 </div>

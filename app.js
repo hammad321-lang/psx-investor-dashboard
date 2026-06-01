@@ -1,68 +1,94 @@
 let focusedCorporateDataNode = null;
-let watchlistDataArray = JSON.parse(localStorage.getItem('psx_watchlist_cache')) || ["FFC", "SYS", "MARI"];
 let comparativeBasketMatrix = [];
 
+// Curated List of Secure Underdogs Trading Under Asset Value
+const underdogDatabaseGrid = [
+    { symbol: "NML", name: "Nishat Mills Ltd", pb: "0.28", price: "78.50", assetSafety: "Outstanding 72% Discount on Assets" },
+    { symbol: "FATIMA", name: "Fatima Fertilizer", pb: "0.74", price: "92.00", assetSafety: "Agri Backbone Under Real Worth" },
+    { symbol: "DGKC", name: "DG Khan Cement", pb: "0.42", price: "65.20", assetSafety: "Factories worth 2x current stock value" },
+    { symbol: "NPL", name: "Nishat Power Ltd", pb: "0.55", price: "38.10", assetSafety: "Asset Rich High Payout Discount" }
+];
+
 document.addEventListener("DOMContentLoaded", () => {
-    initializeWatchlistUI();
-    triggerDirectTickerQuery(watchlistDataArray[0] || "FFC");
+    renderUnderdogRadar();
+    triggerDirectTickerQuery("NML");
+    runLiveCalculation(); // Initialize calculator defaults
 });
 
-function initializeWatchlistUI() {
-    const container = document.getElementById('watchlistContainer');
-    container.innerHTML = "";
-    watchlistDataArray.forEach(sym => {
-        const row = document.createElement('div');
-        row.className = "list-item";
-        row.innerHTML = `<strong>${sym}</strong> <span style='color:var(--accent); font-size:0.75rem;'>Load Profile</span>`;
-        row.onclick = () => triggerDirectTickerQuery(sym);
-        container.appendChild(row);
+// A. Render the Underdog Target Grid Area
+function renderUnderdogRadar() {
+    const radarContainer = document.getElementById('underdogRadarContainer');
+    radarContainer.innerHTML = "";
+    
+    underdogDatabaseGrid.forEach(stock => {
+        const card = document.createElement('div');
+        card.className = "radar-card";
+        card.style.cursor = "pointer";
+        card.onclick = () => triggerDirectTickerQuery(stock.symbol);
+        card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong style="font-size:1.1rem; color:var(--accent);">${stock.symbol}</strong>
+                <span class="quick-badge badge-green">P/B: ${stock.pb}x</span>
+            </div>
+            <div style="font-size:0.8rem; color:#fff; margin:5px 0;">${stock.name}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">Price: Rs. ${stock.price}</div>
+            <div style="font-size:0.75rem; color:var(--green); font-weight:600; margin-top:8px;">🛡️ ${stock.assetSafety}</div>
+        `;
+        radarContainer.appendChild(card);
     });
 }
 
-function toggleWatchlist() {
-    if (!focusedCorporateDataNode) return;
-    const s = focusedCorporateDataNode.symbol;
-    const idx = watchlistDataArray.indexOf(s);
-    if (idx > -1) watchlistDataArray.splice(idx, 1);
-    else watchlistDataArray.push(s);
-    localStorage.setItem('psx_watchlist_cache', JSON.stringify(watchlistDataArray));
-    initializeWatchlistUI();
+// B. Live Interactive Book Value Calculator Logic Engine
+function runLiveCalculation() {
+    const price = parseFloat(document.getElementById('calcPrice').value) || 0;
+    const assets = parseFloat(document.getElementById('calcAssets').value) || 0;
+    const liabilities = parseFloat(document.getElementById('calcLiab').value) || 0;
+    const shares = parseFloat(document.getElementById('calcShares').value) || 1; // Prevent divide by zero
+
+    // Net Worth = Assets - Liabilities (Convert billions to millions for scaling math alignment)
+    const netWorthMillions = (assets - liabilities) * 1000;
+    const bvPerShare = netWorthMillions / shares;
+    const pbRatio = bvPerShare > 0 ? (price / bvPerShare) : 0;
+
+    document.getElementById('calcOutputBv').innerText = `Rs. ${bvPerShare.toFixed(2)}`;
+    
+    const pbOutputEl = document.getElementById('calcOutputPb');
+    if (pbRatio <= 0) {
+        pbOutputEl.innerText = "N/A";
+        pbOutputEl.className = "";
+    } else if (pbRatio < 1.0) {
+        pbOutputEl.innerText = `${pbRatio.toFixed(2)}x (🔥 Underdog Bargain)`;
+        pbOutputEl.className = "quick-badge badge-green";
+    } else {
+        pbOutputEl.innerText = `${pbRatio.toFixed(2)}x (Premium Pricing)`;
+        pbOutputEl.className = "quick-badge badge-accent";
+    }
 }
 
-async function triggerSearch() {
-    const target = document.getElementById('targetInput').value;
-    if (target) triggerDirectTickerQuery(target);
-}
-
+// C. Fetch Profile Infrastructure
 async function triggerDirectTickerQuery(symbol) {
     if (!symbol) return;
-    const cleanedSym = symbol.trim().toUpperCase();
+    const cleanSym = symbol.trim().toUpperCase();
     
-    const dropdown = document.getElementById('shariahDropdown');
-    if (dropdown) {
-        if ([...dropdown.options].some(opt => opt.value === cleanedSym)) {
-            dropdown.value = cleanedSym;
-        } else {
-            dropdown.value = "";
-        }
-    }
-
     try {
-        const res = await fetch(`/api/company?symbol=${cleanedSym}`);
+        const res = await fetch(`/api/company?symbol=${cleanSym}`);
         const data = await res.json();
-        if (data.error) {
-            alert(data.error);
-            return;
-        }
+        if (data.error) return alert(data.error);
+        
         focusedCorporateDataNode = data;
-        mapCorporateNodeToTerminalUI(data);
+        mapDataToActiveUI(data);
     } catch (e) {
-        console.error("Critical structural execution error loading node assets.", e);
+        console.error("Pipeline failure fetching asset context", e);
     }
 }
 
-function mapCorporateNodeToTerminalUI(node) {
-    // 1. Basic Text Content Fields
+function triggerSearch() {
+    const input = document.getElementById('targetInput').value;
+    if (input) triggerDirectTickerQuery(input);
+}
+
+// D. Parse Elements to Layout Interface
+function mapDataToActiveUI(node) {
     document.getElementById('lblSym').innerText = node.symbol;
     document.getElementById('displayTitle').innerText = node.name;
     document.getElementById('lblSector').innerText = node.sector;
@@ -75,189 +101,79 @@ function mapCorporateNodeToTerminalUI(node) {
     document.getElementById('lblYield').innerText = node.divYield;
     document.getElementById('lblDeRatio').innerText = node.deRatio;
 
-    // 2. KMIALL Shariah Status Badge Mapping
-    const shariahEl = document.getElementById('lblShariahBadge');
-    shariahEl.innerText = node.isShariah === "YES" ? "🕋 KMIALL COMPLIANT" : "❌ NON-COMPLIANT";
-    shariahEl.className = "quick-badge " + (node.isShariah === "YES" ? "badge-green" : "badge-red");
+    // Map Beginner Prescriptions & Explanations Dynamic Texts
+    document.getElementById('lblShariahBadge').innerText = node.isShariah === "YES" ? "🕋 COMPLIANT" : "❌ NON-COMPLIANT";
+    document.getElementById('lblShariahBadge').className = "quick-badge " + (node.isShariah === "YES" ? "badge-green" : "badge-red");
 
-    // 3. Investment Horizon Mapping Logic
-    const horizonEl = document.getElementById('lblHorizonBadge');
-    horizonEl.innerText = node.horizon.toUpperCase();
-    if (node.horizon.includes("Long-Term")) horizonEl.className = "quick-badge badge-green";
-    else if (node.horizon.includes("Moderate-Term")) horizonEl.className = "quick-badge badge-accent";
-    else horizonEl.className = "quick-badge badge-red";
+    document.getElementById('lblHorizonBadge').innerText = node.horizon.toUpperCase();
+    document.getElementById('lblHorizonBadge').className = "quick-badge " + (node.horizon.includes("Secure") ? "badge-green" : "badge-accent");
+    document.getElementById('tipHorizonText').innerText = `Target Classification: [${node.horizon}]. This tells a beginner how long to securely hold this company to let asset worth expand.`;
 
-    // 4. Macro Risk Allocation Tracking Logic
-    const riskEl = document.getElementById('lblRiskBadge');
-    riskEl.innerText = node.riskClass.toUpperCase();
-    const deNum = parseFloat(node.deRatio);
-    if (deNum > 0.8) {
-        riskEl.innerText = "HIGH LEVERAGE RISK";
-        riskEl.className = "quick-badge badge-red";
+    document.getElementById('lblRiskBadge').innerText = node.riskClass.toUpperCase();
+    document.getElementById('lblRiskBadge').className = "quick-badge " + (node.riskClass.includes("Low") ? "badge-green" : "badge-accent");
+    document.getElementById('tipRiskText').innerText = `Risk Level Evaluated: [${node.riskClass}]. Derived via Debt Ratio: ${node.deRatio}. Lower debt provides a safe cushion during economic stress.`;
+
+    const pbNum = parseFloat(node.pb);
+    const valBadge = document.getElementById('lblValBadge');
+    if (pbNum < 1.0) {
+        valBadge.innerText = "🔥 SECURE UNDERDOG VALUE";
+        valBadge.className = "quick-badge badge-green";
+        document.getElementById('tipValText').innerText = `This asset is an Underdog choice! At a P/B of ${node.pb}x, you are buying its physical assets for less than they are actually worth. Excellent loss protection.`;
     } else {
-        riskEl.className = "quick-badge " + (node.riskClass.includes("Low") ? "badge-green" : "badge-accent");
+        valBadge.innerText = "🎯 PREMIUM MARKET PRICING";
+        valBadge.className = "quick-badge badge-accent";
+        document.getElementById('tipValText').innerText = `Priced at ${node.pb}x its asset base. Investors are paying a premium because the company generates solid active earnings.`;
     }
 
-    // 5. Intrinsic Core Mathematical Model Framework Valuation
-    const curPrice = parseFloat(node.price);
-    const epsNum = parseFloat(node.eps);
-    const bvNum = parseFloat(node.bookValue);
-    const divYieldNum = parseFloat(node.divYield.replace('%',''));
+    // Suggestions & Red Flags Rendering Pipeline
+    const sugList = document.getElementById('suggestionsList'); sugList.innerHTML = "";
+    node.suggestions.forEach(txt => { let li = document.createElement('li'); li.innerText = txt; sugList.appendChild(li); });
 
-    // A. Benjamin Graham Number Equation
-    let grahamVal = 0;
-    if (epsNum > 0 && bvNum > 0) {
-        grahamVal = Math.sqrt(22.5 * epsNum * bvNum);
-    }
-    document.getElementById('valGraham').innerText = grahamVal > 0 ? `Rs. ${grahamVal.toFixed(2)}` : "N/A";
-
-    // B. Discounted Cash Flow Model (DCF Optimization Simulation)
-    let projectedGrowth = 0.08; 
-    if (node.sector.includes("Technology")) projectedGrowth = 0.15; 
-    const discountRate = 0.14; // Paired to reflect Pakistani macro costs
-    let dummyFcf = epsNum * 0.75; 
-    let sumDcf = 0;
-    let tempFcf = dummyFcf;
-    for (let i = 1; i <= 5; i++) {
-        tempFcf = tempFcf * (1 + projectedGrowth);
-        sumDcf += tempFcf / Math.pow((1 + discountRate), i);
-    }
-    document.getElementById('valDcf').innerText = sumDcf > 0 ? `Rs. ${sumDcf.toFixed(2)}` : "N/A";
-
-    // C. Dividend Discount Model (Gordon Growth Allocation)
-    let ddmVal = 0;
-    const currentAnnDiv = epsNum * (divYieldNum / 100);
-    if (currentAnnDiv > 0) {
-        ddmVal = currentAnnDiv / (discountRate - 0.04);
-    }
-    document.getElementById('valDdm').innerText = ddmVal > 0 ? `Rs. ${ddmVal.toFixed(2)}` : "N/A";
-
-    // D. Consensus Valuation Target Summary Array
-    let validModels = [];
-    if (grahamVal > 0) validModels.push(grahamVal);
-    if (sumDcf > 0) validModels.push(sumDcf);
-    if (ddmVal > 0) validModels.push(ddmVal);
-    
-    let consensusVal = curPrice;
-    if (validModels.length > 0) {
-        consensusVal = validModels.reduce((a,b) => a+b, 0) / validModels.length;
-    }
-    document.getElementById('valConsensus').innerText = `Rs. ${consensusVal.toFixed(2)}`;
-
-    // Valuation Tag Output Calculations
-    const valEl = document.getElementById('lblValBadge');
-    const marginOfSafety = ((consensusVal - curPrice) / consensusVal) * 100;
-    if (marginOfSafety > 15) {
-        valEl.innerText = `🔥 UNDERVALUED UNDERDOG (${marginOfSafety.toFixed(0)}% MOS)`;
-        valEl.className = "quick-badge badge-green";
-    } else if (marginOfSafety < -15) {
-        valEl.innerText = "⚠️ PREMIUM OVERVALUED";
-        valEl.className = "quick-badge badge-red";
-    } else {
-        valEl.innerText = "🎯 FAIR VALUE RATING";
-        valEl.className = "quick-badge badge-accent";
-    }
-
-    // 6. Suggestions & Red Flags Panel Rendering
-    const sugContainer = document.getElementById('suggestionsList');
-    sugContainer.innerHTML = "";
-    node.suggestions.forEach(item => {
-        const li = document.createElement('li');
-        li.innerText = item;
-        sugContainer.appendChild(li);
-    });
-
-    const flagContainer = document.getElementById('redFlagsList');
-    flagContainer.innerHTML = "";
-    node.redFlags.forEach(item => {
-        const li = document.createElement('li');
-        li.innerText = item;
-        flagContainer.appendChild(li);
-    });
-
-    // 7. Render 5-Year Financial Statements
-    const tableBody = document.getElementById('financialBody');
-    tableBody.innerHTML = "";
-    const metrics = [
-        { name: "Revenue Turnover Base (B)", data: node.history.rev },
-        { name: "Gross Margin Realization (B)", data: node.history.gp },
-        { name: "Net Corporate Income (B)", data: node.history.np },
-        { name: "Stated EPS Trajectory (Rs)", data: node.history.eps },
-        { name: "Dividend Pay Timeline (Rs)", data: node.history.divHistory }
-    ];
-    metrics.forEach(m => {
-        const tr = document.createElement('tr');
-        let tds = `<td><strong>${m.name}</strong></td>`;
-        m.data.forEach(val => { tds += `<td>${val}</td>`; });
-        tr.innerHTML = tds;
-        tableBody.appendChild(tr);
-    });
+    const flagList = document.getElementById('redFlagsList'); flagList.innerHTML = "";
+    node.redFlags.forEach(txt => { let li = document.createElement('li'); li.innerText = txt; flagList.appendChild(li); });
 }
 
-// 8. 5-Company Bottom Comparison Matrix Processing Engine
+// E. Multi-Staging System Framework
 function stageCurrentToMatrix() {
     if (!focusedCorporateDataNode) return;
-    const matchIndex = comparativeBasketMatrix.findIndex(item => item.symbol === focusedCorporateDataNode.symbol);
-    if (matchIndex === -1) {
-        if (comparativeBasketMatrix.length >= 5) {
-            alert("Matrix capacity limit reached. Please remove an existing asset before staging a new one.");
-            return;
-        }
-        // Calculate dynamic consensus target value for the record
-        const eps = parseFloat(focusedCorporateDataNode.eps);
-        const bv = parseFloat(focusedCorporateDataNode.bookValue);
-        const graham = (eps > 0 && bv > 0) ? Math.sqrt(22.5 * eps * bv) : parseFloat(focusedCorporateDataNode.price);
-        
-        const stagedRecordNode = {
-            symbol: focusedCorporateDataNode.symbol,
-            sector: focusedCorporateDataNode.sector,
-            price: focusedCorporateDataNode.price,
-            pe: focusedCorporateDataNode.pe,
-            pb: focusedCorporateDataNode.pb,
-            de: focusedCorporateDataNode.deRatio,
-            yield: focusedCorporateDataNode.divYield,
-            consensus: graham.toFixed(2)
-        };
-        comparativeBasketMatrix.push(stagedRecordNode);
-        renderComparativeMatrixUI();
-    }
+    if (comparativeBasketMatrix.some(x => x.symbol === focusedCorporateDataNode.symbol)) return;
+    if (comparativeBasketMatrix.length >= 5) comparativeBasketMatrix.shift(); // Max 5 cap limit carousel rolling track
+
+    comparativeBasketMatrix.push({
+        symbol: focusedCorporateDataNode.symbol,
+        sector: focusedCorporateDataNode.sector,
+        price: focusedCorporateDataNode.price,
+        pe: focusedCorporateDataNode.pe,
+        pb: focusedCorporateDataNode.pb,
+        de: focusedCorporateDataNode.deRatio,
+        yield: focusedCorporateDataNode.divYield
+    });
+    renderMatrixUI();
 }
 
-function removeNodeFromMatrix(symbol) {
-    comparativeBasketMatrix = comparativeBasketMatrix.filter(item => item.symbol !== symbol);
-    renderComparativeMatrixUI();
+function removeStagedNode(sym) {
+    comparativeBasketMatrix = comparativeBasketMatrix.filter(x => x.symbol !== sym);
+    renderMatrixUI();
 }
 
-function renderComparativeMatrixUI() {
+function renderMatrixUI() {
     const body = document.getElementById('comparisonMatrixBody');
     body.innerHTML = "";
-    
     if (comparativeBasketMatrix.length === 0) {
-        body.innerHTML = `<tr><td colspan="9" style="color:var(--text-muted); text-align:center; padding:2rem;">No companies staged yet. Select from the dropdown and click "Stage Active Asset" to run a cross-comparison pipeline.</td></tr>`;
+        body.innerHTML = `<tr><td colspan="8" style="color:var(--text-muted); text-align:center; padding:2rem;">No companies staged. Run queries above and stage them to execute multi-company comparisons.</td></tr>`;
         return;
     }
-
-    // Algorithmic Analysis Step: Find the absolute minimum valuation P/E entry in the array
-    let minPeVal = Infinity;
-    comparativeBasketMatrix.forEach(item => {
-        const peNum = parseFloat(item.pe);
-        if (peNum < minPeVal) minPeVal = peNum;
-    });
-
-    comparativeBasketMatrix.forEach(item => {
-        const tr = document.createElement('tr');
-        const isPeWinner = parseFloat(item.pe) === minPeVal && comparativeBasketMatrix.length > 1;
-        
+    comparativeBasketMatrix.forEach(x => {
+        let tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><strong style="color:var(--accent);">${item.symbol}</strong> ${isPeWinner ? '⭐ <span style="font-size:0.75rem; color:var(--green)">VALUE PIPELINE LEADER</span>' : ''}</td>
-            <td>${item.sector}</td>
-            <td>Rs. ${item.price}</td>
-            <td class="${isPeWinner ? 'highlight-val' : ''}">${item.pe}x</td>
-            <td>${item.pb}x</td>
-            <td>${item.de}</td>
-            <td style="color:var(--green); font-weight:600;">${item.yield}</td>
-            <td style="color:var(--accent); font-weight:600;">Rs. ${item.consensus}</td>
-            <td><button class="filter-btn" style="color:var(--red); border-color:rgba(231,76,60,0.3);" onclick="removeNodeFromMatrix('${item.symbol}')">Delete</button></td>
+            <td><strong style="color:var(--accent);">${x.symbol}</strong></td>
+            <td>${x.sector}</td>
+            <td>Rs. ${x.price}</td>
+            <td>${x.pe}x</td>
+            <td style="color:${parseFloat(x.pb) < 1.0 ? 'var(--green)' : '#fff'}; font-weight:bold;">${x.pb}x</td>
+            <td>${x.de}</td>
+            <td style="color:var(--green);">${x.yield}</td>
+            <td><button class="filter-btn" style="color:var(--red); border-color:rgba(231,76,60,0.2);" onclick="removeStagedNode('${x.symbol}')">Remove</button></td>
         `;
         body.appendChild(tr);
     });

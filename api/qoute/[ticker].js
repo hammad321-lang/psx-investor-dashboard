@@ -28,6 +28,6 @@ export default function handler(req, res) {
         shares: data.shares,
         sector: data.sector,
         shariah: "YES",
-        dividends: [0,0,0,0,0]
+        divs: [0,0,0,0,0]
     });
 }

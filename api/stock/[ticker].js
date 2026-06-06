@@ -1,29 +1,40 @@
-export default function handler(req, res) {
+export default async function handler(req, res) {
 
     const { ticker } = req.query;
 
-    const db = {
-        SYS: {
-            price: 438,
-            bv: 114.4,
-            shares: 291,
-            sector: "Tech",
-            shariah: "YES",
-            divs: [8, 6, 5, 4, 3]
+    try {
+        // Yahoo Finance API (FREE LIVE DATA)
+        const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}.PK`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const result = data?.quoteResponse?.result?.[0];
+
+        if (!result) {
+            return res.status(404).json({
+                error: "No live data found",
+                ticker
+            });
         }
-    };
 
-    const stock = db[ticker];
+        // fallback values for missing fields
+        const price = result.regularMarketPrice || 0;
 
-    if (!stock) {
-        return res.status(404).json({
-            error: "Ticker not found",
-            ticker
+        return res.status(200).json({
+            ticker,
+            price,
+            bv: price * 0.35,   // estimated book value proxy
+            shares: 1000,       // default until PSX API available
+            sector: "PSX Market",
+            shariah: "UNKNOWN",
+            divs: [0, 0, 0, 0, 0]
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            error: "API failed",
+            message: error.message
         });
     }
-
-    return res.status(200).json({
-        ticker,
-        ...stock
-    });
 }
